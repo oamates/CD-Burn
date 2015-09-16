@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnContrl>
+  <commandType>sendRTBurnConfig</commandType>
+  
+  <jobID>4444</jobID>
+  <jobFlag>1</jobFlag>
+
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>1</CDROMID>
+      <CDROMDescription>光驱1</CDROMDescription>
+      <isSelected>1</isSelected>
+    </CDROMStruct>
+  </CDROMVector>
+
+  <burnType>0</burnType>
+  <burnPassword>4444</burnPassword>
+  <contentPassword>4444</contentPassword>
+
+  <videoLocationVector>
+    <videoLocationStruct>
+      <locationID>1</locationID>
+      <locationDescription>法官席</locationDescription>
+      <locationBurnOrNot>1</locationBurnOrNot>
+    </videoLocationStruct>
+  </videoLocationVector>
+
+</burnContrl>

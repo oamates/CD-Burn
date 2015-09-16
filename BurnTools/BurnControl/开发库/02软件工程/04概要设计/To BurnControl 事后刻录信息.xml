@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendBurnInfo</commandType>
+
+  <burnServerVector>
+    <burnServerStruct>
+      <burnServerIP>10.1.2.58</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+      <burnServerName>Local BurnServer</burnServerName>
+      <burnServerDescription></burnServerDescription>
+      <isDefaultBurnServer></isDefaultBurnServer>
+    </burnServerStruct>
+  </burnServerVector>
+  
+  <burnFlag>1</burnFlag>
+  <burnPassword></burnPassword>
+  <contentPassword></contentPassword>
+
+  <playerInfoStruct>
+    <playerVersion>3.0.0.0</playerVersion>
+    <playerDownloadURL>E:\Work\TEST\PlayBack\</playerDownloadURL>
+    <remoteIP>10.1.2.58</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <jobVector>
+    
+    <jobStruct>
+      <jobID>JOB_ID_20140313</jobID>
+      <jobName>简单可依赖的上网导航</jobName>
+      <jobDescription></jobDescription>
+
+      <burnServerIP>10.1.2.58</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+
+      <burnType>2</burnType>
+      <burnPassword></burnPassword>
+      <contentPassword></contentPassword>
+      <CDName>郑州停车场起火73辆新车烧毁包括30辆凯迪拉克</CDName>
+
+      <noteFileRemoteIP>10.1.2.58</noteFileRemoteIP>
+      <noteFileRemotePort>18479</noteFileRemotePort>
+      <noteFileDownloadURL>E:\Work\TEST\(2013)京法执追异字第8888888号\</noteFileDownloadURL>
+      <noteFileName>note_1.doc</noteFileName>
+
+      <videoFileRemoteIP>10.1.2.58</videoFileRemoteIP>
+      <videoFileRemotePort>18479</videoFileRemotePort>
+      <videoFileDownloadURL>E:\Work\TEST\(2013)京法执追异字第8888888号\</videoFileDownloadURL>
+
+      <videoLocationVector>
+        
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>当事人</locationDescription>
+          <locationBurnOrNot>0</locationBurnOrNot>
+          <streamType>1</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <videoFileSize>150.1</videoFileSize>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <videoFileSize>150.1</videoFileSize>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+
+        <videoLocationStruct>
+          <locationID>2</locationID>
+          <locationDescription>法官席</locationDescription>
+          <locationBurnOrNot>1</locationBurnOrNot>
+          <streamType>1</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <videoFileSize>200.2</videoFileSize>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M5_20130821163058_20130821163314.chn</videoFileName>
+              <videoFileSize>200.2</videoFileSize>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+        
+      </videoLocationVector>
+
+      <playListInfo>PEFBQT52YWx1ZTE8L0FBQT4KPEJCQj52YWx1ZTI8L0JCQj4KPENDQz52YWx1ZTM8L0NDQz4=</playListInfo>
+
+      <viewCount></viewCount>
+
+      <printWordVector>
+        <printWordStruct>
+          <itemID>1</itemID>
+          <itemValue>还是配置刻录参数然后可以立即开始刻录</itemValue>
+        </printWordStruct>
+      </printWordVector>
+
+      <upServerIP></upServerIP>
+      <upServerPort></upServerPort>
+      
+    </jobStruct>
+    
+  </jobVector>
+
+</burnControl>

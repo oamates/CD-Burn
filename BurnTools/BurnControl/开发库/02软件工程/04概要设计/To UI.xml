@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendBurnInfo</commandType>
+
+  <burnServerVector>
+    <burnServerStruct>
+      <burnServerIP>10.1.10.55</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+    </burnServerStruct>
+  </burnServerVector>
+  
+
+  <burnFlag>0</burnFlag>
+  <burnPassword>4444</burnPassword>
+  <contentPassword>4444</contentPassword>
+
+  <playerInfoStruct>
+    <playerVersion>3.0.0.0</playerVersion>
+    <playerDownloadURL>E:\Work\TEST\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.10.55</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <jobVector>
+    
+    <jobStruct>
+      <jobID>测试任务1</jobID>
+      <jobName>测试任务一的名称</jobName>
+
+      <burnServerIP>10.1.10.55</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+
+      <burnType>1</burnType>
+      
+      <burnPassword>4444</burnPassword>
+      <contentPassword>4444</contentPassword>
+      
+      <CDName>光盘名称</CDName>
+
+      <noteFileRemoteIP>10.1.10.55</noteFileRemoteIP>
+      <noteFileRemotePort>18479</noteFileRemotePort>
+      <noteFileDownloadURL>E:\Work\TEST\</noteFileDownloadURL>
+      <noteFileName>note_1.doc</noteFileName>
+
+      <videoFileRemoteIP>10.1.10.55</videoFileRemoteIP>
+      <videoFileRemotePort>18479</videoFileRemotePort>
+      <videoFileDownloadURL>E:\Work\TEST</videoFileDownloadURL>
+
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>当事人</locationDescription>
+          <locationBurnOrNot>0</locationBurnOrNot>
+          <streamType>1</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M5_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+
+        <videoLocationStruct>
+          <locationID>2</locationID>
+          <locationDescription>被告</locationDescription>
+          <locationBurnOrNot>1</locationBurnOrNot>
+          <streamType>1</streamType>
+          <videoFileVector>
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+
+      <playListInfo>
+        <AAA>value1</AAA>
+        <BBB>value2</BBB>
+        <CCC>value3</CCC>
+      </playListInfo>
+      
+
+      <printWordVector>
+        <printWordStruct>
+          <itemID>7</itemID>
+          <itemValue>案号</itemValue>
+        </printWordStruct>
+        <printWordStruct>
+          <itemID>8</itemID>
+          <itemValue>开庭时间</itemValue>
+        </printWordStruct>
+        <printWordStruct>
+          <itemID>9</itemID>
+          <itemValue>法庭名称</itemValue>
+        </printWordStruct>
+        <printWordStruct>
+          <itemID>10</itemID>
+          <itemValue>审判长名字</itemValue>
+        </printWordStruct>
+      </printWordVector>
+
+    </jobStruct>
+
+    <jobStruct>
+      <jobID>测试任务4</jobID>
+      <jobName>测试任务san的名称</jobName>
+
+      <burnServerIP>10.1.10.55</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+
+      <burnType>0</burnType>
+
+      <burnPassword>4444</burnPassword>
+      <contentPassword>4444</contentPassword>
+
+      <CDName>光盘名称</CDName>
+
+      <noteFileRemoteIP>10.1.10.55</noteFileRemoteIP>
+      <noteFileRemotePort>18479</noteFileRemotePort>
+      <noteFileDownloadURL>E:\Work\TEST\</noteFileDownloadURL>
+      <noteFileName>note_1.doc</noteFileName>
+
+      <videoFileRemoteIP>10.1.10.55</videoFileRemoteIP>
+      <videoFileRemotePort>18479</videoFileRemotePort>
+      <videoFileDownloadURL>E:\Work\TEST</videoFileDownloadURL>
+
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>当事人</locationDescription>
+          <locationBurnOrNot>0</locationBurnOrNot>
+          <streamType>1</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M5_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+
+        <videoLocationStruct>
+          <locationID>2</locationID>
+          <locationDescription>被告</locationDescription>
+          <locationBurnOrNot>1</locationBurnOrNot>
+          <streamType>1</streamType>
+          <videoFileVector>
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+
+      <playListInfo>
+        <AAA>value1</AAA>
+        <BBB>value2</BBB>
+        <CCC>value3</CCC>
+      </playListInfo>
+
+
+      <printWordVector>
+        <printWordStruct>
+          <itemID>7</itemID>
+          <itemValue>案号</itemValue>
+        </printWordStruct>
+        <printWordStruct>
+          <itemID>8</itemID>
+          <itemValue>开庭时间</itemValue>
+        </printWordStruct>
+        <printWordStruct>
+          <itemID>9</itemID>
+          <itemValue>法庭名称</itemValue>
+        </printWordStruct>
+        <printWordStruct>
+          <itemID>10</itemID>
+          <itemValue>审判长名字</itemValue>
+        </printWordStruct>
+      </printWordVector>
+
+    </jobStruct>
+    
+  </jobVector>
+
+</burnControl>

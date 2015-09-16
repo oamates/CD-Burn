@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendBurnCtrlCMD</commandType>
+
+  <jobID>7777</jobID>
+  <ctrlCMD>stopRTBurn/getJobState</ctrlCMD>
+  
+</burnControl>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startRTBurn</commandType>
+  
+  <jobID>TestRtBurn</jobID>
+
+	<burnType>0</burnType>
+
+  <playListInfoStruct>
+    <playListDownloadURL>E:\Work\TEST\TestRtBurn.playlist</playListDownloadURL>
+    <remoteIP>10.1.2.102</remoteIP>
+    <remotePort>18479</remotePort>
+  </playListInfoStruct>
+
+  <playerInfoStruct>
+    <playerDownloadURL>E:\Work\TEST\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.2.102</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <noteFileRemoteIP>10.1.2.102</noteFileRemoteIP>
+  <noteFileRemotePort>18479</noteFileRemotePort>
+  <noteFileDownloadURL>E:\Work\TEST\note_1.doc</noteFileDownloadURL>
+
+  <CDROMVector>
+    
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationURL>rtsp://10.14.1.15/1</locationURL>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+
+  </CDROMVector>
+
+</burnControl>

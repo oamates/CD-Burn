@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+	<jobs>
+		<job>
+			<jobID></jobID>
+			<discLabel></discLabel>
+			<upperIP></upperIP>
+			<upperPort></upperPort>
+		</job>
+	</jobs>
+</burnControl>

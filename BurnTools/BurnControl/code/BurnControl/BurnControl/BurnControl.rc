@@ -1,0 +1,287 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+#if !defined(_AFXDLL)
+#include "afxribbon.rc"
+#endif
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "#if !defined(_AFXDLL)\r\n"
+    "#include ""afxribbon.rc""\r\n"
+    "#endi\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\BurnControl.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
+    "#endi\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\BurnTray.ico"
+IDI_ICON_CLOSE          ICON                    "res\\Close.ico"
+IDI_ICON_CLOSE_OVER     ICON                    "res\\CloseOver.ico"
+IDI_ICON_MAX            ICON                    "res\\Max.ico"
+IDI_ICON_MAX_OVER       ICON                    "res\\MaxOver.ico"
+IDI_ICON_MIN            ICON                    "res\\Min.ico"
+IDI_ICON_MIN_OVER       ICON                    "res\\MinOver.ico"
+IDI_ICON_RESTORE        ICON                    "res\\Restore.ico"
+IDI_ICON_RESTORE_OVER   ICON                    "res\\RestoreOver.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 BurnControl"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,20,20
+    LTEXT           "BurnControl，1.0.0.7 版",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2013",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
+END
+
+IDD_BURNCONTROL_DIALOG DIALOGEX 0, 0, 500, 715
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_SYSMENU
+EXSTYLE WS_EX_WINDOWEDGE | WS_EX_APPWINDOW
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "光盘名称设置",IDC_STATIC_GP_CDNAME,17,27,378,30
+    LTEXT           "光盘名称：",IDC_STATIC_CDNAME,18,39,34,13
+    EDITTEXT        IDC_EDIT_CDNAME,54,37,326,14,ES_AUTOHSCROLL
+    GROUPBOX        "刻录参数设置",IDC_STATIC_GP_BURNPARAM,15,74,205,214
+    LTEXT           "选择刻录机：",IDC_STATIC_RECORDER,17,92,42,8
+    LTEXT           "刻录机信息：",IDC_STATIC_RECORDERINFO,17,109,42,8
+    CONTROL         "单盘刻录",IDC_RADIO_SINGLE,"Button",BS_AUTORADIOBUTTON,66,167,43,10
+    CONTROL         "多盘同刻",IDC_RADIO_MULTISYN,"Button",BS_AUTORADIOBUTTON,112,167,43,10
+    CONTROL         "多盘续刻",IDC_RADIO_MULTIASYN,"Button",BS_AUTORADIOBUTTON,159,167,43,10
+    EDITTEXT        IDC_EDIT_RECORDERINFO,57,108,143,49,ES_MULTILINE | ES_READONLY | WS_VSCROLL
+    LTEXT           "选择刻录方式：",IDC_STATIC_BURNTYPE,16,168,49,8
+    LTEXT           "选择刻录光驱：",IDC_STATIC_SELECTCDROM,17,191,49,8
+    CONTROL         "",IDC_LIST_SELECTCDROM,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,63,188,137,76
+    GROUPBOX        "刻录状态显示",IDC_STATIC_GP_BURNSTATE,16,331,379,82
+    CONTROL         "",IDC_LIST_BURNSTATE,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,21,341,370,63
+    GROUPBOX        "刻录加密设置",IDC_STATIC_GP_BURNPASSWORD,277,69,193,61
+    CONTROL         "设置光盘访问密码（1-16位）",IDC_CHECK_BURNPASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,283,82,106,10,WS_EX_TRANSPARENT
+    CONTROL         "密码对刻录内容也生效",IDC_CHECK_CONTENTPASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,383,82,85,10,WS_EX_TRANSPARENT
+    LTEXT           "输入密码：",IDC_STATIC_INPUTPASSWORD,282,104,35,8
+    EDITTEXT        IDC_EDIT_INPUTPASSWORD,314,101,40,14,ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "确认密码：",IDC_STATIC_CONFIRMPASSWORD,364,105,35,8
+    EDITTEXT        IDC_EDIT_CONFIRMPASSWORD,400,102,40,14,ES_PASSWORD | ES_AUTOHSCROLL
+    GROUPBOX        "刻录文件信息",IDC_STATIC_GP_FILEINFO,273,151,179,129
+    CONTROL         "",IDC_LIST_FILEINFO,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,279,163,169,109
+    PUSHBUTTON      "",IDC_BUTTON_BURN,135,421,50,14
+    PUSHBUTTON      "",IDC_BUTTON_CLOSE,262,421,50,14
+    COMBOBOX        IDC_COMBO_RECORDER,58,91,142,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "刻录任务列表",IDC_STATIC_GP_JOBLIST,15,467,384,133
+    CONTROL         "",IDC_LIST_JOBLIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,23,480,372,79
+    PUSHBUTTON      "",IDC_BUTTON_UP,31,576,50,14
+    PUSHBUTTON      "",IDC_BUTTON_DOWN,94,576,50,14
+    GROUPBOX        "刻录内容",IDC_STATIC_GP_BURNCONTENT,16,613,384,95
+    CONTROL         "L1",IDC_CHECK_L1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,631,23,10
+    CONTROL         "L2",IDC_CHECK_L2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,81,631,23,10
+    CONTROL         "L3",IDC_CHECK_L3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,142,631,23,10
+    CONTROL         "L4",IDC_CHECK_L4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,207,631,23,10
+    CONTROL         "L5",IDC_CHECK_L5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,267,631,23,10
+    CONTROL         "L6",IDC_CHECK_L6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,665,23,10
+    CONTROL         "L7",IDC_CHECK_L7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,81,665,23,10
+    CONTROL         "L8",IDC_CHECK_L8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,142,665,23,10
+    CONTROL         "L9",IDC_CHECK_L9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,207,665,23,10
+    LTEXT           "Static",IDC_STATIC_TITLE,74,12,19,8
+    PUSHBUTTON      "",IDC_BUTTON_SAVE,64,421,50,14
+    PUSHBUTTON      "",IDC_BUTTON_PAUSE,198,422,50,14
+    CONTROL         "L10",IDC_CHECK_L10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,266,667,27,10
+    EDITTEXT        IDC_EDIT_ITEM,186,575,40,14,ES_AUTOHSCROLL
+    LTEXT           "",IDC_STATIC_BURNPIC,20,14,8,8
+END
+
+IDD_DIALOG_POPUP DIALOGEX 0, 0, 166, 88
+STYLE DS_ABSALIGN | DS_SETFONT | DS_SETFOREGROUND | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "",IDC_STATIC_MSG,7,7,151,46
+    PUSHBUTTON      "确定",IDC_BUTTON1,22,64,50,14
+    PUSHBUTTON      "取消",IDC_BUTTON2,91,64,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,9
+ PRODUCTVERSION 1,0,0,9
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "北京视通科技有限公司"
+            VALUE "FileDescription", "Burn configuration interface "
+            VALUE "FileVersion", "1.0.0.10"
+            VALUE "InternalName", "BurnControl.exe"
+            VALUE "OriginalFilename", "BurnControl.exe"
+            VALUE "ProductName", "BurnControl"
+            VALUE "ProductVersion", "1.0.0.10"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_BURNCONTROL_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 493
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 708
+    END
+
+    IDD_DIALOG_POPUP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 158
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 78
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_TRAY MENU 
+BEGIN
+    POPUP "Root"
+    BEGIN
+        MENUITEM "退出",                          ID_SUB_QUIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "关于 BurnControl(&A)..."
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\BurnControl.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "l.CHS\afxres.rc"      // 标准组件
+#endif
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

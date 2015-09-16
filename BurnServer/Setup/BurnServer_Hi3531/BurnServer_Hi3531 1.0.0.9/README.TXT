@@ -1,0 +1,1 @@
+The world is a book,and those who do not travel only one page.大千世界是一本书，没有旅行的人仅读了其中一页。

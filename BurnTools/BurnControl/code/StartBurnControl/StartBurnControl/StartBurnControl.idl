@@ -1,0 +1,54 @@
+// StartBurnControl.idl : type library source for ActiveX Control project.
+
+// This file will be processed by the MIDL compiler tool to
+// produce the type library (StartBurnControl.tlb) that will become a resource in
+// StartBurnControl.ocx.
+
+#include <olectl.h>
+#include <idispids.h>
+
+[ uuid(2F5B963B-C18C-4E87-BA8F-EE01410DB830), version(1.0),
+  helpfile("StartBurnControl.hlp"),
+  helpstring("StartBurnControl ActiveX Control module"),
+  control ]
+library StartBurnControlLib
+{
+	importlib(STDOLE_TLB);
+
+	//  Primary dispatch interface for CStartBurnControlCtrl
+
+	[ uuid(3D243C9C-1F0D-4C7A-9C90-CA4DFEE56068),
+	  helpstring("Dispatch interface for StartBurnControl Control")]
+	dispinterface _DStartBurnControl
+	{
+		properties:
+		methods:
+
+			[id(DISPID_ABOUTBOX)] void AboutBox();
+            [id(1), helpstring("method StartBurnControl")] LONG StartBurnControl(LPCTSTR strStartInfo);
+            [id(2), helpstring("method StrBase64")] BSTR StrBase64(BSTR strSrc);
+    };
+
+	//  Event dispatch interface for CStartBurnControlCtrl
+
+	[ uuid(74AE4278-FF71-4597-9278-F53509B6EECD),
+	  helpstring("Event interface for StartBurnControl Control") ]
+	dispinterface _DStartBurnControlEvents
+	{
+		properties:
+			//  Event interface has no properties
+
+		methods:
+	};
+
+	//  Class information for CStartBurnControlCtrl
+
+	[ uuid(CDFA0CD4-381B-412D-B7BD-1DBFCD9021AA),
+	  helpstring("StartBurnControl Control"), control ]
+	coclass StartBurnControl
+	{
+		[default] dispinterface _DStartBurnControl;
+		[default, source] dispinterface _DStartBurnControlEvents;
+	};
+
+};

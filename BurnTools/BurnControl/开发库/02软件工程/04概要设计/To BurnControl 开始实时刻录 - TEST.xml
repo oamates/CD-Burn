@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startRTBurn</commandType>
+
+  <jobID>TESTRTBURN</jobID>
+  
+  <playerInfoStruct>
+    <playerDownloadURL>E:\Work\TEST\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.2.102</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <playListInfoStruct>
+    <display>
+      <AAA>value1</AAA>
+      <BBB>value2</BBB>
+      <CCC>value3</CCC>
+    </display>
+  </playListInfoStruct>
+  
+
+  <noteFileRemoteIP>10.1.2.102</noteFileRemoteIP>
+  <noteFileRemotePort>18479</noteFileRemotePort>
+  <noteFileDownloadURL>E:\Work\TEST\note_1.doc</noteFileDownloadURL>
+
+  <burnServerIP>10.1.2.36</burnServerIP>
+  <burnServerPort>8888</burnServerPort>
+  
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+    </CDROMStruct>
+  </CDROMVector>
+
+  <burnType>2</burnType>
+
+  <videoLocationVector>
+    
+    <videoLocationStruct>
+      <locationID>1</locationID>
+      <locationDescription>当你停止尝试时,就是失败的时候1</locationDescription>
+      <locationURL>rtsp://10.14.1.15/1</locationURL>
+    </videoLocationStruct>
+    
+  </videoLocationVector>
+
+</burnControl>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  
+  <info>
+    <winnortburn>Windows系统无法实时刻录</winnortburn>
+    <running>当前任务正在被执行</running>
+    <devunavailable>刻录光驱正在被使用</devunavailable>
+    <downloadfailed>下载文件失败</downloadfailed>
+    <downloading>正在下载</downloading>
+    <downloadsuccess>下载完成</downloadsuccess>
+    <generatejobfilefailed>生成任务脚本文件失败</generatejobfilefailed>
+    <startburn>开始刻录</startburn>
+    <checkdev>正在检测刻录光驱，请确保托盘已经关闭，并且光驱中已经插入光盘</checkdev>
+    <checkdevfailed>检测刻录光驱信息失败</checkdevfailed>
+    <checkdisc>正在检测光盘信息</checkdisc>
+    <checkdiscfailed>检测光盘信息失败</checkdiscfailed>
+    <insertdisc>请插入光盘</insertdisc>
+    <discreadonly>光盘不可写，请插入一张可写光盘</discreadonly>
+    <nospace>光盘可刻录的空间不足，请插入另一张光盘</nospace>
+    <nodiscburnfailed>由于长时间没有插入光盘，刻录失败</nodiscburnfailed>
+    <preparedata>正在准备刻录数据</preparedata>
+    <createplaylistfailed>生成播放列表文件失败</createplaylistfailed>
+    <tomuchdata>刻录数据太大，刻录失败</tomuchdata>
+    <formatdiscfailed>格式化光盘失败</formatdiscfailed>
+    <watchfailed>设置状态监控失败</watchfailed>
+    <burning>正在刻录</burning>
+    <burnfailed>刻录失败了</burnfailed>
+    <changedisc>刻录单张光盘成功，正在换盘</changedisc>
+    <nextdisc>刻录单张光盘成功，正在切换到下个光驱刻录</nextdisc>
+    <closedisc>正在封盘</closedisc>
+    <initfailed>初始化刻录环境失败</initfailed>
+    <setmodefailed>设置刻录模式失败</setmodefailed>
+    <createenv>创建刻录环境失败</createenv>
+    <preparedevfailed>准备刻录设备失败</preparedevfailed>
+    <adddatafailed>添加刻录数据失败</adddatafailed>
+    <startburnfailed>开启刻录失败</startburnfailed>
+    <closediscfailed>封盘失败</closediscfailed>
+    <burnsuccess>刻录成功</burnsuccess>
+    <justburndone>刻录完成，但是存在部分光驱刻录失败</justburndone>
+    <initparamfailed>初始化参数失败</initparamfailed>
+    <createjobfailed>创建任务失败</createjobfailed>
+    <submitjobfailed>提交任务失败</submitjobfailed>
+    <submitjobsuccess>已经成功提交任务</submitjobsuccess>
+    <stopping>正在停止刻录...</stopping>
+    <pausing>正在暂停刻录</pausing>
+    <paused>已暂停</paused>
+    <stopped>已停止</stopped>
+    <startburnbackup>开始刻录备份的数据</startburnbackup>
+    <getjobstatefailed>获取任务信息失败</getjobstatefailed>
+    <downloadinformation>已经下载#个文件，总共有#个文件</downloadinformation>
+    <protocolparamerr>协议参数错误</protocolparamerr>
+    <devnumerr>光驱数量错误</devnumerr>
+    <winnort>刻录失败，Windows系统不能实时刻录</winnort>
+    <invalidhandle>无效的句柄</invalidhandle>
+    <linuxnoprimera>刻录失败，Linux系统不能运行派美雅刻录</linuxnoprimera>
+    <linuxnoepson>刻录失败，Linux不能运行爱普生刻录</linuxnoepson>
+    <streamunconnectable>无法连接数据流</streamunconnectable>
+    <stoprtburnfailed>停止实时流失败</stoprtburnfailed>
+    <streamtoomuch>目前最多支持四路流！</streamtoomuch>
+  </info>
+  
+</config>

@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Burn", "src\Burn\Platform\Win32\Burn.vcproj", "{9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{545CBF7D-ECF4-4B2A-94A6-B525B81C176D} = {545CBF7D-ECF4-4B2A-94A6-B525B81C176D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RingBuffer", "src\RingBuffer\Win32\RingBuffer.vcproj", "{545CBF7D-ECF4-4B2A-94A6-B525B81C176D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Data", "src\Data\Win32\Data.vcproj", "{B47E52D7-5FCB-4FC8-9141-3162273509AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E} = {9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Support", "Support", "{03A45C2D-1E35-40E8-812E-CF1084AB3C7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{449C6F1E-F591-4DF8-AC1B-7E3E4BD3A11B}"
+	ProjectSection(SolutionItems) = preProject
+		include\Burn_Err.h = include\Burn_Err.h
+		include\burn_sdk.h = include\burn_sdk.h
+		include\Burn_State.h = include\Burn_State.h
+		include\Burn_Stream.h = include\Burn_Stream.h
+		include\ChnsysRTSP.h = include\ChnsysRTSP.h
+		include\ChnsysTypes.h = include\ChnsysTypes.h
+		include\Database.h = include\Database.h
+		include\debug.h = include\debug.h
+		include\LibDVDSDK.h = include\LibDVDSDK.h
+		src\main.c = src\main.c
+		include\Platform.h = include\Platform.h
+		include\RingBuffer.h = include\RingBuffer.h
+		include\rtspts.h = include\rtspts.h
+		include\stdbool.h = include\stdbool.h
+		include\WinBurnSDK.h = include\WinBurnSDK.h
+		include\ZMediaTS.h = include\ZMediaTS.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E}.Debug|Win32.Build.0 = Debug|Win32
+		{9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E}.Release|Win32.ActiveCfg = Release|Win32
+		{9782BEF1-4BB8-4114-AE0E-F36AC5C5A30E}.Release|Win32.Build.0 = Release|Win32
+		{545CBF7D-ECF4-4B2A-94A6-B525B81C176D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{545CBF7D-ECF4-4B2A-94A6-B525B81C176D}.Debug|Win32.Build.0 = Debug|Win32
+		{545CBF7D-ECF4-4B2A-94A6-B525B81C176D}.Release|Win32.ActiveCfg = Release|Win32
+		{545CBF7D-ECF4-4B2A-94A6-B525B81C176D}.Release|Win32.Build.0 = Release|Win32
+		{B47E52D7-5FCB-4FC8-9141-3162273509AC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B47E52D7-5FCB-4FC8-9141-3162273509AC}.Debug|Win32.Build.0 = Debug|Win32
+		{B47E52D7-5FCB-4FC8-9141-3162273509AC}.Release|Win32.ActiveCfg = Release|Win32
+		{B47E52D7-5FCB-4FC8-9141-3162273509AC}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnContrl>
+	<commandType>sendRTBurnRequest</commandType>
+  
+  <jobID>4444</jobID>
+  <requestType>xxxx</requestType>
+</burnContrl>

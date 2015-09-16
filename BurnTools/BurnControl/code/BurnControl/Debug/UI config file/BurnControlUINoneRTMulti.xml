@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<titletext>
+		<text>事后刻录-多任务</text>
+	</titletext>
+	
+  <burncontrolui>
+    <left>0</left>
+    <top>0</top>
+    <right>850</right>
+    <bottom>780</bottom>
+  </burncontrolui>
+
+  <gpjoblist>
+    <left>20</left>
+    <top>40</top>
+    <right>830</right>
+    <bottom>220</bottom>
+  </gpjoblist>
+
+  <listjoblist>
+    <left>30</left>
+    <top>60</top>
+    <right>810</right>
+    <bottom>175</bottom>
+  </listjoblist>
+
+  <buttonjobup>
+    <left>60</left>
+    <top>180</top>
+    <right>160</right>
+    <bottom>210</bottom>
+  </buttonjobup>
+
+  <buttonjobdown>
+    <left>200</left>
+    <top>180</top>
+    <right>300</right>
+    <bottom>210</bottom>
+  </buttonjobdown>
+
+  <gpburnparam>
+    <left>20</left>
+    <top>220</top>
+    <right>400</right>
+    <bottom>535</bottom>
+  </gpburnparam>
+
+  <staticrecorder>
+    <left>35</left>
+    <top>240</top>
+    <right>120</right>
+    <bottom>260</bottom>
+  </staticrecorder>
+
+  <comborecorder>
+    <left>120</left>
+    <top>235</top>
+    <right>380</right>
+    <bottom>255</bottom>
+  </comborecorder>
+
+  <staticrecorderinfo>
+    <left>35</left>
+    <top>260</top>
+    <right>120</right>
+    <bottom>280</bottom>
+  </staticrecorderinfo>
+
+  <editrecorderinfo>
+    <left>120</left>
+    <top>260</top>
+    <right>380</right>
+    <bottom>340</bottom>
+  </editrecorderinfo>
+
+  <staticburntype>
+    <left>35</left>
+    <top>345</top>
+    <right>120</right>
+    <bottom>365</bottom>
+  </staticburntype>
+
+  <radiosingle>
+    <left>120</left>
+    <top>345</top>
+    <right>190</right>
+    <bottom>365</bottom>
+  </radiosingle>
+
+  <radiomultisyn>
+    <left>215</left>
+    <top>345</top>
+    <right>285</right>
+    <bottom>365</bottom>
+  </radiomultisyn>
+
+  <radiomultiasyn>
+    <left>310</left>
+    <top>345</top>
+    <right>380</right>
+    <bottom>365</bottom>
+  </radiomultiasyn>
+
+  <staticselectcdrom>
+    <left>35</left>
+    <top>370</top>
+    <right>120</right>
+    <bottom>385</bottom>
+  </staticselectcdrom>
+
+  <listselectcdrom>
+    <left>120</left>
+    <top>370</top>
+    <right>380</right>
+    <bottom>520</bottom>
+  </listselectcdrom>
+
+  <gpburnpassword>
+    <left>420</left>
+    <top>220</top>
+    <right>830</right>
+    <bottom>305</bottom>
+  </gpburnpassword>
+
+  <checkburnpassword>
+    <left>430</left>
+    <top>240</top>
+    <right>600</right>
+    <bottom>260</bottom>
+  </checkburnpassword>
+
+  <checkcontentpassword>
+    <left>625</left>
+    <top>240</top>
+    <right>810</right>
+    <bottom>260</bottom>
+  </checkcontentpassword>
+
+  <staticinputpassword>
+    <left>430</left>
+    <top>270</top>
+    <right>490</right>
+    <bottom>290</bottom>
+  </staticinputpassword>
+
+  <editinputpassword>
+    <left>495</left>
+    <top>268</top>
+    <right>615</right>
+    <bottom>288</bottom>
+  </editinputpassword>
+
+  <staticconfirmpassword>
+    <left>625</left>
+    <top>270</top>
+    <right>685</right>
+    <bottom>290</bottom>
+  </staticconfirmpassword>
+
+  <editconfirmpassword>
+    <left>690</left>
+    <top>268</top>
+    <right>810</right>
+    <bottom>288</bottom>
+  </editconfirmpassword>
+
+  <gpfileinfo>
+    <left>420</left>
+    <top>305</top>
+    <right>830</right>
+    <bottom>535</bottom>
+  </gpfileinfo>
+
+  <listfileinfo>
+    <left>430</left>
+    <top>325</top>
+    <right>810</right>
+    <bottom>520</bottom>
+  </listfileinfo>
+
+  <gpburnstate>
+    <left>20</left>
+    <top>540</top>
+    <right>830</right>
+    <bottom>720</bottom>
+  </gpburnstate>
+
+  <listburnstate>
+    <left>30</left>
+    <top>555</top>
+    <right>810</right>
+    <bottom>705</bottom>
+  </listburnstate>
+
+  <buttonsave>
+    <left>0</left>
+    <top>0</top>
+    <right>0</right>
+    <bottom>0</bottom>
+  </buttonsave>
+  
+  <buttonburn>
+    <left>260</left>
+    <top>725</top>
+    <right>360</right>
+    <bottom>755</bottom>
+  </buttonburn>
+
+  <buttonpause>
+    <left>0</left>
+    <top>0</top>
+    <right>0</right>
+    <bottom>0</bottom>
+  </buttonpause>
+
+  <buttonclose>
+    <left>400</left>
+    <top>725</top>
+    <right>500</right>
+    <bottom>755</bottom>
+  </buttonclose>
+
+
+</config>

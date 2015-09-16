@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinBurn", "WinBurn\WinBurn.vcproj", "{E0396D0B-6105-4771-9728-EEE11D25459F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestWinBurn", "TestWinBurn\TestWinBurn\TestWinBurn.vcproj", "{EC1083E6-2950-4FD5-990F-10D6A365365F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E0396D0B-6105-4771-9728-EEE11D25459F} = {E0396D0B-6105-4771-9728-EEE11D25459F}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0396D0B-6105-4771-9728-EEE11D25459F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E0396D0B-6105-4771-9728-EEE11D25459F}.Debug|Win32.Build.0 = Debug|Win32
+		{E0396D0B-6105-4771-9728-EEE11D25459F}.Release|Win32.ActiveCfg = Release|Win32
+		{E0396D0B-6105-4771-9728-EEE11D25459F}.Release|Win32.Build.0 = Release|Win32
+		{EC1083E6-2950-4FD5-990F-10D6A365365F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC1083E6-2950-4FD5-990F-10D6A365365F}.Debug|Win32.Build.0 = Debug|Win32
+		{EC1083E6-2950-4FD5-990F-10D6A365365F}.Release|Win32.ActiveCfg = Release|Win32
+		{EC1083E6-2950-4FD5-990F-10D6A365365F}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  
+  <primera>
+    <sharedfoder>C:\PTBurnJobs</sharedfoder>
+    <manualmerge>0</manualmerge>
+    <txtfields>1,2,3,4</txtfields>
+  </primera>
+
+  <job>
+    <clientid>CS-BURNSERVER</clientid>
+    <stdfilepath>C:\CS\BurnServer\config\label.std</stdfilepath>
+    <copies>1</copies>
+  </job>
+  
+</burnControl>

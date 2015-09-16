@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startHM3RTBurn</commandType>
+
+  <jobID>4444</jobID>
+  
+  <playerInfoStruct>
+    <playerVersion>1.0.0.4</playerVersion>
+    <playerDownloadURL>xxxx</playerDownloadURL>
+    <remoteIP>10.1.2.77</remoteIP>
+    <remotePort>44</remotePort>
+  </playerInfoStruct>
+
+  <playListInfo>
+    <AAA>value1</AAA>
+    <BBB>value2</BBB>
+    <CCC>value3</CCC>
+  </playListInfo>
+  
+  <viewCount>1</viewCount>
+
+  <noteFileRemoteIP>10.1.10.55</noteFileRemoteIP>
+  <noteFileRemotePort>8888</noteFileRemotePort>
+  <noteFileDownloadURL>xxxx</noteFileDownloadURL>
+
+  <burnServerIP>10.1.10.55</burnServerIP>
+  <burnServerPort>8888</burnServerPort>
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>1</CDROMID>
+      <CDROMDescription>光驱1</CDROMDescription>
+    </CDROMStruct>
+    <CDROMStruct>
+      <CDROMID>2</CDROMID>
+      <CDROMDescription>光驱2</CDROMDescription>
+    </CDROMStruct>
+  </CDROMVector>
+
+  <!-- 0：单盘刻录 1：多盘同刻 2：多盘续刻 -->
+  <burnType>0</burnType>
+  <burnPassword>4444</burnPassword>
+  <!-- 如果和burnPassword节点的值相同，才起作用 -->
+  <contentPassword>4444</contentPassword>
+  <CDName>ABCDE</CDName>
+
+  <videoLocationVector>
+    <videoLocationStruct>
+      <locationID>1</locationID>
+      <locationDescription>法官席</locationDescription>
+      <streamType>0</streamType>
+      <videoLocationURL>xxxx</videoLocationURL>
+    </videoLocationStruct>
+  </videoLocationVector>
+
+  <newFileName>xxxx</newFileName>
+
+  <upServerVector>
+  	<upServerStruct>
+  		<upServerIP>10.1.2.66</upServerIP>
+  		<upServerPort>4488</upServerPort>
+  	</upServerStruct>
+  </upServerVector>
+</burnControl>

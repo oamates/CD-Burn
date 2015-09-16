@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnContrl>
+	<commandType>sendRTBurnState</commandType>
+	
+  <jobID>4444</jobID>
+  <stateFlag>1</stateFlag>
+  <stateDescription>xxxx</stateDescription>
+
+</burnContrl>

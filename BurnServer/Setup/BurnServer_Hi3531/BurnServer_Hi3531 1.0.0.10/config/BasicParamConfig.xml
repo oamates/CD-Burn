@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+  <info>
+    <burnServerCreateLog>false</burnServerCreateLog>
+    <burnServerDownloadDir>/mnt/HD0/BurnServerDownload/</burnServerDownloadDir>
+    <burnServerRTBackupDir>/mnt/HD0/BurnServerBack/</burnServerRTBackupDir>
+    <burnServerBufferSize>90</burnServerBufferSize>
+    <burnServerDiscAlarmSize>500</burnServerDiscAlarmSize>
+	<burnServerDiscAlarmWarningSize>100</burnServerDiscAlarmWarningSize>
+    <burnServerPrimeraDiscSize>4400</burnServerPrimeraDiscSize>
+    <burnServerEpsonDiscSize>4400</burnServerEpsonDiscSize>
+  </info>
+</config>

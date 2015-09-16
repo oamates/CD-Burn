@@ -1,0 +1,39 @@
+﻿<html>
+<head>
+    <title>StartBurnControl</title>
+
+    <script type="text/javascript">
+        function startBurnControl() {
+            var burnControlOcx = document.getElementById('StartBurnControl');
+
+            var strStartInfo = 'null';
+            
+            if (burnControlOcx.StartBurnControl(strStartInfo) == -1) {
+                alert("启动BurnControl失败");
+            }
+            else {
+                alert("启动BurnControl成功");
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="startBurnControl()" value="测试BurnControl控件" />
+            </td>
+        </tr>
+    </table>
+    <table width="100" height="100">
+        <tr>
+            <td>
+                <object id="StartBurnControl" classid="clsid:CDFA0CD4-381B-412D-B7BD-1DBFCD9021AA"
+                    width="0" height="0">
+                </object>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

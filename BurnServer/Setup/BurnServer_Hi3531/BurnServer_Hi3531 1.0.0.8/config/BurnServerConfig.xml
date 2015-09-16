@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<burnControl>
+<config>
+
+  <type>
+    <burnServerVector>
+      <burnServerStruct>
+        <burnServerType>1</burnServerType>
+        <burnServerTypeDescription>普通刻录服务器</burnServerTypeDescription>
+        <burnServerDescription>庭审主机刻录服务器</burnServerDescription>
+      </burnServerStruct>
+    </burnServerVector>
+  </type>
+
+</config>
+</burnControl>

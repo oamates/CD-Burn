@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startHM3RTBurn</commandType>
+
+  <jobID>7777</jobID>
+  <jobType>1</jobType>
+
+  <playerInfoStruct>
+    <playerDownloadURL>E:\Work\TEST\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.2.58</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <noteFileRemoteIP>10.1.2.58</noteFileRemoteIP>
+  <noteFileRemotePort>18479</noteFileRemotePort>
+  <noteFileDownloadURL>E:\Work\TEST\note_1.doc</noteFileDownloadURL>
+
+  <burnServerIP>10.1.2.138</burnServerIP>
+  <burnServerPort>8888</burnServerPort>
+
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+      <isSelected>0</isSelected>
+    </CDROMStruct>
+    <CDROMStruct>
+      <CDROMID>1</CDROMID>
+      <isSelected>1</isSelected>
+    </CDROMStruct>
+  </CDROMVector>
+
+  <burnType>0</burnType>
+  <burnPassword>1234</burnPassword>
+  <contentPassword></contentPassword>
+
+  <videoLocationVector>
+    
+    <videoLocationStruct>
+      <locationID>1</locationID>
+      <locationDescription>法官席</locationDescription>
+      <locationURL>rtsp://10.14.1.15/1</locationURL>
+      <locationBurnOrNot>1</locationBurnOrNot>
+    </videoLocationStruct>
+    
+    <videoLocationStruct>
+      <locationID>2</locationID>
+      <locationDescription>当事人</locationDescription>
+      <locationBurnOrNot>0</locationBurnOrNot>
+      <locationURL>rtsp://10.14.1.53/1</locationURL>
+    </videoLocationStruct>
+    
+  </videoLocationVector>
+
+  <playListInfo>
+    PGRpc3BsYXk+CiAgICA85qGI5Lu25Y+3PuahiOS7tuWPtzwv5qGI5Lu25Y+3PgogICAgPOW9k+S6i+S6uj7lvZPkuovkuro8L+W9k+S6i+S6uj4KICAgIDzlrqHliKTplb8+5a6h5Yik6ZW/PC/lrqHliKTplb8+CiAgICA85byA5bqt5pe26Ze0PuW8gOW6reaXtumXtDwv5byA5bqt5pe26Ze0PgogICAgPOazleW6reWQjeensD7ms5Xluq3lkI3np7A8L+azleW6reWQjeensD4KPC9kaXNwbGF5Pg==
+  </playListInfo>
+
+</burnControl>

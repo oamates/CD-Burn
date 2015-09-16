@@ -1,0 +1,21 @@
+AC_INIT
+AM_INIT_AUTOMAKE(ckcore,0.1)
+AM_PROG_LIBTOOL
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+
+AC_CONFIG_MACRO_DIR([m4])
+
+# Version information (current:revision:age).
+CKCORE_VERSION=1:0:0
+AC_SUBST(CKCORE_VERSION)
+
+AC_SUBST(DEPS_CFLAGS)
+AC_SUBST(DEPS_LIBS)
+
+AC_DEFINE(_UNIX)
+AC_DEFINE(_FILE_OFFSET_BIT,64,[Enable support for large files.])
+
+AC_OUTPUT(Makefile src/Makefile src/unix/Makefile)
+

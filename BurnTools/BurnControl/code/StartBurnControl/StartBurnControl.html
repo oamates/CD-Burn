@@ -1,0 +1,39 @@
+﻿<html>
+<head>
+    <title>StartBurnControl</title>
+
+    <script type="text/javascript">
+        function startBurnControl() {
+            var burnControlOcx = document.getElementById('StartBurnControl');
+
+            var strStartInfo = '<?xml version="1.0" encoding="gb2312" ?><burnControl><dstIP>10.1.2.102</dstIP><dstPort>7788</dstPort><content>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iR0IyMzEyIiA/Pgo8YnVybkNvbnRyb2w+CiAgPGNvbW1hbmRUeXBlPnN0YXJ0SE0zUlRCdXJuPC9jb21tYW5kVHlwZT4KCiAgPGpvYklEPlRFU1RSVEJVUk48L2pvYklEPgogIAogIDxwbGF5ZXJJbmZvU3RydWN0PgogICAgPHBsYXllckRvd25sb2FkVVJMPkU6XFdvcmtcVEVTVFxQbGF5QmFjazwvcGxheWVyRG93bmxvYWRVUkw+CiAgICA8cmVtb3RlSVA+MTAuMS4yLjEwMjwvcmVtb3RlSVA+CiAgICA8cmVtb3RlUG9ydD4xODQ3OTwvcmVtb3RlUG9ydD4KICA8L3BsYXllckluZm9TdHJ1Y3Q+CgogIDxwbGF5TGlzdEluZm9TdHJ1Y3Q+CiAgICA8ZGlzcGxheT4KICAgICAgPEFBQT52YWx1ZTE8L0FBQT4KICAgICAgPEJCQj52YWx1ZTI8L0JCQj4KICAgICAgPENDQz52YWx1ZTM8L0NDQz4KICAgIDwvZGlzcGxheT4KICA8L3BsYXlMaXN0SW5mb1N0cnVjdD4KICAKCiAgPG5vdGVGaWxlUmVtb3RlSVA+MTAuMS4yLjEwMjwvbm90ZUZpbGVSZW1vdGVJUD4KICA8bm90ZUZpbGVSZW1vdGVQb3J0PjE4NDc5PC9ub3RlRmlsZVJlbW90ZVBvcnQ+CiAgPG5vdGVGaWxlRG93bmxvYWRVUkw+RTpcV29ya1xURVNUXG5vdGVfMS5kb2M8L25vdGVGaWxlRG93bmxvYWRVUkw+CgogIDxidXJuU2VydmVySVA+MTAuMS4yLjM2PC9idXJuU2VydmVySVA+CiAgPGJ1cm5TZXJ2ZXJQb3J0Pjg4ODg8L2J1cm5TZXJ2ZXJQb3J0PgogIAogIDxDRFJPTVZlY3Rvcj4KICAgIDxDRFJPTVN0cnVjdD4KICAgICAgPENEUk9NSUQ+MDwvQ0RST01JRD4KICAgIDwvQ0RST01TdHJ1Y3Q+CiAgICA8Q0RST01TdHJ1Y3Q+CiAgICAgIDxDRFJPTUlEPjE8L0NEUk9NSUQ+CiAgICA8L0NEUk9NU3RydWN0PgogIDwvQ0RST01WZWN0b3I+CgogIDxidXJuVHlwZT4yPC9idXJuVHlwZT4KCiAgPHZpZGVvTG9jYXRpb25WZWN0b3I+CiAgICA8dmlkZW9Mb2NhdGlvblN0cnVjdD4KICAgICAgPGxvY2F0aW9uSUQ+MTwvbG9jYXRpb25JRD4KICAgICAgPGxvY2F0aW9uRGVzY3JpcHRpb24+tbHE482j1rmzosrUyrEsvs3Kx8qnsNy1xMqxuvI8L2xvY2F0aW9uRGVzY3JpcHRpb24+CiAgICAgIDxsb2NhdGlvblVSTD5ydHNwOi8vMTAuMS4yLjEzNS8xPC9sb2NhdGlvblVSTD4KICAgIDwvdmlkZW9Mb2NhdGlvblN0cnVjdD4KICA8L3ZpZGVvTG9jYXRpb25WZWN0b3I+Cgo8L2J1cm5Db250cm9sPg==</content></burnControl>';
+            
+            if (burnControlOcx.StartBurnControl(strStartInfo) == -1) {
+                alert("启动BurnControl失败");
+            }
+            else {
+                alert("启动BurnControl成功");
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="startBurnControl()" value="测试BurnControl控件" />
+            </td>
+        </tr>
+    </table>
+    <table width="100" height="100">
+        <tr>
+            <td>
+                <object id="StartBurnControl" classid="clsid:CDFA0CD4-381B-412D-B7BD-1DBFCD9021AA"
+                    width="0" height="0">
+                </object>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

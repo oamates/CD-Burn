@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendBurnState</commandType>
+
+  <jobID>TESTNORMALBURN</jobID>
+  <jobState>任务刻录状态标识，详见刻录协议2.7.4</jobState>
+  <jobStateDescription>任务状态描述信息</jobStateDescription>
+
+  <CDROMVector>
+
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+      <stateFlag>光驱状态标识，详见刻录协议2.7.4</stateFlag>
+      <stateDescription>当前光驱状态的文字描述信息，如果stateFlag表示正在刻录，那么这个字段的内容是刻录进度，如50表示刻录了光盘一般容量的数据</stateDescription>
+	  
+	  <!-- videoLocationVector表示刻录文件的详细信息，暂时用不到 -->
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>2222</locationID>
+          <locationDescription>xxxx</locationDescription>
+          <videoFileVector>
+            <videoFileStruct>
+              <fileName>测试.mp4</fileName>
+              <burnState>1</burnState>
+              <Size>333</Size>
+              <percent>90</percent>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+
+  </CDROMVector>
+
+</burnControl>

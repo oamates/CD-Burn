@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>getCDROMInfo</commandType>
+
+  <!-- 以下为BurnServer接收到协议命令后返回的内容 -->
+  <!--
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>2</CDROMID>
+      <CDROMDescription>xxxx</CDROMDescription>
+      <stateFlag>0</stateFlag>
+      <stateDescription>...</stateDescription>
+      <hasCD>1</hasCD>
+      <CDLeftCapacity>1000</CDLeftCapacity>
+      <CDTotalCapacity>4000</CDTotalCapacity>
+      <jobID></jobID>
+      <burnType></burnType>
+    </CDROMStruct>
+  </CDROMVector>
+  -->
+
+</burnControl>

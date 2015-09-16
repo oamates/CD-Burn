@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendBurnInfo</commandType>
+
+  <burnServerVector>
+    <burnServerStruct>
+      <burnServerIP>10.1.2.102</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+      <burnServerName>刻录服务器名字</burnServerName>
+      <burnServerDescription>刻录服务器的描述信息</burnServerDescription>
+      <isDefaultBurnServer>1</isDefaultBurnServer>
+    </burnServerStruct>
+  </burnServerVector>
+
+  <burnFlag>2</burnFlag>
+
+  <playerInfoStruct>
+    <playerVersion>4.0.0.3</playerVersion>
+    <playerDownloadURL>E:\Work\TEST\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.2.102</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <jobVector>
+    
+    <jobStruct>
+      <jobID>刻录任务1</jobID>
+      <jobName>TEST_1</jobName>
+      <jobDescription>TEST_1 DSP</jobDescription>
+
+      <burnServerIP>10.1.2.102</burnServerIP>
+      <burnServerPort>8888</burnServerPort>
+
+      <burnType>1</burnType>
+      <CDName>光盘名称123</CDName>
+
+      <noteFileRemoteIP>10.1.2.102</noteFileRemoteIP>
+      <noteFileRemotePort>18479</noteFileRemotePort>
+      <noteFileDownloadURL>E:\Work\TEST\(2013)京赔他字第12345678号</noteFileDownloadURL>
+      <noteFileName>note_1.doc</noteFileName>
+
+      <videoFileRemoteIP>10.1.2.102</videoFileRemoteIP>
+      <videoFileRemotePort>18479</videoFileRemotePort>
+      <videoFileDownloadURL>E:\Work\TEST\(2013)京法执追异字第8888888号</videoFileDownloadURL>
+
+      <videoLocationVector>
+        
+        <videoLocationStruct>
+          <locationID>0</locationID>
+          <locationDescription>当事人</locationDescription>
+          <locationBurnOrNot>0</locationBurnOrNot>
+          <streamType>hik_avs</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>法官席</locationDescription>
+          <locationBurnOrNot>1</locationBurnOrNot>
+          <streamType>hik_avs</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+
+        <videoLocationStruct>
+          <locationID>2</locationID>
+          <locationDescription>被告</locationDescription>
+          <locationBurnOrNot>0</locationBurnOrNot>
+          <streamType>hik_avs</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+
+        <videoLocationStruct>
+          <locationID>3</locationID>
+          <locationDescription>原告</locationDescription>
+          <locationBurnOrNot>0</locationBurnOrNot>
+          <streamType>hik_avs</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M5_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+        
+      </videoLocationVector>
+
+      <playListInfo>PGRpc3BsYXk+POWuoeWIpOWRmD7lvKDkuIk8L+WuoeWIpOWRmD485aeT5ZCNPuadjuWImjwv5aeT5ZCNPjzmoYjlj7c+5Lqs5rOVPC/moYjlj7c+PC9kaXNwbGF5Pg==</playListInfo>
+    </jobStruct>
+
+  </jobVector>
+
+</burnControl>

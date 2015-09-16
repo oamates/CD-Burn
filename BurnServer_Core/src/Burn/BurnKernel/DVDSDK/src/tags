@@ -1,0 +1,231 @@
+BITS_PER_LONG	file.c	663
+CSLEEP	cdr_cmd.c	/^	#define CSLEEP(ms) {struct timespec tv = {ms \/ 10/
+CalcNeedFidSize	mkudffs.c	/^static int CalcNeedFidSize(FILDIRNODE * Dir,int Da/
+CloseDisc	udffscore.c	/^static int CloseDisc(udfinfo_t *pUdfInfo)$/
+DISC_MINFREEBLOCKS	LvDvdRecAPI.c	23
+DP_MMCCMD	cdr_cmd.c	/^static void DP_MMCCMD(char *errname, struct cdrom_/
+DP_MMCCMD	cdr_cmd.c	/^	#define DP_MMCCMD(_errname, _cgc, _line)$/
+DVDVideoCode	file.c	/^static void DVDVideoCode(uint8_t * buf,uint8_t * n/
+DVD_INRECORD	LvDvdRecAPI.c	/^#define DVD_INRECORD()  if(pDVD->bRecording) 	retu/
+DVD_ISBUSY	LvDvdRecAPI.c	/^#define DVD_ISBUSY()	if(pDVD->isBusy) 		return ERR/
+DeleteFileDirNode	udffscore.c	/^static void DeleteFileDirNode(void *hMem, FILDIRNO/
+DirDepth	mkudffs.c	/^static int DirDepth(FILDIRNODE * Directory,int Dat/
+FindDiscType	cdr_cmd.c	/^static int FindDiscType(char *pbuf,unsigned char */
+FindLastBrothers	udffscore.c	/^static FILDIRNODE* FindLastBrothers(FILDIRNODE * P/
+FindNodeByIndex	udffscore.c	/^static FILDIRNODE * FindNodeByIndex(FILDIRNODE *No/
+FreeUdf_extent	mkudffs.c	/^static void FreeUdf_extent(void *hMem, struct udf_/
+Freeudf_data	mkudffs.c	/^static void Freeudf_data(void *hMem, struct udf_da/
+Freeudf_desc	mkudffs.c	/^static void Freeudf_desc(void *hMem, struct udf_de/
+GetDevProfile	cdr_cmd.c	/^static int GetDevProfile(int fd,unsigned char * pr/
+GetDiscInfo	cdr_cmd.c	/^static BOOL GetDiscInfo(int fd, disc_info_t *di)$/
+GetNodeInDir	udffscore.c	/^static FILDIRNODE *GetNodeInDir(FILDIRNODE *pDirNo/
+HANDLE_DEF	LvDvdRecAPI.c	21
+HCDR_CMD	LvDvdRecAPI.c	/^#define HCDR_CMD()		pDVD->pCmd$/
+HDEV_FD	LvDvdRecAPI.c	/^#define HDEV_FD()		pDVD->fd$/
+HDVD_DEV_T	LvDvdRecAPI.c	34
+HUDF_HANLE	LvDvdRecAPI.c	/^#define HUDF_HANLE()  	pDVD->pUdf$/
+INIT_CGC	cdr_cmd.c	/^#define INIT_CGC()	struct cdrom_generic_command cg/
+InitUdfFs	udffscore.c	/^static int InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOL/
+LvDVDRecUdf_EncUnicodeStr	unicode.c	/^int LvDVDRecUdf_EncUnicodeStr(uint8_t *instr,uint8/
+LvDVDRecUdf_alloc_data	extent.c	/^struct udf_data *LvDVDRecUdf_alloc_data(void *hMem/
+LvDVDRecUdf_append_data	extent.c	/^void LvDVDRecUdf_append_data(struct udf_desc *desc/
+LvDVDRecUdf_crc	crc.c	/^uint16_t LvDVDRecUdf_crc(uint8_t *data, uint32_t s/
+LvDVDRecUdf_encode_utf8	unicode.c	/^int LvDVDRecUdf_encode_utf8(char *out, char *hdr, /
+LvDVDRecUdf_find_desc	extent.c	/^struct udf_desc *LvDVDRecUdf_find_desc(struct udf_/
+LvDVDRecUdf_insert_fid	file.c	/^int LvDVDRecUdf_insert_fid(void *hMem, struct udf_/
+LvDVDRecUdf_next_desc	extent.c	/^struct udf_desc *LvDVDRecUdf_next_desc(struct udf_/
+LvDVDRecUdf_next_extent	extent.c	/^struct udf_extent *LvDVDRecUdf_next_extent(struct /
+LvDVDRecUdf_query_tag	file.c	/^tag LvDVDRecUdf_query_tag(struct udf_disc *disc, s/
+LvDVDRecUdf_realloc	extent.c	/^void* LvDVDRecUdf_realloc(void *hMem,struct udf_de/
+LvDVDRecUdf_set_desc	extent.c	/^struct udf_desc *LvDVDRecUdf_set_desc(void *hMem, /
+LvDVDRecUdf_set_extent	extent.c	/^struct udf_extent *LvDVDRecUdf_set_extent(void *hM/
+LvDVDRecUdf_udf_create	file.c	/^struct udf_desc *LvDVDRecUdf_udf_create(void *hMem/
+LvDVDRecUdf_udf_query_tag	file.c	/^tag LvDVDRecUdf_udf_query_tag(struct udf_disc *dis/
+LvDVDRec_GetCdrcmd	cdr_cmd.c	/^int LvDVDRec_GetCdrcmd(char *pCdrName, struct CDR_/
+LvDVDRec_UdfCreate	udffscore.c	/^udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t Dat/
+LvDVDRec_UdfFree	udffscore.c	/^int LvDVDRec_UdfFree(udfinfo_t *pUdfInfo)$/
+LvDVDRec_UdfTreeFree	udffscore.c	/^int LvDVDRec_UdfTreeFree(udfinfo_t *pUdfInfo)$/
+LvDVDRec_Utf8ToUnicode	file.c	/^int LvDVDRec_Utf8ToUnicode(unsigned char * pSrc, u/
+LvDVDRec_udffstest	LvDvdRecAPI.c	/^int LvDVDRec_udffstest(void)$/
+LvDVDUdf_freeUdfdisc	mkudffs.c	/^void LvDVDUdf_freeUdfdisc(void *hMem, struct udf_d/
+LvDVDUdf_insert_desc	mkudffs.c	/^int LvDVDUdf_insert_desc(void *hMem, struct udf_de/
+LvDVDUdf_setup_anchor	mkudffs.c	/^void LvDVDUdf_setup_anchor(void *hMem, struct udf_/
+LvDVDUdf_setup_fileset	mkudffs.c	/^int LvDVDUdf_setup_fileset(void *hMem, struct udf_/
+LvDVDUdf_setup_root	mkudffs.c	/^int LvDVDUdf_setup_root(void *hMem, struct udf_dis/
+LvDVDUdf_setup_vds	mkudffs.c	/^void LvDVDUdf_setup_vds(void *hMem, struct udf_dis/
+LvDVDUdf_setup_vrs	mkudffs.c	/^void LvDVDUdf_setup_vrs(void *hMem, struct udf_dis/
+LvDVDUdf_split_space	mkudffs.c	/^void LvDVDUdf_split_space(void *hMem, struct udf_d/
+LvDVDUdf_udf_init_disc	mkudffs.c	/^void LvDVDUdf_udf_init_disc(void *hMem, struct udf/
+LvUDF_Defaults	defaults.c	492
+MASK_ID	LvDvdRecAPI.c	24
+MkUdffsBurnToDisc	udffscore.c	/^static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)$/
+RecursiveTree	mkudffs.c	/^static int RecursiveTree(void *hMem, struct udf_di/
+VALID_DRIVER	LvDvdRecAPI.c	/^#define VALID_DRIVER()  if(!pDVD->pUdf) 		return E/
+VALID_HANDLE	LvDvdRecAPI.c	/^#define VALID_HANDLE()  if( !pDVD || pDVD->maskid /
+WRITE_TRYNUMS	cdr_cmd.c	10
+WriteCloseAVDP	udffscore.c	/^static int WriteCloseAVDP(udfinfo_t *pUdfInfo)$/
+WriteEmptyStream	udffscore.c	/^static int WriteEmptyStream(udfinfo_t *pUdfInfo, u/
+WriteFSDToDisc	udffscore.c	/^static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int/
+WriteFileTrackEmdpy	udffscore.c	/^static int WriteFileTrackEmdpy(udfinfo_t *pUdfInfo/
+WriteStream	udffscore.c	/^static int WriteStream(udfinfo_t *pUdfInfo, FILDIR/
+WriteUDFFsToDVDDisk	udffscore.c	/^static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo/
+Xkd_DVDSDK_Analysisdirectory	LvDvdRecAPI.c	/^static int Xkd_DVDSDK_Analysisdirectory(char * szD/
+Xkd_DVDSDK_CloseDisc	LvDvdRecAPI.c	/^int Xkd_DVDSDK_CloseDisc(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_CloseFile	LvDvdRecAPI.c	/^int Xkd_DVDSDK_CloseFile(XKD_DVDDRV hDVD, Xkd_DVDS/
+Xkd_DVDSDK_CopyDisc	LvDvdRecAPI.c	/^int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DV/
+Xkd_DVDSDK_CreateDir	LvDvdRecAPI.c	/^Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDV/
+Xkd_DVDSDK_CreateFile	LvDvdRecAPI.c	/^Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV h/
+Xkd_DVDSDK_DiscCanWrite	LvDvdRecAPI.c	/^int Xkd_DVDSDK_DiscCanWrite(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_FillAllDiscEmptyData	LvDvdRecAPI.c	/^int Xkd_DVDSDK_FillAllDiscEmptyData(XKD_DVDDRV hDV/
+Xkd_DVDSDK_FillEmptyDataOnFirst	LvDvdRecAPI.c	/^int Xkd_DVDSDK_FillEmptyDataOnFirst(XKD_DVDDRV hDV/
+Xkd_DVDSDK_FormatDisc	LvDvdRecAPI.c	/^int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *s/
+Xkd_DVDSDK_GetDevInfo	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetDevInfo(XKD_DVDDRV hDVD, LVDVD_D/
+Xkd_DVDSDK_GetDiscInfo	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetDiscInfo(XKD_DVDDRV hDVD, LVDVD_/
+Xkd_DVDSDK_GetFreeWriteSize	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetFreeWriteSize(XKD_DVDDRV hDVD, u/
+Xkd_DVDSDK_GetMediaBasicType	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetMediaBasicType(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_GetMediaExactType	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetMediaExactType(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_GetReserveBuffer	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetReserveBuffer(XKD_DVDDRV hDVD, u/
+Xkd_DVDSDK_GetReserveData	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetReserveData(XKD_DVDDRV hDVD, uns/
+Xkd_DVDSDK_GetTotalWriteSize	LvDvdRecAPI.c	/^int Xkd_DVDSDK_GetTotalWriteSize(XKD_DVDDRV hDVD, /
+Xkd_DVDSDK_GetTrayState	LvDvdRecAPI.c	/^int	Xkd_DVDSDK_GetTrayState(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_HaveDisc	LvDvdRecAPI.c	/^int Xkd_DVDSDK_HaveDisc(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_Load	LvDvdRecAPI.c	/^XKD_DVDDRV Xkd_DVDSDK_Load(const char *szDevName)$/
+Xkd_DVDSDK_LoadDisc	LvDvdRecAPI.c	/^int Xkd_DVDSDK_LoadDisc(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_LockDoor	LvDvdRecAPI.c	/^int Xkd_DVDSDK_LockDoor(XKD_DVDDRV hDVD, int bLock/
+Xkd_DVDSDK_PrintProfile	LvDvdRecAPI.c	/^int Xkd_DVDSDK_PrintProfile(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_ResumeDisc	LvDvdRecAPI.c	/^int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *D/
+Xkd_DVDSDK_SetCopySpeed	LvDvdRecAPI.c	/^int Xkd_DVDSDK_SetCopySpeed(XKD_DVDDRV HDVDSrc, XK/
+Xkd_DVDSDK_SetFileLoca	LvDvdRecAPI.c	/^int Xkd_DVDSDK_SetFileLoca(XKD_DVDDRV hDVD, Xkd_DV/
+Xkd_DVDSDK_SetWriteSpeed	LvDvdRecAPI.c	/^int Xkd_DVDSDK_SetWriteSpeed(XKD_DVDDRV hDVD, int /
+Xkd_DVDSDK_Tray	LvDvdRecAPI.c	/^int	Xkd_DVDSDK_Tray(XKD_DVDDRV hDVD, int bOpen)$/
+Xkd_DVDSDK_UnLoad	LvDvdRecAPI.c	/^int Xkd_DVDSDK_UnLoad(XKD_DVDDRV hDVD)$/
+Xkd_DVDSDK_WriteData	LvDvdRecAPI.c	/^int	Xkd_DVDSDK_WriteData(XKD_DVDDRV hDVD, Xkd_DVDS/
+addDVDFile	mkudffs.c	/^void addDVDFile(struct udf_disc * disc,struct udf_/
+add_type1_partition	mkudffs.c	/^static void add_type1_partition(void *hMem, struct/
+addnode	udffscore.c	/^static FILDIRNODE *addnode(void *hMem, FILEDIRTREE/
+bRecording	LvDvdRecAPI.c	30
+buffer_free	cdr_cmd.c	768
+buffer_size	cdr_cmd.c	767
+cdr_buffcap	cdr_cmd.c	/^static int cdr_buffcap(int fd, uint32_t *buffsize,/
+cdr_closesession	cdr_cmd.c	/^static int cdr_closesession(int fd, CDR_TRACK_T *p/
+cdr_closetrack	cdr_cmd.c	/^static int cdr_closetrack(int fd, CDR_TRACK_T *ptr/
+cdr_closetray	cdr_cmd.c	/^static BOOL cdr_closetray(int fd)$/
+cdr_devcapablity	cdr_cmd.c	/^static int cdr_devcapablity(int fd, int *capablity/
+cdr_discbasictype	cdr_cmd.c	/^static int cdr_discbasictype(int fd, int *type)$/
+cdr_discexacttype	cdr_cmd.c	/^static int cdr_discexacttype(int fd, int *type)$/
+cdr_dpdevprofile	cdr_cmd.c	/^static int cdr_dpdevprofile(int fd)$/
+cdr_dvd	cdr_cmd.c	1400
+cdr_flushtrack	cdr_cmd.c	/^static int cdr_flushtrack(int fd, CDR_TRACK_T *ptr/
+cdr_formatdisc	cdr_cmd.c	/^static int cdr_formatdisc(int fd, int ReserveBlock/
+cdr_getdevinfo	cdr_cmd.c	/^static int cdr_getdevinfo(int fd, LVDVD_DEV_INFO_T/
+cdr_getdiscinfo	cdr_cmd.c	/^static int cdr_getdiscinfo(int fd, int *TrickCount/
+cdr_getdiscusedsize	cdr_cmd.c	/^static int cdr_getdiscusedsize(int fd,int * usedsi/
+cdr_getdoorstate	cdr_cmd.c	/^static int cdr_getdoorstate(int fd)$/
+cdr_getmaxspeed	cdr_cmd.c	/^static int cdr_getmaxspeed(int fd,int *MaxReadSpee/
+cdr_gettrackinfo	cdr_cmd.c	/^static int cdr_gettrackinfo(int fd, int trackid, C/
+cdr_havedisc	cdr_cmd.c	/^static BOOL cdr_havedisc(int fd)$/
+cdr_loadmedia	cdr_cmd.c	/^static int cdr_loadmedia(int fd)$/
+cdr_lockdoor	cdr_cmd.c	/^static BOOL cdr_lockdoor(int fd)$/
+cdr_opentray	cdr_cmd.c	/^static BOOL cdr_opentray(int fd)$/
+cdr_pausewrite	cdr_cmd.c	/^static int cdr_pausewrite(int fd)$/
+cdr_readtrack	cdr_cmd.c	/^static int cdr_readtrack(int fd, int start, uint8_/
+cdr_resumewrite	cdr_cmd.c	/^static int cdr_resumewrite(int fd)$/
+cdr_setspeed	cdr_cmd.c	/^static int cdr_setspeed(int fd,int ReadSpeed,int W/
+cdr_startStopUnit	cdr_cmd.c	/^int cdr_startStopUnit(int fd, int isStop)$/
+cdr_unlockdoor	cdr_cmd.c	/^static BOOL cdr_unlockdoor(int fd)$/
+cdr_writetrack	cdr_cmd.c	/^static int cdr_writetrack(int fd, CDR_TRACK_T *ptr/
+change_data	mkudffs.c	/^static int change_data(struct udf_desc *desc,int p/
+close_session	cdr_cmd.c	/^static int close_session(int fd, int track)$/
+close_track	cdr_cmd.c	/^static int close_track(int fd, int track)$/
+compute_ident_length	file.c	/^static uint32_t compute_ident_length(uint32_t leng/
+convert_to_unicode	file.c	/^static int convert_to_unicode(buffer, size, source/
+crc_table	crc.c	7
+decode_string	unicode.c	/^int decode_string(struct udf_disc *disc, char *in,/
+decode_string_utf16	unicode.c	/^int decode_string_utf16(char *in, char *out, int i/
+decode_utf8	unicode.c	/^int decode_utf8(char *in, char *out, int inlen)$/
+default_efe	defaults.c	458
+default_fe	defaults.c	425
+default_fsd	defaults.c	386
+default_iuvd	defaults.c	97
+default_iuvdiu	defaults.c	227
+default_lvd	defaults.c	150
+default_lvid	defaults.c	251
+default_lvidiu	defaults.c	266
+default_pd	defaults.c	121
+default_pvd	defaults.c	44
+default_sparmap	defaults.c	315
+default_stable	defaults.c	288
+default_td	defaults.c	203
+default_usd	defaults.c	189
+default_vat15	defaults.c	337
+default_vat20	defaults.c	355
+default_vdp	defaults.c	215
+default_virtmap	defaults.c	366
+dump_space	mkudffs.c	/^static void dump_space(struct udf_disc *disc)$/
+e_malloc	file.c	/^static void * e_malloc(size_t size)$/
+encode_string	unicode.c	/^static int encode_string(struct udf_disc *disc, ch/
+encode_unicode	unicode.c	/^static int encode_unicode(uint8_t *instr,uint8_t */
+fd	LvDvdRecAPI.c	28
+ffz	file.c	/^inline unsigned long ffz(unsigned long word)$/
+findDVDFile	mkudffs.c	/^DVDfileInfo_t * findDVDFile(struct udf_disc * disc/
+find_extent	extent.c	/^static struct udf_extent *find_extent(struct udf_d/
+findnodebyid	udffscore.c	/^static FILDIRNODE *findnodebyid(FILEDIRTREE *FileD/
+findnodebyname	udffscore.c	/^static FILDIRNODE *findnodebyname(FILEDIRTREE *Fil/
+from2Byte	cdr_cmd.c	/^static uint16_t from2Byte( uint8_t * Data)$/
+getdircount	udffscore.c	/^static int getdircount(FILEDIRTREE *FileDirTree)$/
+getfilecount	udffscore.c	/^static int getfilecount(FILEDIRTREE *FileDirTree)$/
+insert_data	file.c	/^static void insert_data(struct udf_disc *disc, str/
+isBusy	LvDvdRecAPI.c	29
+joliet_strlen	file.c	/^static int joliet_strlen(string, maxlen, inls)$/
+leBPL_to_cpup	file.c	/^#define leBPL_to_cpup(x) leNUM_to_cpup(BITS_PER_LO/
+leNUM_to_cpup	file.c	/^#define leNUM_to_cpup(x,y) xleNUM_to_cpup(x,y)$/
+mallc_nums	memmalloc.c	7
+mallc_ptr	memmalloc.c	9
+maskid	LvDvdRecAPI.c	27
+memfree	memmalloc.c	/^void memfree(void *memblock)$/
+memmalloc	memmalloc.c	/^void *memmalloc(int size)$/
+memprintinfo	memmalloc.c	/^void  memprintinfo()$/
+memrealloc	memmalloc.c	/^void *memrealloc(void *memblock, size_t size)$/
+next_extent_size	extent.c	/^static uint32_t next_extent_size(struct udf_extent/
+pCmd	LvDvdRecAPI.c	33
+pUdf	LvDvdRecAPI.c	32
+pad	cdr_cmd.c	766
+prev_extent	extent.c	/^static struct udf_extent *prev_extent(struct udf_e/
+prev_extent_size	extent.c	/^static uint32_t prev_extent_size(struct udf_extent/
+read_track_info	cdr_cmd.c	/^static BOOL read_track_info(int fd, int trackno, t/
+reserve_track	cdr_cmd.c	/^static BOOL reserve_track(int fd, int blocks)$/
+resetptr	memmalloc.c	/^static int resetptr(int src, int dst)$/
+send_cmd	cdr_cmd.c	/^static int send_cmd(int fd, struct cdrom_generic_c/
+set_core_dump	LvDvdRecAPI.c	/^static int set_core_dump(int enable, int size)$/
+set_ostaunicode	file.c	/^int set_ostaunicode(dst, dst_size, src)$/
+setup_iuvd	mkudffs.c	/^static void setup_iuvd(void *hMem, struct udf_disc/
+setup_lvd	mkudffs.c	/^static void setup_lvd(void *hMem, struct udf_disc /
+setup_lvid	mkudffs.c	/^static void setup_lvid(void *hMem, struct udf_disc/
+setup_partition	mkudffs.c	/^static void setup_partition(struct udf_disc *disc,/
+setup_pd	mkudffs.c	/^static void setup_pd(void *hMem, struct udf_disc */
+setup_pvd	mkudffs.c	/^static void setup_pvd(void *hMem, struct udf_disc /
+setup_space	mkudffs.c	/^static int setup_space(struct udf_disc *disc, stru/
+setup_td	mkudffs.c	/^static void setup_td(void *hMem, struct udf_disc */
+setup_usd	mkudffs.c	/^static void setup_usd(void *hMem, struct udf_disc /
+sic_c2uni	file.c	/^#define	sic_c2uni(t, c)	((t)->sic_cs2uni[c])$/
+stDevInfo	LvDvdRecAPI.c	31
+sync_cache	cdr_cmd.c	/^static int sync_cache(int fd)$/
+testHaveDisc	cdr_cmd.c	/^static BOOL testHaveDisc(int fd)$/
+testUnitReady	cdr_cmd.c	/^static int inline testUnitReady(int fd)$/
+tounicode	file.c	/^static void tounicode(uint8_t * buf,uint8_t * name/
+udf_alloc_bitmap_blocks	file.c	/^static int udf_alloc_bitmap_blocks(struct udf_disc/
+udf_alloc_blocks	file.c	/^static int udf_alloc_blocks(struct udf_disc *disc,/
+udf_alloc_table_blocks	file.c	/^static int udf_alloc_table_blocks(struct udf_disc /
+udf_find_next_one_bit	file.c	/^inline unsigned long udf_find_next_one_bit (void */
+udf_find_next_zero_bit	file.c	/^inline unsigned long udf_find_next_zero_bit(void */
+udf_set_version	mkudffs.c	/^static int udf_set_version(struct udf_disc *disc, /
+udf_space_type_str	mkudffs.c	28
+udfcmd	udffscore.c	898
+udffstest	udffscore.c	/^static int udffstest(udfinfo_t *pUdfInfo)$/
+uint	file.c	/^#define uint(x) xuint(x)$/
+uintBPL	file.c	668
+unicode	file.c	/^static int unicode(unsigned int *pwc, char *s, int/
+wait_unit_ready	cdr_cmd.c	/^static BOOL wait_unit_ready(int fd, int secs)$/
+writetrack_block	cdr_cmd.c	/^BOOL writetrack_block(int fd, uint8_t *buffer, int/
+xleNUM_to_cpup	file.c	/^#define xleNUM_to_cpup(x,y) (le ## x ## _to_cpup(y/
+xuint	file.c	/^#define xuint(x) uint ## x ## _t$/

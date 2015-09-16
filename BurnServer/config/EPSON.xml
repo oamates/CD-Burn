@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <epson>
+    <orderforder>Orders</orderforder>
+    <serverip>127.0.0.1</serverip>
+    <labelfile>C:\CS\BurnServer\config\label.tdd</labelfile>
+    <replacefield>ITEM1,1,ITEM2,3,ITEM3,10,ITEM4,9,ITEM5,6,ITEM6,4,ITEM7,5</replacefield>
+  </epson>
+
+  <job>
+    <disctype>2</disctype>
+    <copies>1</copies>
+  </job>
+</config>

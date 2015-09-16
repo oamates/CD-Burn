@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<titletext>
+		<text>事后刻录-单任务</text>
+	</titletext>
+	
+  <burncontrolui>
+    <left>0</left>
+    <top>0</top>
+    <right>850</right>
+    <bottom>670</bottom>
+  </burncontrolui>
+
+  <gpcdname>
+    <left>20</left>
+    <top>40</top>
+    <right>830</right>
+    <bottom>100</bottom>
+  </gpcdname>
+
+  <staticcdname>
+    <left>40</left>
+    <top>62</top>
+    <right>100</right>
+    <bottom>87</bottom>
+  </staticcdname>
+
+  <editcdname>
+    <left>120</left>
+    <top>57</top>
+    <right>810</right>
+    <bottom>83</bottom>
+  </editcdname>
+
+  <gpburnparam>
+    <left>20</left>
+    <top>105</top>
+    <right>400</right>
+    <bottom>420</bottom>
+  </gpburnparam>
+
+  <staticrecorder>
+    <left>35</left>
+    <top>125</top>
+    <right>120</right>
+    <bottom>145</bottom>
+  </staticrecorder>
+
+  <comborecorder>
+    <left>120</left>
+    <top>120</top>
+    <right>380</right>
+    <bottom>140</bottom>
+  </comborecorder>
+
+  <staticrecorderinfo>
+    <left>35</left>
+    <top>145</top>
+    <right>120</right>
+    <bottom>165</bottom>
+  </staticrecorderinfo>
+
+  <editrecorderinfo>
+    <left>120</left>
+    <top>145</top>
+    <right>380</right>
+    <bottom>225</bottom>
+  </editrecorderinfo>
+
+  <staticburntype>
+    <left>35</left>
+    <top>230</top>
+    <right>120</right>
+    <bottom>250</bottom>
+  </staticburntype>
+
+  <radiosingle>
+    <left>120</left>
+    <top>230</top>
+    <right>190</right>
+    <bottom>250</bottom>
+  </radiosingle>
+
+  <radiomultisyn>
+    <left>215</left>
+    <top>230</top>
+    <right>285</right>
+    <bottom>250</bottom>
+  </radiomultisyn>
+
+  <radiomultiasyn>
+    <left>310</left>
+    <top>230</top>
+    <right>380</right>
+    <bottom>250</bottom>
+  </radiomultiasyn>
+
+  <staticselectcdrom>
+    <left>35</left>
+    <top>255</top>
+    <right>120</right>
+    <bottom>270</bottom>
+  </staticselectcdrom>
+
+  <listselectcdrom>
+    <left>120</left>
+    <top>255</top>
+    <right>380</right>
+    <bottom>405</bottom>
+  </listselectcdrom>
+
+  <gpburnpassword>
+    <left>420</left>
+    <top>105</top>
+    <right>830</right>
+    <bottom>190</bottom>
+  </gpburnpassword>
+
+  <checkburnpassword>
+    <left>430</left>
+    <top>125</top>
+    <right>600</right>
+    <bottom>145</bottom>
+  </checkburnpassword>
+
+  <checkcontentpassword>
+    <left>625</left>
+    <top>125</top>
+    <right>830</right>
+    <bottom>145</bottom>
+  </checkcontentpassword>
+
+  <staticinputpassword>
+    <left>430</left>
+    <top>155</top>
+    <right>490</right>
+    <bottom>175</bottom>
+  </staticinputpassword>
+
+  <editinputpassword>
+    <left>495</left>
+    <top>153</top>
+    <right>615</right>
+    <bottom>173</bottom>
+  </editinputpassword>
+
+  <staticconfirmpassword>
+    <left>625</left>
+    <top>155</top>
+    <right>685</right>
+    <bottom>175</bottom>
+  </staticconfirmpassword>
+
+  <editconfirmpassword>
+    <left>690</left>
+    <top>153</top>
+    <right>810</right>
+    <bottom>173</bottom>
+  </editconfirmpassword>
+
+  <gpfileinfo>
+    <left>420</left>
+    <top>190</top>
+    <right>830</right>
+    <bottom>420</bottom>
+  </gpfileinfo>
+
+  <listfileinfo>
+    <left>430</left>
+    <top>210</top>
+    <right>810</right>
+    <bottom>405</bottom>
+  </listfileinfo>
+
+  <gpburnstate>
+    <left>20</left>
+    <top>425</top>
+    <right>830</right>
+    <bottom>605</bottom>
+  </gpburnstate>
+
+  <listburnstate>
+    <left>30</left>
+    <top>445</top>
+    <right>810</right>
+    <bottom>590</bottom>
+  </listburnstate>
+  
+  <buttonburn>
+    <left>260</left>
+    <top>610</top>
+    <right>360</right>
+    <bottom>640</bottom>
+  </buttonburn>
+
+  <buttonclose>
+    <left>440</left>
+    <top>610</top>
+    <right>540</right>
+    <bottom>640</bottom>
+  </buttonclose>
+
+</config>

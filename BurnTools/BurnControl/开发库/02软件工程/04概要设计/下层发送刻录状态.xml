@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendBurnState</commandType>
+
+  <jobID>4444</jobID>
+
+  <CDROMVector>
+
+    <CDROMStruct>
+      <CDROMID>2</CDROMID>
+      <stateFlag>0</stateFlag>
+      <stateDescription>xxxx55%</stateDescription>
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>2222</locationID>
+          <locationDescription>xxxx</locationDescription>
+          <videoFileVector>
+            <videoFileStruct>
+              <fileName>xxxx</fileName>
+              <burnState>1</burnState>
+              <Size>333</Size>
+              <percent>90</percent>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+
+  </CDROMVector>
+
+</burnControl>

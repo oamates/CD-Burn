@@ -1,0 +1,5 @@
+#! /bin/sh
+
+pkill -9 BurnServer
+cd /home/BurnServer/
+./BurnServer.out

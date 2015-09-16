@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startBurn</commandType>
+
+  <jobID>(2013)京法执追异字第8888888号</jobID>
+  <burnServerType>0</burnServerType>
+
+  <playerInfoStruct>
+    <playerVersion>3.0.0.0</playerVersion>
+    <playerDownloadURL>B:\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.10.53</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <playlistInfoStruct>
+    <playlistDownloadURL>B:\(2013)京法执追异字第8888888号\(2013)京法执追异字第8888888号.playlist</playlistDownloadURL>
+    <remoteIP>10.1.10.53</remoteIP>
+    <remotePort>18479</remotePort>
+  </playlistInfoStruct>
+
+  <noteFileRemoteIP>10.1.10.53</noteFileRemoteIP>
+  <noteFileRemotePort>18479</noteFileRemotePort>
+  <noteFileDownloadURL>B:\(2013)京法执追异字第8888888号\</noteFileDownloadURL>
+  <noteFileName>note_1.doc</noteFileName>
+
+  <videoFileRemoteIP>10.1.10.53</videoFileRemoteIP>
+  <videoFileRemotePort>18479</videoFileRemotePort>
+  <videoFileDownloadURL>B:\(2013)京法执追异字第8888888号</videoFileDownloadURL>
+
+  <burnType>0</burnType>
+  <burnPassword>4444</burnPassword>
+  <contentPassword>4444</contentPassword>
+  <CDName>ABCDE</CDName>
+
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>1</CDROMID>
+      <CDROMDescription>光驱1</CDROMDescription>
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>法官席</locationDescription>
+          <streamType>0</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <!--
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M5_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            -->
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+    <!--    
+    <CDROMStruct>
+      <CDROMID>2</CDROMID>
+      <CDROMDescription>光驱1</CDROMDescription>
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>法官席</locationDescription>
+          <streamType>0</streamType>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M5_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+    -->
+  </CDROMVector>
+
+  <printWordVector>
+    <printWordStruct>
+      <itemID>1</itemID>
+      <itemValue>具体的案件号</itemValue>
+    </printWordStruct>
+  </printWordVector>
+
+  <copies>1</copies>
+  <discType>1</discType>
+  <speed>1</speed>
+  <closeDisc>1</closeDisc>
+  <deleteFile>1</deleteFile>
+
+  <upServerIP>10.1.10.55</upServerIP>
+  <upServerPort>7788</upServerPort>
+
+</burnControl>

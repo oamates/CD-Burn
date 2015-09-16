@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startBurn</commandType>
+
+  <jobID>TESTBURNSERVER</jobID>
+  <burnServerType>1</burnServerType>
+  
+  <burnType>1</burnType>
+
+  <noteFileRemoteIP>10.1.10.55</noteFileRemoteIP>
+  <noteFileRemotePort>18479</noteFileRemotePort>
+  <noteFileDownloadURL>E:\Work\TEST</noteFileDownloadURL>
+  <noteFileName>note_1.doc</noteFileName>
+
+  <playerInfoStruct>
+    <playerDownloadURL>F:\Player4.0 测试数据\实时刻录H323流-H323\PlayBack</playerDownloadURL>
+    <remoteIP>10.1.10.55</remoteIP>
+    <remotePort>18479</remotePort>
+  </playerInfoStruct>
+
+  <playlistInfoStruct>
+    <playlistDownloadURL>E:\Work\TEST\To BurnServer 开始事后刻录 - TEST.playlist</playlistDownloadURL>
+    <remoteIP>10.1.10.55</remoteIP>
+    <remotePort>18479</remotePort>
+  </playlistInfoStruct>
+
+  <videoFileRemoteIP>10.1.10.55</videoFileRemoteIP>
+  <videoFileRemotePort>18479</videoFileRemotePort>
+  <videoFileDownloadURL>E:\Work\TEST\(2013)京法执追异字第8888888号</videoFileDownloadURL>
+
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+      <videoLocationVector>
+        <videoLocationStruct>
+        	<locationID>0</locationID>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M1_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+            <videoFileStruct>
+              <videoFileName>M4_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <videoFileVector>
+            <videoFileStruct>
+              <videoFileName>M3_20130821163058_20130821163314.chn</videoFileName>
+              <newVideoFileName></newVideoFileName>
+            </videoFileStruct>
+          </videoFileVector>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+
+    <CDROMStruct>
+      <CDROMID>1</CDROMID>
+    </CDROMStruct>
+    
+  </CDROMVector>
+
+  <upServerIP>10.1.10.55</upServerIP>
+  <upServerPort>7788</upServerPort>
+
+</burnControl>

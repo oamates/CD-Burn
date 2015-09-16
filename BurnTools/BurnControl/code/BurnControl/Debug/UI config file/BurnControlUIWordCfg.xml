@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+  <uiword>
+    <name>刻录控制程序</name>
+    
+    <gpcdname>xxxx光盘名称设置xxxx</gpcdname>
+    <staticcdname>光盘名称:</staticcdname>
+
+    <gpburnparam>刻录参数设置</gpburnparam>
+    <staticrecorder>选择刻录机:</staticrecorder>
+    <staticrecorderinfo>刻录机信息:</staticrecorderinfo>
+    <staticburntype>选择刻录方式:</staticburntype>
+    <radiosingle>单盘刻录</radiosingle>
+    <radiomultisyn>多盘同刻</radiomultisyn>
+    <radiomultiasyn>多盘续刻</radiomultiasyn>
+    <staticselectcdrom>选择刻录光驱:</staticselectcdrom>
+    <cdromdrivername>光驱</cdromdrivername>
+
+    <gpburnpassword>刻录加密设置</gpburnpassword>
+    <checkburnpassword>设置光盘访问密码</checkburnpassword>
+    <checkcontentpassword>密码对刻录内容也生效</checkcontentpassword>
+    <staticinputpassword>输入密码:</staticinputpassword>
+    <staticconfirmpassword>确认密码:</staticconfirmpassword>
+
+    <gpfileinfo>刻录文件信息</gpfileinfo>
+    <statewait>等待刻录</statewait>
+    <stateburndone>刻录完毕</stateburndone>
+
+    <gpburnstate>刻录状态显示</gpburnstate>
+
+    <btnsave>保存</btnsave>
+    <btnburn>开始刻录</btnburn> 
+    <btnpause>暂停刻录</btnpause>
+    <btnresume>恢复刻录</btnresume>
+    <btnstop>停止刻录</btnstop>
+    <btnclose>关闭</btnclose>
+    <burnagain>重新刻录</burnagain>
+
+    <gpjoblist>刻录任务列表</gpjoblist>
+    <cljobname>任务名称</cljobname>
+    <cljobstate>任务状态</cljobstate>
+    <cljobsize>任务大小</cljobsize>
+    <clcdname>光盘名称设置</clcdname>
+    <btnup>上移</btnup>
+    <btndown>xx下移xx</btndown>
+
+    <gpburncontent>刻录内容</gpburncontent>
+    
+    <hostburnserver>本机刻录服务器</hostburnserver>
+    <notecheckboxname>庭审笔录</notecheckboxname>
+
+    <burnsuccess>刻录成功</burnsuccess>
+    <burnfailed>刻录失败</burnfailed>
+    <burning>正在刻录</burning>
+    
+  </uiword>
+  
+</config>

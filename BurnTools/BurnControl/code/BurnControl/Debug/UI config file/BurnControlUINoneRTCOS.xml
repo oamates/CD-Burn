@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+	<titletext>
+		<text>COS事后刻录</text>
+	</titletext>
+		
+  <burncontrolui>
+    <left>0</left>
+    <top>0</top>
+    <right>850</right>
+    <bottom>750</bottom>
+  </burncontrolui>
+
+  <gpcdname>
+    <left>20</left>
+    <top>40</top>
+    <right>830</right>
+    <bottom>100</bottom>
+  </gpcdname>
+
+  <staticcdname>
+    <left>40</left>
+    <top>62</top>
+    <right>100</right>
+    <bottom>87</bottom>
+  </staticcdname>
+
+  <editcdname>
+    <left>120</left>
+    <top>57</top>
+    <right>810</right>
+    <bottom>83</bottom>
+  </editcdname>
+
+  <gpburncontent>
+    <left>20</left>
+    <top>105</top>
+    <right>830</right>
+    <bottom>180</bottom>
+  </gpburncontent>
+
+  <check1>
+    <left>40</left>
+    <top>120</top>
+    <right>140</right>
+    <bottom>140</bottom>
+  </check1>
+
+  <check2>
+    <left>160</left>
+    <top>120</top>
+    <right>260</right>
+    <bottom>140</bottom>
+  </check2>
+
+  <check3>
+    <left>280</left>
+    <top>120</top>
+    <right>380</right>
+    <bottom>140</bottom>
+  </check3>
+
+  <check4>
+    <left>400</left>
+    <top>120</top>
+    <right>500</right>
+    <bottom>140</bottom>
+  </check4>
+
+  <check5>
+    <left>520</left>
+    <top>120</top>
+    <right>620</right>
+    <bottom>140</bottom>
+  </check5>
+
+  <check6>
+    <left>40</left>
+    <top>150</top>
+    <right>140</right>
+    <bottom>170</bottom>
+  </check6>
+
+  <check7>
+    <left>160</left>
+    <top>150</top>
+    <right>260</right>
+    <bottom>170</bottom>
+  </check7>
+
+  <check6>
+    <left>280</left>
+    <top>150</top>
+    <right>380</right>
+    <bottom>170</bottom>
+  </check6>
+
+  <check6>
+    <left>400</left>
+    <top>150</top>
+    <right>500</right>
+    <bottom>170</bottom>
+  </check6>
+
+  <gpburnparam>
+    <left>20</left>
+    <top>185</top>
+    <right>400</right>
+    <bottom>500</bottom>
+  </gpburnparam>
+
+  <staticrecorder>
+    <left>35</left>
+    <top>205</top>
+    <right>120</right>
+    <bottom>225</bottom>
+  </staticrecorder>
+
+  <comborecorder>
+    <left>120</left>
+    <top>200</top>
+    <right>380</right>
+    <bottom>220</bottom>
+  </comborecorder>
+
+  <staticrecorderinfo>
+    <left>35</left>
+    <top>225</top>
+    <right>120</right>
+    <bottom>245</bottom>
+  </staticrecorderinfo>
+
+  <editrecorderinfo>
+    <left>120</left>
+    <top>225</top>
+    <right>380</right>
+    <bottom>305</bottom>
+  </editrecorderinfo>
+
+  <staticburntype>
+    <left>35</left>
+    <top>310</top>
+    <right>120</right>
+    <bottom>330</bottom>
+  </staticburntype>
+
+  <radiosingle>
+    <left>120</left>
+    <top>310</top>
+    <right>190</right>
+    <bottom>330</bottom>
+  </radiosingle>
+
+  <radiomultisyn>
+    <left>215</left>
+    <top>310</top>
+    <right>285</right>
+    <bottom>330</bottom>
+  </radiomultisyn>
+
+  <radiomultiasyn>
+    <left>310</left>
+    <top>310</top>
+    <right>380</right>
+    <bottom>330</bottom>
+  </radiomultiasyn>
+
+  <staticselectcdrom>
+    <left>35</left>
+    <top>335</top>
+    <right>120</right>
+    <bottom>350</bottom>
+  </staticselectcdrom>
+
+  <listselectcdrom>
+    <left>120</left>
+    <top>335</top>
+    <right>380</right>
+    <bottom>485</bottom>
+  </listselectcdrom>
+
+  <gpburnpassword>
+    <left>420</left>
+    <top>185</top>
+    <right>830</right>
+    <bottom>270</bottom>
+  </gpburnpassword>
+
+  <checkburnpassword>
+    <left>430</left>
+    <top>205</top>
+    <right>600</right>
+    <bottom>225</bottom>
+  </checkburnpassword>
+
+  <checkcontentpassword>
+    <left>625</left>
+    <top>205</top>
+    <right>830</right>
+    <bottom>225</bottom>
+  </checkcontentpassword>
+
+  <staticinputpassword>
+    <left>430</left>
+    <top>235</top>
+    <right>490</right>
+    <bottom>255</bottom>
+  </staticinputpassword>
+
+  <editinputpassword>
+    <left>495</left>
+    <top>233</top>
+    <right>615</right>
+    <bottom>253</bottom>
+  </editinputpassword>
+
+  <staticconfirmpassword>
+    <left>625</left>
+    <top>235</top>
+    <right>685</right>
+    <bottom>255</bottom>
+  </staticconfirmpassword>
+
+  <editconfirmpassword>
+    <left>690</left>
+    <top>233</top>
+    <right>810</right>
+    <bottom>253</bottom>
+  </editconfirmpassword>
+
+  <gpfileinfo>
+    <left>420</left>
+    <top>270</top>
+    <right>830</right>
+    <bottom>500</bottom>
+  </gpfileinfo>
+
+  <listfileinfo>
+    <left>430</left>
+    <top>290</top>
+    <right>810</right>
+    <bottom>485</bottom>
+  </listfileinfo>
+
+  <gpburnstate>
+    <left>20</left>
+    <top>505</top>
+    <right>830</right>
+    <bottom>685</bottom>
+  </gpburnstate>
+
+  <listburnstate>
+    <left>30</left>
+    <top>525</top>
+    <right>810</right>
+    <bottom>670</bottom>
+  </listburnstate>
+
+  <buttonsave>
+    <left>0</left>
+    <top>0</top>
+    <right>0</right>
+    <bottom>0</bottom>
+  </buttonsave>
+
+  <buttonburn>
+    <left>220</left>
+    <top>690</top>
+    <right>320</right>
+    <bottom>720</bottom>
+  </buttonburn>
+
+  <buttonpause>
+    <left>0</left>
+    <top>0</top>
+    <right>0</right>
+    <bottom>0</bottom>
+  </buttonpause>
+
+  <buttonclose>
+    <left>440</left>
+    <top>690</top>
+    <right>540</right>
+    <bottom>720</bottom>
+  </buttonclose>
+  
+</config>

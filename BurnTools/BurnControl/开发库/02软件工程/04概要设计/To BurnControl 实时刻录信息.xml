@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>sendRTBurnInfo</commandType>
+
+  <jobID>7777</jobID>
+  <jobType>1</jobType>
+
+  <burnServerIP>10.1.10.5</burnServerIP>
+  <burnServerPort>8888</burnServerPort>
+
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+      <isSelected>0</isSelected>
+    </CDROMStruct>
+    <CDROMStruct>
+      <CDROMID>1</CDROMID>
+      <isSelected>1</isSelected>
+    </CDROMStruct>
+    <CDROMStruct>
+      <CDROMID>2</CDROMID>
+      <isSelected>0</isSelected>
+    </CDROMStruct>
+  </CDROMVector>
+
+  <burnType>1</burnType>
+  <burnPassword>1234</burnPassword>
+  <contentPassword></contentPassword>
+
+  <videoLocationVector>
+    
+    <videoLocationStruct>
+      <locationID>1</locationID>
+      <locationDescription>法官席</locationDescription>
+      <locationBurnOrNot>1</locationBurnOrNot>
+    </videoLocationStruct>
+    
+    <videoLocationStruct>
+      <locationID>2</locationID>
+      <locationDescription>当事人</locationDescription>
+      <locationBurnOrNot>0</locationBurnOrNot>
+    </videoLocationStruct>
+  </videoLocationVector>
+
+</burnControl>
