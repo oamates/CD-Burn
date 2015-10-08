@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NCXDLL", "NCXDLL\NCXDLL.vcproj", "{275A1453-EEF4-4B65-9353-590B77C5F7B9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NCXExampleClient", "NCXExampleClient\NCXExampleClient.vcproj", "{93091046-CEE0-4BED-BAFE-9C27ECCAE13B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{275A1453-EEF4-4B65-9353-590B77C5F7B9} = {275A1453-EEF4-4B65-9353-590B77C5F7B9}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NCXExampleServer", "NCXExampleServer\NCXExampleServer.vcproj", "{8ABCA4B7-8493-4023-8F57-8231E926BF8D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{275A1453-EEF4-4B65-9353-590B77C5F7B9} = {275A1453-EEF4-4B65-9353-590B77C5F7B9}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{275A1453-EEF4-4B65-9353-590B77C5F7B9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{275A1453-EEF4-4B65-9353-590B77C5F7B9}.Debug|Win32.Build.0 = Debug|Win32
+		{275A1453-EEF4-4B65-9353-590B77C5F7B9}.Release|Win32.ActiveCfg = Release|Win32
+		{275A1453-EEF4-4B65-9353-590B77C5F7B9}.Release|Win32.Build.0 = Release|Win32
+		{93091046-CEE0-4BED-BAFE-9C27ECCAE13B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{93091046-CEE0-4BED-BAFE-9C27ECCAE13B}.Debug|Win32.Build.0 = Debug|Win32
+		{93091046-CEE0-4BED-BAFE-9C27ECCAE13B}.Release|Win32.ActiveCfg = Release|Win32
+		{93091046-CEE0-4BED-BAFE-9C27ECCAE13B}.Release|Win32.Build.0 = Release|Win32
+		{8ABCA4B7-8493-4023-8F57-8231E926BF8D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8ABCA4B7-8493-4023-8F57-8231E926BF8D}.Debug|Win32.Build.0 = Debug|Win32
+		{8ABCA4B7-8493-4023-8F57-8231E926BF8D}.Release|Win32.ActiveCfg = Release|Win32
+		{8ABCA4B7-8493-4023-8F57-8231E926BF8D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

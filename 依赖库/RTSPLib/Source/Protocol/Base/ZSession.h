@@ -1,0 +1,271 @@
+///////////////////////////////////////////////////////////////////////////////
+/******************************************************************************
+	Project		ZMediaServer
+	ZSession	Header File
+	Create		20100701		ZHAOTT		SESSION
+	Modify		20110601		ZHAOTT		SESSION
+	Modify		20120222		ZHAOTT		SESSION
+******************************************************************************/
+///////////////////////////////////////////////////////////////////////////////
+#ifndef	_ZSESSION_H_
+#define	_ZSESSION_H_
+///////////////////////////////////////////////////////////////////////////////
+#include "ZTimeoutTask.h"
+#include "ZSocket.h"
+#include "ZAuthorization.h"
+#include "ZAuthenticator.h"
+#include "ZRTSPProtocol.h"
+///////////////////////////////////////////////////////////////////////////////
+class	ZSession;
+class	ZDataPin;
+class	ZBaseStream;
+class	ZSessionStream;
+///////////////////////////////////////////////////////////////////////////////
+#define	DEFAULT_SESSION_TIMEIDLE			(DEFAULT_PROCESS_TIMEOUT*100)
+#define	DEFAULT_SESSION_TIMEOUT				(DEFAULT_PROCESS_TIMEOUT*1000)
+///////////////////////////////////////////////////////////////////////////////
+#define	DEFAULT_SESSION_ID_SIZE				32
+#define	DEFAULT_SESSION_BLOCK_SIZE			(1024*4)
+#define	DEFAULT_SESSION_STREAM_SIZE			(1024*8)
+#define	DEFAULT_SESSION_BUFFER_SIZE			(1024*8)
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//	Session Type
+///////////////////////////////////////////////////////////////////////////////
+typedef	enum	_SESSION_TYPE_
+{
+	SESSION_TYPE_HTTP	= 0,	//Type HTTP
+	SESSION_TYPE_RTSP,			//Type RTSP
+	SESSION_TYPE_RTP,			//Type RTP
+	SESSION_TYPE_RTCP,			//Type RTCP
+	SESSION_TYPE_RTMP,			//Type RTMP
+	SESSION_TYPE_SCP,			//Type SCP
+	SESSION_TYPE_COUNT,			//Type Count
+	SESSION_TYPE_ERROR	= UINT16_MAX
+}SESSION_TYPE;
+///////////////////////////////////////////////////////////////////////////////
+//	Session SubType
+///////////////////////////////////////////////////////////////////////////////
+typedef	enum	_SESSION_SUBTYPE_
+{
+	SESSION_TYPE_SERVER	= SESSION_TYPE_COUNT,
+	SESSION_TYPE_CLIENT,
+}SESSION_SUBTYPE;
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//	Session State
+///////////////////////////////////////////////////////////////////////////////
+typedef	enum	_SESSION_STATE_
+{
+	//RUN STATUS
+	SESSION_STATE_READY	= 0,		//Session Ready
+	SESSION_STATE_OPEN,				//Session Open
+	SESSION_STATE_PLAY,				//Session Play
+	SESSION_STATE_PAUSE,			//Session Pause
+	SESSION_STATE_STOP,				//Session Stop
+	SESSION_STATE_CLOSE,			//Session Close
+	//READ STATUS
+	SESSION_STATE_READ_REQUEST,		//Session Read Request
+	SESSION_STATE_READ_OPTIONS,		//Session Read Options
+	SESSION_STATE_READ_DESCRIBE,
+	SESSION_STATE_READ_SETUP,
+	SESSION_STATE_READ_PLAY,
+	SESSION_STATE_READ_PAUSE,
+	SESSION_STATE_READ_STOP,
+	SESSION_STATE_READ_OTHERS,
+	SESSION_STATE_READ_ERROR,
+	//WRITE STATUS
+	SESSION_STATE_SEND_RESPONSE,	//Session Send Response
+	SESSION_STATE_SEND_OPTIONS,		//Session Send Options
+	SESSION_STATE_SEND_DESCRIBE,
+	SESSION_STATE_SEND_SETUP,
+	SESSION_STATE_SEND_PLAY,
+	SESSION_STATE_SEND_PAUSE,
+	SESSION_STATE_SEND_STOP,
+	SESSION_STATE_SEND_ERROR,
+	//ERROR STATUS
+	SESSION_STATE_TIMEOUT,			//Session Timeout
+	SESSION_STATE_ERROR,			//Session Error
+	SESSION_STATE_COUNT				//Session State Count
+}SESSION_STATE;
+///////////////////////////////////////////////////////////////////////////////
+//	Session Message State
+///////////////////////////////////////////////////////////////////////////////
+typedef	enum	_SESSION_MESSAGE_STATE_
+{
+	SESSION_MESSAGE_STATE_READ		= SESSION_STATE_COUNT,	//Session Message Process Read
+	SESSION_MESSAGE_STATE_COMPLETE,							//Session Message Process Complete
+	SESSION_MESSAGE_STATE_INVALID,							//Session Message Process Invaild
+	SESSION_MESSAGE_STATE_EOF,								//Session Message Process End
+	SESSION_MESSAGE_STATE_ERROR,							//Session Message Process Error
+	SESSION_MESSAGE_STATE_COUNT								//Session Message State Count
+}SESSION_MESSAGE_STATE;
+#define	SESSION_STREAM_MESSAGE_STATE(s)		(s-SESSION_MESSAGE_STATE_COUNT+SESSION_STATE_COUNT)				
+///////////////////////////////////////////////////////////////////////////////
+//	Session Stream State
+///////////////////////////////////////////////////////////////////////////////
+typedef	enum	_SESSION_STREAM_STATE_
+{
+	SESSION_STREAM_STATE_READ		= SESSION_MESSAGE_STATE_COUNT,	//Session Stream Process Read
+	SESSION_STREAM_STATE_COMPLETE,									//Session Stream Process Complete
+	SESSION_STREAM_STATE_INVALID,									//Session Stream Process Invaild
+	SESSION_STREAM_STATE_EOF,										//Session Stream Process End
+	SESSION_STREAM_STATE_ERROR,										//Session Stream Process Error
+	SESSION_STREAM_STATE_COUNT										//Session Stream State Count
+}SESSION_STREAM_STATE;
+#define	SESSION_STREAM_PROCESS(s)	(s==SESSION_STREAM_STATE_READ||s==SESSION_STREAM_STATE_COMPLETE)
+///////////////////////////////////////////////////////////////////////////////
+typedef	enum	_STREAM_TYPE_
+{
+    STREAM_UNKNOWN	= 0,						//unknown
+    STREAM_AUDIO,								//audio
+    STREAM_VIDEO,								//video
+}STREAM_TYPE;
+///////////////////////////////////////////////////////////////////////////////
+class ZSession : public ZTimeoutTask
+{
+///////////////////////////////////////////////////////////////////////////////
+public:
+///////////////////////////////////////////////////////////////////////////////
+public:
+	ZSession(SESSION_TYPE eType,SESSION_SUBTYPE eSubType);
+	virtual	~ZSession();
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual	BOOL	Create();
+	virtual	BOOL	Close();
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual	BOOL	SetSessionStream(ZBaseStream* pStream)	= 0;
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual	UINT			GetDataStreamCount();
+	virtual	ZBaseStream*	GetDataStream(int i);
+	virtual	ZDataPin*		GetDataPin(int i);
+	//virtual BOOL			Status(STATUS_TYPE	eRequestType, char *sStatus);
+	virtual BOOL			OnDataPinClose();
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual BOOL	IsLiveSession();
+	BOOL			IsPauseSession();
+///////////////////////////////////////////////////////////////////////////////
+public:
+	SESSION_TYPE	GetSessionType();
+	SESSION_SUBTYPE	GetSessionSubType();
+	SESSION_STATE	GetSessionState();
+	SESSION_STATE	SetSessionState(SESSION_STATE nSessionState);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual	BOOL			SetSessionUserPassword(CHAR* sUser,CHAR* sPassword);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual	BOOL			Authorization();
+	virtual	BOOL			Authentication();
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual	BOOL			AuthorizationCheck(ZAuth::AUTH_TYPE nType,CHAR* sParam);
+	virtual	BOOL			AuthenticationCheck(ZAuth::AUTH_TYPE nType,CHAR* sParam);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	char*			GetSessionID();
+	char*			SetSessionID(const char* sSessionID);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	virtual char*	GetSessionURI();
+	char*			SetSessionURI(const char* sURI);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	char*			GetContent();
+	char*			GetContentType();
+	int				GetContentLength();
+	int				SetContentType(CONST CHAR* sContentType);
+	int				SetContent(const char* sContent,int nContent);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	int				AddSequence();
+	int				GetSequence();
+	int				SetSequence(int nSequence);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	FLOAT64			GetStartTime();
+	FLOAT64			GetStopTime();
+	FLOAT64			GetTimeStamp();
+	FLOAT64			SetTime(FLOAT64 nStartTime,FLOAT64 nStopTime);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	BOOL			SetPause(BOOL bPause);
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	virtual	void	GenerateSessionID();
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	virtual	int		Run(int nEvent = 0);
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	virtual	int		ServerRun(UINT nEvent)	= 0;
+	virtual	int		ClientRun(UINT nEvent)	= 0;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	virtual	BOOL	DoTaskKill()			= 0;			
+	virtual	BOOL	DoTimeOut()				= 0;
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	ZOSMutex		m_SessionMutex;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	ZAuthorization			m_SessionAuthorization;
+	ZAuthenticator			m_SessionAuthenticator;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	SESSION_TYPE	m_nSessionType;
+	SESSION_SUBTYPE	m_nSessionSubType;
+	SESSION_STATE	m_nSessionState;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	char*			m_pSessionID;
+	char*			m_pSessionURI;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	char*			m_pContentType;
+	char*			m_pContentData;
+	int				m_nContentData;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	int				m_nSequence;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	FLOAT64			m_nStartTime;
+	FLOAT64			m_nStopTime;
+///////////////////////////////////////////////////////////////////////////////
+protected:
+	BOOL			m_bPause;
+///////////////////////////////////////////////////////////////////////////////
+//	Session Entry
+///////////////////////////////////////////////////////////////////////////////
+public:
+typedef	struct	_SESSION_FACTORY_DATA_
+{
+	CHAR*			m_sSessionLabel ;
+	SESSION_TYPE	m_nSessionType;
+	ZSession*		(*m_pCreateZSession)(SESSION_SUBTYPE eSubType,ZSocket* pSocket,char* sURI,RTSP_PROTOCOL_TRANSPORT eProtocolTransport,char* sUser,char* sPassword);
+}SESSION_FACTORY_DATA;
+///////////////////////////////////////////////////////////////////////////////
+#define	SESSION_INSTANCE_REGIST(a,s,t)	{s,t,a::CreateSession},
+///////////////////////////////////////////////////////////////////////////////
+	STATIC	CONST	SESSION_FACTORY_DATA	m_aSessionFactory[];
+	STATIC	CONST	INT						m_nSessionFactory;
+///////////////////////////////////////////////////////////////////////////////
+public:
+	STATIC	ZSession*		CreateInstance(SESSION_TYPE eType,SESSION_SUBTYPE eSubType,ZSocket* pSocket,
+		char* sURI,RTSP_PROTOCOL_TRANSPORT eProtocolTransport,char* sUser,char* sPassword);
+	STATIC	ZSession*		CloseInstance(ZSession* pSession);
+///////////////////////////////////////////////////////////////////////////////
+public:
+	STATIC	SESSION_TYPE	GetSessionType(CONST CHAR* sName);
+///////////////////////////////////////////////////////////////////////////////
+ };
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+#endif	//_ZSESSION_H_
+///////////////////////////////////////////////////////////////////////////////

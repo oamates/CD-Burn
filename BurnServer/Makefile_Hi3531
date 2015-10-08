@@ -62,7 +62,7 @@ CPPFILES	= ./BurnServer/main.cpp \
 
 CORE_LINK_LIBS = -lpthread -lrt -ldl -lstdc++ -lm -lcrypt -luuid
 
-LIBS = -lHIstream -lHIburn -lHIRingBuf -lHIDVDSDK -lHINCX -lChnsysRTSP -lHITSLib -lTaskModel $(CORE_LINK_LIBS)
+LIBS = -lHIstream -lHIburn -lHIRingBuf -lHIDVDSDK -lHINCX -lHiRTSP -lHITSLib -lTaskModel $(CORE_LINK_LIBS)
 
 LINKPATH = -L./BurnServer/Depends/Burn/lib/ARMGCC_Hi3531/ -L./BurnServer/Depends/e2fsprogs/
 
