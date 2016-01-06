@@ -495,7 +495,7 @@ int main(int argc,char **argv)
     return 0;
 #endif
 
-//     LinuxServer(COMMAND_DEBUG,NULL);
+//  LinuxServer(COMMAND_DEBUG,NULL);
 
     LinuxServer(COMMAND_RUN,NULL);
 #endif

@@ -3164,7 +3164,7 @@ void BurnTask::RTBurnExtraData(DEV_HANDLE handle,const std::map< std::string,std
 
 //	Burn_File_Form_Local_File(handle, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED.playlist");
 //	Burn_File_Form_Local_File(handle, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/AutoRun.inf");
-//	Burn_File_Form_Local_File(handle, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/AuthChnsys.exe");
+//	Burn_File_Form_Local_File(handle, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/Auth.exe");
 
 
 //	Burn_Dir_Form_Local_Dir(handle, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/PlayBack" );

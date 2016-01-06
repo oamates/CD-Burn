@@ -563,6 +563,7 @@ void CCommonBurnParam::SetCDName(std::string val)
 CRTBurnInfo::CRTBurnInfo(void):
 m_strJobID(""),
 m_strJobType(""),
+m_strUpServerType("tcp"),
 m_strUpServerIP(""),
 m_strUpServerPort(""),
 m_strNewFileName(""),
@@ -588,6 +589,7 @@ m_strJobType(RTBurnInfo.GetJobType()),
 m_BurnServerInfo(RTBurnInfo.GetBurnServerInfo()),
 m_CommonBurnParam(RTBurnInfo.GetCommonBurnParam()),
 m_vecLocationInfo(RTBurnInfo.GetVecVideoLocationInfo()),
+m_strUpServerType(RTBurnInfo.GetUpServerType()),
 m_strUpServerIP(RTBurnInfo.GetUpServerIP()),
 m_strUpServerPort(RTBurnInfo.GetUpServerPort()),
 m_strNewFileName(RTBurnInfo.GetNewFileName()),
@@ -614,6 +616,7 @@ CRTBurnInfo & CRTBurnInfo::operator=(const CRTBurnInfo &RTBurnInfo)
     m_BurnServerInfo=RTBurnInfo.GetBurnServerInfo();
     m_CommonBurnParam=RTBurnInfo.GetCommonBurnParam();
     m_vecLocationInfo=RTBurnInfo.GetVecVideoLocationInfo();
+    m_strUpServerType=RTBurnInfo.GetUpServerType();
     m_strUpServerIP=RTBurnInfo.GetUpServerIP();
     m_strUpServerPort=RTBurnInfo.GetUpServerPort();
     m_strNewFileName=RTBurnInfo.GetNewFileName();
@@ -684,6 +687,14 @@ std::vector<CLocationInfo> & CRTBurnInfo::GetVecVideoLocationInfo()
 void CRTBurnInfo::SetVecVideoLocationInfo(std::vector<CLocationInfo> val)
 { 
     m_vecLocationInfo = val;
+}
+std::string CRTBurnInfo::GetUpServerType() const 
+{
+    return m_strUpServerType;
+}
+void CRTBurnInfo::SetUpServerType(std::string val) 
+{
+    m_strUpServerType = val;
 }
 std::string CRTBurnInfo::GetUpServerIP() const
 {

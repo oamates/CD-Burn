@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<burnControl>
+  <commandType>startRTBurn</commandType>
+  
+  <jobID>4444</jobID>
+
+  <playerInfoStruct>
+    <playerVersion>1.0.0.4</playerVersion>
+    <playerDownloadURL>xxxx</playerDownloadURL>
+    <remoteIP>10.1.2.77</remoteIP>
+    <remotePort>44</remotePort>
+  </playerInfoStruct>
+
+  <playlistInfoStruct>
+    <playlistDownloadURL>xxxx</playlistDownloadURL>
+    <remoteIP>10.1.2.77</remoteIP>
+    <remotePort>44</remotePort>
+  </playlistInfoStruct>
+
+  <noteFileRemoteIP>10.1.2.67</noteFileRemoteIP>
+  <noteFileRemotePort>3344</noteFileRemotePort>
+  <noteFileDownloadURL>xxxx</noteFileDownloadURL>
+
+	<burnType>1</burnType>
+  <burnPassword>4444</burnPassword>
+  <contentPassword>4444</contentPassword>
+  <CDName>ABCDE</CDName>
+
+  <CDROMVector>
+    <CDROMStruct>
+      <CDROMID>0</CDROMID>
+      <CDROMDescription>光驱1</CDROMDescription>
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>法官席</locationDescription>
+          <locationURL>xxxx</locationURL>
+        </videoLocationStruct>
+	<videoLocationStruct>
+          <locationID>2</locationID>
+          <locationDescription>嫌疑人席</locationDescription>
+          <locationURL>xxxx</locationURL>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+	<CDROMStruct>
+      <CDROMID>1</CDROMID>
+      <CDROMDescription>光驱2</CDROMDescription>
+      <videoLocationVector>
+        <videoLocationStruct>
+          <locationID>1</locationID>
+          <locationDescription>法官席</locationDescription>
+          <locationURL>xxxx</locationURL>
+        </videoLocationStruct>
+		<videoLocationStruct>
+          <locationID>2</locationID>
+          <locationDescription>嫌疑人席</locationDescription>
+          <locationURL>xxxx</locationURL>
+        </videoLocationStruct>
+      </videoLocationVector>
+    </CDROMStruct>
+  </CDROMVector>
+
+  <newFileName>xxxx</newFileName>
+  
+  
+  <upServerType>udp</upServerType>
+  <upServerIP>10.1.2.66</upServerIP>
+  <upServerPort>4488</upServerPort>
+  
+  <hardDiskBackup>1</hardDiskBackup>
+	<speed>1</speed>
+	<CDAlarmLimit>1</CDAlarmLimit>
+	<CDAutoFormat>1</CDAutoFormat>
+	<burnBufferSize>1</burnBufferSize>
+	<hardDiskBakAlarmLimit>1</hardDiskBakAlarmLimit>
+	<streamType>1</streamType>
+	<md5>1</md5>
+
+</burnControl>

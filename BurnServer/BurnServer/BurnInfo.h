@@ -310,6 +310,9 @@ public:
     std::vector<CLocationInfo> & GetVecVideoLocationInfo();
     void SetVecVideoLocationInfo(std::vector<CLocationInfo> val);
 
+    std::string GetUpServerType() const ;
+    void SetUpServerType(std::string val) ;
+
     std::string GetUpServerIP() const ;
     void SetUpServerIP(std::string val) ;
 
@@ -365,6 +368,7 @@ protected:
     CBurnServerInfo                 m_BurnServerInfo;
     CCommonBurnParam                m_CommonBurnParam;//刻录方式、刻录密码设置、光盘名称，实时刻录协议仅仅用第二项
     std::vector<CLocationInfo>      m_vecLocationInfo;
+    std::string                     m_strUpServerType;
     std::string                     m_strUpServerIP;
     std::string                     m_strUpServerPort;
     std::string                     m_strNewFileName;//TS文件重命名

@@ -17,7 +17,7 @@
 #include "BurnServerAgent.h"
 #include "FileUtil.h"
 #include "CharsetConvert.h"
-
+#include "UDPClient.h"
 #include <string>
 #include <cstdio>
 
@@ -2138,7 +2138,7 @@ void BurnServerAgent::StartNormalBurn(const CNormalBurnJobInfoEx &normalJob)
                 }
 
                 //光盘访问控制文件
-                strFilePath=CharsetConvertMFC::UTF16ToUTF8(CStringW(CStringA(GetCurDir().c_str()))).GetBuffer()+std::string("AuthChnsys.exe");
+                strFilePath=CharsetConvertMFC::UTF16ToUTF8(CStringW(CStringA(GetCurDir().c_str()))).GetBuffer()+std::string("Auth.exe");
                 dataSource.strType = SOURCE_TYPE_NORMAL_FILE;
                 dataSource.strSourceUrl = strFilePath;
                 vecSinglePollDataSource.push_back(dataSource);
@@ -3136,7 +3136,7 @@ bool BurnServerAgent::CopyLocalFileOrDir(const CNormalBurnJobInfoEx &normalJob)
     }
 
     //auth文件
-    strRemotePath=BurnServerAgent::GetCurDir()+"AuthChnsys.exe";
+    strRemotePath=BurnServerAgent::GetCurDir()+"Auth.exe";
     strLocalDataDir=BurnTask::Path(strRootDir+normalJob.GetJobID(),true);
 
     LOG_INFO(("[BurnServerAgent::CopyLocalFileOrDir] AuthCS.exe: Remote ip : %s,remote port : %s, \
@@ -3334,7 +3334,7 @@ bool BurnServerAgent::CopyLocalFileOrDir(const CRTBurnInfoEx &rtJob)
     }
 
     //auth文件
-    strRemotePath=BurnServerAgent::GetCurDir()+"AuthChnsys.exe";
+    strRemotePath=BurnServerAgent::GetCurDir()+"Auth.exe";
     strLocalDataDir=BurnTask::Path(strRootDir+rtJob.GetJobID(),true);
 #ifdef WIN32
 #else
@@ -5170,6 +5170,7 @@ void BurnServerAgent::SendCurrentBurnStateToUpper(std::string strUpperIP,
               ip : %s,port : %s,%s,%s,%d\r\n",
               strJobID.c_str(),strUpperIP.c_str(),strUpperPort.c_str(),strState.c_str(),
               strStateDescription.c_str(),__LINE__));
+    std::string strUpperType = "";
 
     std::vector<CCDROMDriverInfo> vecDevInfo;
     bool bJobFound=false;
@@ -5185,6 +5186,11 @@ void BurnServerAgent::SendCurrentBurnStateToUpper(std::string strUpperIP,
             if (iterNormalJob->GetJobID() == strJobID)
             {
                 bJobFound=true;
+
+                if ("" == strUpperType)
+                {
+                    strUpperType="tcp";
+                }
 
                 if ("" == strUpperIP)
                 {
@@ -5212,6 +5218,11 @@ void BurnServerAgent::SendCurrentBurnStateToUpper(std::string strUpperIP,
                 if (iterRTJob->GetJobID() == strJobID)
                 {
                     bJobFound=true;
+
+                    if ("" == strUpperType)
+                    {
+                        strUpperType=iterRTJob->GetUpServerType();
+                    }
 
                     if ("" == strUpperIP)
                     {
@@ -5360,11 +5371,27 @@ void BurnServerAgent::SendCurrentBurnStateToUpper(std::string strUpperIP,
 #endif
 
 #if 1
+        if("udp" == strUpperType)
+        {
+            //rtb.state=jobID,jobState,jobStateDescription\n
+            std::string strContent;
+            strContent = "rtb.state=";
+            strContent += strJobID;
+            strContent += ",";
+            strContent += strState;
+            strContent += ",";
+            strContent += strStateDescription;
+            strContent += "\n";
+            UDPClient::Send(strUpperIP.c_str(),StringToInt(strUpperPort),strContent.c_str(),strContent.length());
+        }
+        else
+        {
             BURNSENDSTATE_PARAMETER burnSendStateParam;
             burnSendStateParam.strUpIP = strUpperIP;
             burnSendStateParam.strUpPort = strUpperPort;
             burnSendStateParam.strProtocalContent = strProtocolContent;
             m_BurnSendStateTask.AddTask(burnSendStateParam);
+        }
 #endif
     }
 }
@@ -5761,10 +5788,10 @@ void BurnServerAgent::PushExtraDataSource(const CNormalBurnJobInfoEx &normalJobI
     data.strType=SOURCE_TYPE_NORMAL_FILE;
 
 #ifdef WIN32
-    std::string strTemp=CharsetConvertMFC::UTF16ToUTF8(CStringW(CStringA(GetCurDir().c_str()))).GetBuffer()+std::string("AuthChnsys.exe");
+    std::string strTemp=CharsetConvertMFC::UTF16ToUTF8(CStringW(CStringA(GetCurDir().c_str()))).GetBuffer()+std::string("Auth.exe");
     data.strSourceUrl=strTemp;
 #else
-    data.strSourceUrl=BurnTask::Path(gBasicParamCfgFile.GetValue("info","burnServerDownloadDir"),true)+strJobID+"/"+"AuthChnsys.exe";
+    data.strSourceUrl=BurnTask::Path(gBasicParamCfgFile.GetValue("info","burnServerDownloadDir"),true)+strJobID+"/"+"Auth.exe";
 #endif
     mapBurnDataSource["auth"].push_back(data);
 }
@@ -5877,11 +5904,11 @@ void BurnServerAgent::PushExtraDataSource(const CRTBurnInfoEx &rtJobInfo,std::ma
     data.strType=SOURCE_TYPE_NORMAL_FILE;
 
 #ifdef WIN32
-    std::string strTemp=CharsetConvertMFC::UTF16ToUTF8(CStringW(CStringA(GetCurDir().c_str()))).GetBuffer()+std::string("AuthChnsys.exe");
+    std::string strTemp=CharsetConvertMFC::UTF16ToUTF8(CStringW(CStringA(GetCurDir().c_str()))).GetBuffer()+std::string("Auth.exe");
     data.strSourceUrl=strTemp;
 #else
     data.strSourceUrl=BurnTask::Path(gBasicParamCfgFile.GetValue("info","burnServerDownloadDir"),true)
-        +strJobID+"/"+"AuthChnsys.exe";
+        +strJobID+"/"+"Auth.exe";
 #endif
     mapBurnDataSource["auth"].push_back(data);
 }

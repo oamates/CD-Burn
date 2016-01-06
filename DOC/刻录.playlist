@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="gb2312" ?>
+<config playerrendermode="0" splitmode="1" playerlayout="1" playtype="本地播放">
+    <notepath>note_1.doc</notepath>
+    <playlistroot>42282907_E35B_28AD_85D7_115B9353D633</playlistroot>
+    <display>
+        <书记员>管理员</书记员>
+        <庭次>26</庭次>
+        <原告>11</原告>
+        <被告>22</被告>
+        <承办人>管理员</承办人>
+        <承办部门>民二庭</承办部门>
+        <案件号>(2015)高技字第1号</案件号>
+        <案件类型>民事</案件类型>
+        <案由>对下级法院执行异议裁定的复议</案由>
+        <法庭>zcy</法庭>
+    </display>
+    <view locationname="复合画面" kerneltype="chnsys" streamindex="0">
+        <url>trial.ts</url>
+    </view>
+</config>

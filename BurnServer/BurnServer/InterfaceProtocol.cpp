@@ -1132,6 +1132,7 @@ void CInterfaceProtocol::AnalyzeProtocolStartRTBurnToBurnServer(const std::strin
 
     RTBurnInfoEx.SetNewFileName(GetTagValue(strProtocolContent,"newFileName"));
 
+    RTBurnInfoEx.SetUpServerType(GetTagValue(strProtocolContent,"upServerType"));
     RTBurnInfoEx.SetUpServerIP(GetTagValue(strProtocolContent,"upServerIP"));
     RTBurnInfoEx.SetUpServerPort(GetTagValue(strProtocolContent,"upServerPort"));
 

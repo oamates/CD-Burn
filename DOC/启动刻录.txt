@@ -1,0 +1,4 @@
+export LD_LIBRARY_PATH=/root/BurnServer_Hi3531:$LD_LIBRARY_PATH
+./Get_CDRom_Dev_Info.sh
+sleep 1
+./BurnServer_Hi3531 1 0 &

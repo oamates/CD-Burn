@@ -56,7 +56,8 @@ CPPFILES	= ./BurnServer/main.cpp \
 ./BurnServer/Depends/FileSys/FileUtil.cpp \
 ./BurnServer/Depends/ConfigurableFile/ConfigurableFile.cpp \
 ./BurnServer/Depends/Charset/CharsetConvert.cpp \
-./BurnServer/Depends/Util/SocketUtil.cpp
+./BurnServer/Depends/Util/SocketUtil.cpp \
+./BurnServer/Depends/Util/UDPClient.cpp
 
 # DEPEND LIB PATH
 

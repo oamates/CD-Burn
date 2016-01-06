@@ -479,6 +479,14 @@
 					RelativePath=".\Depends\Util\SocketUtil.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Depends\Util\UDPClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Depends\Util\UDPClient.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Burn"

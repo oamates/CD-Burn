@@ -5405,7 +5405,7 @@ void CBurnControlDlg::CreateAutorunFile(CRTBurnInfo &RTBurnInfo)
 
     CStringW strWholePath=strTempDir+CStringW(L"\\")+CStringW(L"AutoRun.ini");
 
-    CString strCMD=L"AuthChnsys.exe";
+    CString strCMD=L"Auth.exe";
 
     CStringW  strMd5;
     if (L"" == strMd5)
@@ -5457,7 +5457,7 @@ void CBurnControlDlg::CreateAutorunFile(CNormalBurnJobInfoEx &jobInfo)
     CStringW strWholePath=strTempDir+CStringW(L"\\")+CStringW(L"AutoRun.ini");
     CStringW strWholePathLinux=strTempDir+CStringW(L"\\")+CStringW(L"AutoRunLinux.ini");
 
-    CString strCMD=L"AuthChnsys.exe";
+    CString strCMD=L"Auth.exe";
 
     CStringW  strMd5;
     if (L"" == strMd5)

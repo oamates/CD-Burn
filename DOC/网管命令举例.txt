@@ -1,0 +1,9 @@
+rtb.burnType=1\n
+rtb.CDROM=2\n
+rtb.fileName=video.ts\n
+rtb.url=rtsp://192.168.1.120/CV1\n
+rtb.upperIP=192.168.1.166\n
+rtb.upperPort=6868\n
+rtb.playerInfo=1.0.0.2,192.168.1.50,18479,/home/cms/apache-tomcat-7.0.61/webapps/cms/szft/fileupload/versionUpgrade/PlayBack\n
+rtb.playlistInfo=192.168.1.50,18479,/home/BurnTest/play.playlist\n
+rtb.noteInfo=192.168.1.50,18479,/home/BurnTest/note.docx\n
