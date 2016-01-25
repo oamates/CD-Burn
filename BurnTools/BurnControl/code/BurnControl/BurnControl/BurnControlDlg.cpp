@@ -5183,7 +5183,7 @@ void CBurnControlDlg::CreatePlayListFile(CRTBurnInfo &RtJob)
 
                 strProtocolContent+="kerneltype=";
                 strProtocolContent+="\"";
-                strProtocolContent+="chnsys";
+                strProtocolContent+="0";
                 strProtocolContent+="\" ";
 
                 strProtocolContent+="streamindex=";

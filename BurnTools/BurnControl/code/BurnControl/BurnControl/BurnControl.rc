@@ -94,7 +94,7 @@ CAPTION "关于 BurnControl"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,14,14,20,20
-    LTEXT           "BurnControl，1.0.0.7 版",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "BurnControl，1.0.0.13 版",IDC_STATIC,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2013",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
 END
@@ -170,8 +170,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,9
- PRODUCTVERSION 1,0,0,9
+ FILEVERSION 1,0,0,13
+ PRODUCTVERSION 1,0,0,13
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -186,13 +186,13 @@ BEGIN
     BEGIN
         BLOCK "080403a8"
         BEGIN
-            VALUE "CompanyName", "北京视通科技有限公司"
+            VALUE "CompanyName", ""
             VALUE "FileDescription", "Burn configuration interface "
-            VALUE "FileVersion", "1.0.0.10"
+            VALUE "FileVersion", "1.0.0.13"
             VALUE "InternalName", "BurnControl.exe"
             VALUE "OriginalFilename", "BurnControl.exe"
             VALUE "ProductName", "BurnControl"
-            VALUE "ProductVersion", "1.0.0.10"
+            VALUE "ProductVersion", "1.0.0.13"
         END
     END
     BLOCK "VarFileInfo"

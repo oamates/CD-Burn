@@ -71,7 +71,7 @@ CLocationInfo::CLocationInfo(void):
 m_strID(""),
 m_strDescription(""),
 m_strBurnOrNot(BURN_NO),
-m_strStreamType("chnsys"),
+m_strStreamType("0"),
 m_strURL("")
 {
 }
