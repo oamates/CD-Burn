@@ -320,7 +320,7 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
         Print_Stream_Struct(hStream);
 
         Burn_Get_RT_File_Name(file_name);
-#ifndef RTSP_TEST
+#ifdef RTSP_TEST
 		char process_path[256] = {0};
 		char process_name[256] = {0};
 		get_executable_path(process_path, process_name, sizeof(process_path));
@@ -328,6 +328,7 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
 		sprintf(readme_file_path, "%sREADME.TXT", process_path);
 		printf("process_path = %s\n", process_path);
 		Burn_File_Form_Local_File(hBurnDEV, NULL, readme_file_path);
+#endif
 #if 1
         //光盘上创建文件
         printf("Create File [%s] On Disc\n", file_name);
@@ -347,7 +348,6 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
             }
         }
 #endif	
-#endif
         //启动RTSP与TS模块
         printf("Start Running RTSP And Ts ...\n");
         rtsptsinitialization(hStream);

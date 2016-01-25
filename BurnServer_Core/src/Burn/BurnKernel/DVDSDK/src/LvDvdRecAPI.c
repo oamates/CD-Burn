@@ -718,6 +718,7 @@ int Xkd_DVDSDK_SetFileLoca(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE FileNode)
 	VALID_HANDLE();
 
 	((FILDIRNODE *)(FileNode))->FileLoca = HUDF_HANLE()->m_CdRwDiskinfo->udffile.writenext - UDF_SYS_LEN;
+    DP(("+++++++++[Xkd_DVDSDK_SetFileLoca] File name = %s,File  location = %ld++++++++++\n",((FILDIRNODE *)(FileNode))->Name,((FILDIRNODE *)(FileNode))->FileLoca));
 
 	return 0;
 }

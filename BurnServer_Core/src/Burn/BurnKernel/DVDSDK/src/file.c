@@ -526,6 +526,7 @@ int LvDVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent 
 			memcpy((char *)fid->fileIdent,name,strlen(name));
         //DVDVideoCode((uint8_t *)fid->fileIdent,name,length_of_file_ident);
 	}
+    printf("-----------------fid->fileIdent=%s---------------\n",fid->fileIdent);
 
 	if (name) 
 	{
@@ -549,6 +550,7 @@ int LvDVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent 
 	fid->fileCharacteristics = fc;
 	fid->lengthFileIdent = cpu_to_le16(length_of_file_ident);
 	fid->lengthOfImpUse = cpu_to_le16(0);
+    printf("-----------------fid->icb.extLength=%d,fid->icb.extLocation.logicalBlockNum=%d,fid->lengthFileIdent=%d---------------\n",fid->icb.extLength,fid->icb.extLocation.logicalBlockNum,fid->lengthFileIdent);
 	
 	len = 38 + length_of_file_ident; 
 	buf = (char *)fid;
@@ -557,19 +559,24 @@ int LvDVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent 
 		buf[len++] = 0;
 	}
 	data->length = len;
-	//printf("padded_length=%d,len=%d,length_of_file_ident=%d,fe->informationLength=%d\n",
-	//	   padded_length,len,length_of_file_ident,fe->informationLength);
+
 	fe->informationLength = cpu_to_le64(padded_length + le64_to_cpu(fe->informationLength));
 	fid->descTag = LvDVDRecUdf_udf_query_tag(disc, TAG_IDENT_FID, DataMode, offset, data, len,length_of_file_ident ? data->ilength : 0);
-//printf("data->ilength=%d,Cumulative=%d\n",data->ilength,Cumulative);
+
+    printf("-----------------padded_length=%d,len=%d,length_of_file_ident=%d,fe->informationLength=%d---------------\n",
+        padded_length,len,length_of_file_ident,fe->informationLength);
+
+
 	if(data->ilength == 0)
 		data->ilength = ilength;
 	else
 		data->ilength += Cumulative;
+    printf("-----------------data->ilength=%d,Cumulative=%d---------------\n",data->ilength,Cumulative);
 
 	data->length = (2048*SecNum);//后面复制数据时用到
 	//fe->logicalBlocksRecorded = cpu_to_le64(data->length/2048);
 	//printf("fe->logicalBlocksRecorded=%lld,fe=%d\n",fe->logicalBlocksRecorded,fe);
+    printf("-----------------data->length=%d---------------\n",data->length);
 	return SecNum;
 }
 

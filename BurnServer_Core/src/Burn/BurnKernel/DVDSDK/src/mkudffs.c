@@ -769,10 +769,11 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 			fentry[i]->logicalBlocksRecorded = Dir->FileSize / CDROM_BLOCK + ( Dir->FileSize % CDROM_BLOCK == 0 ? 0 : 1);
 			fentry[i]->logicalBlocksRecorded = cpu_to_le64(fentry[i]->logicalBlocksRecorded);
 
+            DP(("+++++++++[RecursiveTree] File name = %s,File  location = %ld,File size =%ld++++++++++\n",Dir->Name,Dir->FileLoca,Dir->FileSize));
 			if(Dir->FileSize < FILE1G)
 			{
 				if( (le16_to_cpu(fentry[i]->icbTag.flags) & ICBTAG_FLAG_AD_MASK) == ICBTAG_FLAG_AD_SHORT )
-				{		
+				{	
 					fentry[i]->lengthAllocDescs = cpu_to_le32(sizeof(short_ad));
 					((short_ad *)&fentry[i]->allocDescs[0])->extLength = cpu_to_le32((unsigned int)Dir->FileSize);
 					((short_ad *)&fentry[i]->allocDescs[0])->extPosition = cpu_to_le32((unsigned int)Dir->FileLoca);//cpu_to_le32(pUdfInfo->m_CurrentFileLocation);	

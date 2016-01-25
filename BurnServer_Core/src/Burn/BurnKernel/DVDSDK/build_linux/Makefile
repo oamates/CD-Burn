@@ -10,7 +10,8 @@ RM = rm -f
 
 INC_DIR += -I../include
 INC_DIR += -I../lib
-INC_DIR += -I/usr/include
+#INC_DIR += -I/usr/include
+#INC_DIR += /opt/hisi-linux/x86-arm/arm-hisiv200-linux/target/usr/include
 
 SRC = ../src/LvDvdRecAPI.c \
 	  ../src/cdr_cmd.c \

@@ -205,7 +205,7 @@ TEST:
 /****************** 进行参数设置 *********************/
 
 	//设置回调函数
-	Burn_Set_Event_Callback(hBurnDEV, important_events, "chnsys");
+	Burn_Set_Event_Callback(hBurnDEV, important_events, "iBurn");
 
 
     //设置刻录模式(实时刻录)
@@ -431,7 +431,7 @@ sleep(3);
 //	Burn_File_Form_Local_File(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/abc3");
 	Burn_File_Form_Local_File(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/note_1.doc");
 	Burn_File_Form_Local_File(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/AutoRun.inf");
-	Burn_File_Form_Local_File(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/AuthChnsys.exe");
+	Burn_File_Form_Local_File(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/Auth.exe");
 
 	Burn_Dir_Form_Local_Dir(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/PlayBack" );
 //	Burn_File_Form_Local_File(hBurnDEV, NULL, "/mnt/HD0/BurnDownload/EBFB6F5D_0DBE_7DDF_86B8_36C4921DF0ED/Note.doc");
@@ -587,7 +587,7 @@ void *BurnLocalFileThrFxn(void *args)
 	Burn_Set_DiscAlarmSize(hBurnDEV, 700);
 
 	//设置回调函数
-	Burn_Set_Event_Callback(hBurnDEV, important_events, "chnsys");
+	Burn_Set_Event_Callback(hBurnDEV, important_events, "iBurn");
 
 /*******************************************************/
 #if 1
@@ -815,7 +815,7 @@ int main(int argc, char *argv[])
     }
 
 	//创建备份文件
-	ret = Disk_Create_BackUpFile(hBurnDEV, "chnsys1.ts");
+	ret = Disk_Create_BackUpFile(hBurnDEV, "1.ts");
     if(ret != BURN_SUCCESS)
     {
         printf("Create Disk BackUp File Failed\n");
@@ -871,7 +871,7 @@ int main(int argc, char *argv[])
     }
 
 	//创建备份文件
-	ret = Disk_Create_BackUpFile(hBurnDEV2, "chnsys2.ts");
+	ret = Disk_Create_BackUpFile(hBurnDEV2, "2.ts");
     if(ret != BURN_SUCCESS)
     {
         printf("Create Disk BackUp File Failed\n");

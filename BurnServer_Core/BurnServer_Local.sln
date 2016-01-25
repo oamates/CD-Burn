@@ -35,6 +35,42 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{449C
 		include\ZMediaTS.h = include\ZMediaTS.h
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kernelSrc", "kernelSrc", "{344132B1-CE3E-444B-96A7-9750D4E69816}"
+	ProjectSection(SolutionItems) = preProject
+		src\Burn\BurnKernel\DVDSDK\src\cdr_cmd.c = src\Burn\BurnKernel\DVDSDK\src\cdr_cmd.c
+		src\Burn\BurnKernel\DVDSDK\src\crc.c = src\Burn\BurnKernel\DVDSDK\src\crc.c
+		src\Burn\BurnKernel\DVDSDK\src\defaults.c = src\Burn\BurnKernel\DVDSDK\src\defaults.c
+		src\Burn\BurnKernel\DVDSDK\src\extent.c = src\Burn\BurnKernel\DVDSDK\src\extent.c
+		src\Burn\BurnKernel\DVDSDK\src\file.c = src\Burn\BurnKernel\DVDSDK\src\file.c
+		src\Burn\BurnKernel\DVDSDK\src\LvDvdRecAPI.c = src\Burn\BurnKernel\DVDSDK\src\LvDvdRecAPI.c
+		src\Burn\BurnKernel\DVDSDK\src\memmalloc.c = src\Burn\BurnKernel\DVDSDK\src\memmalloc.c
+		src\Burn\BurnKernel\DVDSDK\src\mkudffs.c = src\Burn\BurnKernel\DVDSDK\src\mkudffs.c
+		src\Burn\BurnKernel\DVDSDK\src\udffscore.c = src\Burn\BurnKernel\DVDSDK\src\udffscore.c
+		src\Burn\BurnKernel\DVDSDK\src\unicode.c = src\Burn\BurnKernel\DVDSDK\src\unicode.c
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kernelInclude", "kernelInclude", "{EDA9FEEE-6EB9-4622-9EF3-E22B84B63827}"
+	ProjectSection(SolutionItems) = preProject
+		src\Burn\BurnKernel\DVDSDK\include\bswap.h = src\Burn\BurnKernel\DVDSDK\include\bswap.h
+		src\Burn\BurnKernel\DVDSDK\include\cdr_cmd.h = src\Burn\BurnKernel\DVDSDK\include\cdr_cmd.h
+		src\Burn\BurnKernel\DVDSDK\include\cgccmd.h = src\Burn\BurnKernel\DVDSDK\include\cgccmd.h
+		src\Burn\BurnKernel\DVDSDK\include\debug.h = src\Burn\BurnKernel\DVDSDK\include\debug.h
+		src\Burn\BurnKernel\DVDSDK\include\defaults.h = src\Burn\BurnKernel\DVDSDK\include\defaults.h
+		src\Burn\BurnKernel\DVDSDK\include\drvcomm.h = src\Burn\BurnKernel\DVDSDK\include\drvcomm.h
+		src\Burn\BurnKernel\DVDSDK\include\ecma_167.h = src\Burn\BurnKernel\DVDSDK\include\ecma_167.h
+		src\Burn\BurnKernel\DVDSDK\include\gb2unicode_bk.h = src\Burn\BurnKernel\DVDSDK\include\gb2unicode_bk.h
+		src\Burn\BurnKernel\DVDSDK\include\LibDVDSDK.h = src\Burn\BurnKernel\DVDSDK\include\LibDVDSDK.h
+		src\Burn\BurnKernel\DVDSDK\include\libudffs.h = src\Burn\BurnKernel\DVDSDK\include\libudffs.h
+		src\Burn\BurnKernel\DVDSDK\include\memmalloc.h = src\Burn\BurnKernel\DVDSDK\include\memmalloc.h
+		src\Burn\BurnKernel\DVDSDK\include\mkudffs.h = src\Burn\BurnKernel\DVDSDK\include\mkudffs.h
+		src\Burn\BurnKernel\DVDSDK\include\osta_udf.h = src\Burn\BurnKernel\DVDSDK\include\osta_udf.h
+		src\Burn\BurnKernel\DVDSDK\include\udf_endian.h = src\Burn\BurnKernel\DVDSDK\include\udf_endian.h
+		src\Burn\BurnKernel\DVDSDK\include\udffscore.h = src\Burn\BurnKernel\DVDSDK\include\udffscore.h
+		src\Burn\BurnKernel\DVDSDK\include\UdffsTag.h = src\Burn\BurnKernel\DVDSDK\include\UdffsTag.h
+		src\Burn\BurnKernel\DVDSDK\include\uuid.h = src\Burn\BurnKernel\DVDSDK\include\uuid.h
+		src\Burn\BurnKernel\DVDSDK\include\uuid_types.h = src\Burn\BurnKernel\DVDSDK\include\uuid_types.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

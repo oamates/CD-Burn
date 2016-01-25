@@ -71,8 +71,8 @@ LINKPATH = -L./BurnServer/Depends/Burn/lib/ARMGCC_Hi3531/ -L./BurnServer/Depends
 BurnServer : $(CFILES:.c=.o) $(CPPFILES:.cpp=.o) 
 	$(C++LINK) -o BurnServer.out $(CFILES:.c=.o) $(CPPFILES:.cpp=.o) $(C++FLAGS) $(LINKPATH) $(LIBS)
 	arm-hisiv200-linux-strip BurnServer.out
-	cp BurnServer.out /tftpboot/BurnServer_Hi3531
-	cp BurnServer.out ./Setup/BurnServer_Hi3531/BurnServer_Hi3531
+	cp BurnServer.out /tftpboot/BServices_Hi3531
+	cp BurnServer.out ./Setup/BurnServer_Hi3531/BServices_Hi3531
 	
 clean:
 	rm -f *.out *.log $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)

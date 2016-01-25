@@ -3006,10 +3006,11 @@ void BurnTask::RTBurnExtraData(DEV_HANDLE handle,const std::map< std::string,std
         LOG_WARNING(("[BurnTask::RTBurnExtraData] No playlist,%d\r\n",__LINE__));
     }
 #endif
-	Burn_File_Form_Local_File(handle, NULL, "/root/BurnServer_Test/abc");
-	Burn_File_Form_Local_File(handle, NULL, "/root/BurnServer_Test/abc1");
-	Burn_File_Form_Local_File(handle, NULL, "/root/BurnServer_Test/abc2");
-	Burn_File_Form_Local_File(handle, NULL, "/root/BurnServer_Test/abc3");
+    Burn_File_Form_Local_File(handle, NULL, "/root/README");
+    Burn_File_Form_Local_File(handle, NULL, "/root/README1");
+    Burn_File_Form_Local_File(handle, NULL, "/root/README2");
+    Burn_File_Form_Local_File(handle, NULL, "/root/README3");
+
     //note
     if ( (iter=mapData.find("note")) != mapData.end())
     {
@@ -4320,10 +4321,12 @@ bool BurnTask::StartSpecificDeviceToBurn(DEV_HANDLE hBurnDEV,std::vector<BURN_DA
 
     if (MEDIAFILE_BURN_LOCAL_FILE == mode)
     {
-        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/BurnServer_Test/abc");
-        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/BurnServer_Test/abc1");
-        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/BurnServer_Test/abc2");
-        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/BurnServer_Test/abc3");
+        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/README");
+        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/README1");
+        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/README2");
+        Burn_File_Form_Local_File(hBurnDEV, NULL, "/root/README3");
+
+
         if (BURN_SUCCESS != Burn_Ctrl_CloseDisc(hBurnDEV))
         {
             LOG_ERROR(("[BurnTask::StartSpecificDeviceToBurn] dev handle[%d] : %p Burn_Ctrl_CloseDisc failed\r\n",burnParam.nIndex,(void*)hBurnDEV));

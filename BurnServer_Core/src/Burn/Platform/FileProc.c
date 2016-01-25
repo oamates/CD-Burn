@@ -690,9 +690,9 @@ int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
 #endif
         num ++;
 //		ret = Xkd_DVDSDK_WriteData(hBurnDEV->hDVD, hFile, buffer, DEFAULTPACKED);
-        printf("***********************Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData hBurnDEV: %p, hFile:%p, num:%d \r\n", (void*)hBurnDEV, (void*)hFile, num);
+//        printf("***********************Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData hBurnDEV: %p, hFile:%p, num:%d \r\n", (void*)hBurnDEV, (void*)hFile, num);
 		ret = Burn_Ctrl_WriteData(hBurnDEV, hFile, buffer, DEFAULTPACKED);
-        printf("***********************After Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData hBurnDEV: %p, hFile:%p, num:%d\r\n", (void*)hBurnDEV, (void*)hFile, num);
+//        printf("***********************After Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData hBurnDEV: %p, hFile:%p, num:%d\r\n", (void*)hBurnDEV, (void*)hFile, num);
 
         if(ret != 0)
         {

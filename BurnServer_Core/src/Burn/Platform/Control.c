@@ -996,7 +996,7 @@ int Burn_Ctrl_Dev_LoadDisc(DEV_HANDLE hBurnDEV)
 			b_disc_info_ptr->usedsize  = 0;	
 			b_disc_info_ptr->writecnt  = 0;	
 			b_disc_info_ptr->freesize  = pDiscInfo.discsize;	
-			strcpy(b_disc_info_ptr->disc_name, "chnsys");
+			strcpy(b_disc_info_ptr->disc_name, "iBurn");
 
 			//如果报警门限没有设置或设置值大于光盘容量，则使用默认配置
 			if((b_disc_info_ptr->alarmsize <= 500) || (b_disc_info_ptr->alarmsize >= b_disc_info_ptr->discsize))
@@ -1039,7 +1039,7 @@ int Burn_Ctrl_Dev_LoadDisc(DEV_HANDLE hBurnDEV)
 			b_disc_info_ptr->writecnt  = 0;	
 			//将Byte转换为MB
 			b_disc_info_ptr->freesize  = discInfo.uiFreeBytes/(1024*1024);	
-			strcpy(b_disc_info_ptr->disc_name, "chnsys");
+			strcpy(b_disc_info_ptr->disc_name, "iBurn");
 
 			//如果报警门限没有设置或设置值大于光盘容量，则使用默认配置
 			if((b_disc_info_ptr->alarmsize <= 500) || (b_disc_info_ptr->alarmsize > b_disc_info_ptr->discsize))
@@ -1113,10 +1113,10 @@ int Burn_Ctrl_Dev_FormatDisc(DEV_HANDLE hBurnDEV)
 	else
 	{
 #ifdef LINUX
-		ret = Xkd_DVDSDK_FormatDisc(hBurnDEV->hDVD, "chnsys");
+		ret = Xkd_DVDSDK_FormatDisc(hBurnDEV->hDVD, "iBurn");
     	if(ret != 0)
 	    {
-            printf("Format Disc Failed,retcode: %d, disc: chnsys\n", ret);
+            printf("Format Disc Failed,retcode: %d, disc: iBurn\n", ret);
         	return ERR_DISC_FORMAT_FAILED;
 	    }
 #endif		
@@ -1378,7 +1378,7 @@ int Burn_Ctrl_Dev_Get_Ready(DEV_HANDLE hBurnDEV)
 #if 0
 	printf("Format Disc\n");
 #ifdef LINUX
-	ret = Xkd_DVDSDK_FormatDisc(hBurnDEV->hDVD, "chnsys");
+	ret = Xkd_DVDSDK_FormatDisc(hBurnDEV->hDVD, "iBurn");
     if(ret != 0)
     {
         printf("Format Disc Failed\n");

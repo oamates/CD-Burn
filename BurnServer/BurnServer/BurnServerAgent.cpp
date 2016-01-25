@@ -3338,7 +3338,7 @@ bool BurnServerAgent::CopyLocalFileOrDir(const CRTBurnInfoEx &rtJob)
     strLocalDataDir=BurnTask::Path(strRootDir+rtJob.GetJobID(),true);
 #ifdef WIN32
 #else
-    if (FileUtil::FileExist(strRemotePath.c_str()))
+    if (FileUtil::FileExist(strRemotePath.c_str()) && rtJob.GetAutorunFilePath() != "")
     {
         std::vector<std::string> vecFiles;
         vecFiles.push_back(strRemotePath);
@@ -3639,7 +3639,7 @@ void BurnServerAgent::DownloadFile(std::string strJobID,int nFlag)
             strRemoteIP != "")
         {
             strUUID=DownloadSingleFileOrDir(strRemoteIP,strRemotePort,strRemotePath,
-                strLocalDownloadDir,"",true);
+                strLocalDownloadDir,"PlayBack",true);
 
             if (strUUID != "")
             {
