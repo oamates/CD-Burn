@@ -561,19 +561,19 @@
 			</Filter>
 		</Filter>
 		<File
-			RelativePath="..\..\Source\ChnsysRTSP.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Source\ChnsysRTSP.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\Source\ChnsysTypes.h"
 			>
 		</File>
 		<File
 			RelativePath="..\..\Source\WindowsDLL\dllmain.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Source\RTSPLib.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Source\RTSPLib.h"
 			>
 		</File>
 	</Files>

@@ -1,4 +1,4 @@
-#ChnsysRTSPLib Makefile
+#RTSPLib Makefile
 #
 
 LIB_NAME = libHiRTSP.so
@@ -69,7 +69,7 @@ CPPFILES =  ../../Source/Protocol/Base/ZSessionStream.cpp\
 			../../Source/Protocol/RTSP/RemoteRTSPClient.cpp\
 			../../Source/Protocol/SDP/ZSessionDescription.cpp\
 			../../Source/Protocol/SDP/SDPUtil.cpp\
-			../../Source/ChnsysRTSP.cpp\
+			../../Source/RTSPLib.cpp\
 			
 all: $(LIB_NAME)
 
