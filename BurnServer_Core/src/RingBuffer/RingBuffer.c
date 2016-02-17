@@ -232,7 +232,7 @@ int Fill_Data_To_Buf(RingBuffer hBuf, char *buf_ptr, int len, int block)
 		while (1)
 		{
 			usleep(10 * 1000);
-            printf("================\n");
+            printf("=========================================================Fill_Data_To_Buf wait!!!!!!\n");
 			if (Get_Free_Space_Len(hBuf) >= len) 
 			{
 		        fill_to_buf(hBuf, buf_ptr, len);
@@ -240,6 +240,10 @@ int Fill_Data_To_Buf(RingBuffer hBuf, char *buf_ptr, int len, int block)
 			}   
 		}   
 	}
+    else
+    {
+        printf("=========================================================Fill_Data_To_Buf loss data!!!!!!\n");
+    }
 
 #endif
 // 	printf("Free Space Len Is Too Small , Discarding the data...\n");

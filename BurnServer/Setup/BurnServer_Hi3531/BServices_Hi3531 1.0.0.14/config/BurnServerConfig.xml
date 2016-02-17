@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<burnControl>
+<config>
+
+  <type>
+    <burnServerVector>
+      <burnServerStruct>
+        <burnServerType>1</burnServerType>
+        <burnServerTypeDescription>普通刻录服务器</burnServerTypeDescription>
+        <burnServerDescription>普通刻录服务器的描述信息</burnServerDescription>
+      </burnServerStruct>
+      <burnServerStruct>
+        <burnServerType>2</burnServerType>
+        <burnServerTypeDescription>派美雅刻录服务器</burnServerTypeDescription>
+        <burnServerDescription>派美雅刻录服务器的描述信息</burnServerDescription>
+      </burnServerStruct>
+      <burnServerStruct>
+        <burnServerType>4</burnServerType>
+        <burnServerTypeDescription>爱普生刻录服务器</burnServerTypeDescription>
+        <burnServerDescription>爱普生刻录服务器的描述信息</burnServerDescription>
+      </burnServerStruct>
+    </burnServerVector>
+  </type>
+
+</config>
+</burnControl>

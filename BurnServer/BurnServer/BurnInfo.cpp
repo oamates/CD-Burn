@@ -533,6 +533,10 @@ void CCommonBurnParam::SetBurnType(std::string val)
     {
         m_strBurnType = val;
     }
+//     if(m_strBurnType == BURN_TYPE_MULTI_SYN)
+//     {
+//         m_strBurnType = BURN_TYPE_MULTI_ASYN;
+//     }
 }
 std::string CCommonBurnParam::GetBurnPassword() const 
 { 

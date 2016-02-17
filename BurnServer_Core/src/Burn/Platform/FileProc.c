@@ -702,7 +702,7 @@ int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
 #ifdef LINUX
 // 		Disk_Write_BackUpFile(hBurnDEV, buffer, DEFAULTPACKED);
 #endif
-		usleep(20);
+//		usleep(20);
     }
     
     //╧ь╠унд╪Ч

@@ -196,7 +196,7 @@ int config_rtsp_url_and_ts_channel(RTSPTS_HANDLE *hStream, char *stream_url, int
 //    initrtsp(hStream->gRTSPClientConfig[ts_channel], url);
 
 	strcpy(hStream->gRTSPClientConfig[ts_channel].sUrl, url);
-	hStream->gRTSPClientConfig[ts_channel].nTransportType = 1;
+	hStream->gRTSPClientConfig[ts_channel].nTransportType = 2;
 	hStream->gRTSPClientConfig[ts_channel].bSynchronizationMode = TRUE;
 	hStream->gRTSPClientConfig[ts_channel].nWaitSecond = 10;
 	hStream->gRTSPClientConfig[ts_channel].bReconnect = TRUE;
