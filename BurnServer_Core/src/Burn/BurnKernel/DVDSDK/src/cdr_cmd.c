@@ -316,7 +316,7 @@ static int sync_cache(int fd)
 //static BOOL writetrack_block(int fd, uint8_t *buffer, int lba, int blocks, int retrynums)
 BOOL writetrack_block(int fd, uint8_t *buffer, int lba, int blocks, int retrynums)
 {
-	int i, iRet;
+	int iRet;
 	int errcode;
     int iRetry = 0;
 	INIT_CGC();
@@ -338,10 +338,10 @@ STARTWRITE:
     gettimeofday(&tvStart, NULL);
     struct tm 	*tm;
     tm = localtime(&tvStart.tv_sec);
-    //DP(("writetrack_block, send_cmd fd=%d ptrack->writenext:%d send_cmdtime:   %d:%d:%d %ld us\n", fd, lba, tm->tm_hour, tm->tm_min, tm->tm_sec, tvStart.tv_usec));
+    DP(("writetrack_block, send_cmd fd=%d ptrack->writenext:%d send_cmdtime:   %d:%d:%d %ld us\n", fd, lba, tm->tm_hour, tm->tm_min, tm->tm_sec, tvStart.tv_usec));
 	iRet = send_cmd(fd, &cgc, buffer, CGC_DATA_WRITE, WAIT_SYNC * 2000 );
     gettimeofday(&tvEnd, NULL);
-    //DP(("writetrack_block after send_cmd, fd=%d ptrack->writenext:%d send_cmdlasttime:%ds %ldus \n", fd, lba,(tvEnd.tv_sec - tvStart.tv_sec), tvEnd.tv_usec - tvStart.tv_usec));
+    DP(("writetrack_block after send_cmd, fd=%d ptrack->writenext:%d send_cmdlasttime:%ds %ldus \n", fd, lba,(tvEnd.tv_sec - tvStart.tv_sec), tvEnd.tv_usec - tvStart.tv_usec));
 
 	if( iRet != 0 && retrynums > 0)
 	{
@@ -349,15 +349,15 @@ STARTWRITE:
 		errcode = ((cgc.sense->sense_key << 16) | (cgc.sense->asc << 8) | cgc.sense->ascq);
 		if(  errcode == 0X020408 || errcode == 0X020407 || errcode == 0X020404 )
 		{
-			if(i < 5)
+			if(retrynums < 5)
 			{
 				CSLEEP(2);
 			}
-			else if(i < 20)
+			else if(retrynums < 20)
 			{
 				CSLEEP(10);
 			}
-			else if(i < 100)
+			else if(retrynums < 100)
 			{
 				CSLEEP(20);
 			}
@@ -1146,7 +1146,7 @@ static int cdr_writetrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int siz
 		ptrack->buffsize += size;
 	}
 
-    //DP(("cdr_writetrack, fd=%d ptrack->writestart:%d ptrack->writenext:%d ptrack->buffsize:%d \n", fd, ptrack->writestart, ptrack->writenext,ptrack->buffsize));
+    DP(("cdr_writetrack, fd=%d ptrack->writestart:%d ptrack->writenext:%d ptrack->buffsize:%d \n", fd, ptrack->writestart, ptrack->writenext,ptrack->buffsize));
 	while( ptrack->buffsize >= PACKET32_SIZE )
 	{
         struct timeval	tvStart;
@@ -1154,7 +1154,7 @@ static int cdr_writetrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int siz
         gettimeofday(&tvStart, NULL);
         struct tm 	*tm;
         tm = localtime(&tvStart.tv_sec);
-        //DP(("cdr_writetrack writetrack_block, fd=%d ptrack->writestart:%d ptrack->writenext:%d writetrack_blocktime:   %d:%d:%d %ld us\n", fd, ptrack->writestart, ptrack->writenext, tm->tm_hour, tm->tm_min, tm->tm_sec, tvStart.tv_usec));
+        DP(("cdr_writetrack writetrack_block, fd=%d ptrack->writestart:%d ptrack->writenext:%d writetrack_blocktime:   %d:%d:%d %ld us\n", fd, ptrack->writestart, ptrack->writenext, tm->tm_hour, tm->tm_min, tm->tm_sec, tvStart.tv_usec));
 		if(!writetrack_block(fd, pStart, ptrack->writenext, PACKET_BLOCK_32, WRITE_TRYNUMS))
 		{
 			DPERROR(("writetrack_block error, fd=%d ptrack->writestart:%d ptrack->writenext:%d  \n", fd, ptrack->writestart, ptrack->writenext));
@@ -1166,7 +1166,7 @@ static int cdr_writetrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int siz
 		ptrack->writedsize	+= PACKET_BLOCK_32;
 		ptrack->freeblocks	-= PACKET_BLOCK_32;
         gettimeofday(&tvEnd, NULL);
-        //DP(("cdr_writetrack after writetrack_block, fd=%d ptrack->writestart:%d ptrack->writenext:%d ptrack->buffsize:%d writetrack_blocklasttime:%ds %ldus \n", fd, ptrack->writestart, ptrack->writenext,ptrack->buffsize,(tvEnd.tv_sec - tvStart.tv_sec), tvEnd.tv_usec - tvStart.tv_usec));
+        DP(("cdr_writetrack after writetrack_block, fd=%d ptrack->writestart:%d ptrack->writenext:%d ptrack->buffsize:%d writetrack_blocklasttime:%ds %ldus \n", fd, ptrack->writestart, ptrack->writenext,ptrack->buffsize,(tvEnd.tv_sec - tvStart.tv_sec), tvEnd.tv_usec - tvStart.tv_usec));
 	}
 
 	if( ptrack->buffsize > 0 && pStart != ptrack->pbuffer)
@@ -1178,7 +1178,7 @@ static int cdr_writetrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int siz
 	{
 		ptrack->bclosed = TRUE;
 	}
-    //DP(("end cdr_writetrack, fd=%d ptrack->writestart:%d ptrack->writenext:%d ptrack->buffsize:%d ptrack->bclosed:%d\n", fd, ptrack->writestart, ptrack->writenext,ptrack->buffsize,ptrack->bclosed));
+    DP(("end cdr_writetrack, fd=%d ptrack->writestart:%d ptrack->writenext:%d ptrack->buffsize:%d ptrack->bclosed:%d\n", fd, ptrack->writestart, ptrack->writenext,ptrack->buffsize,ptrack->bclosed));
 	return 0;
 }
 

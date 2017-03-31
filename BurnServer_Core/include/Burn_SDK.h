@@ -367,7 +367,7 @@ int Burn_Ctrl_GetReserveData(DEV_HANDLE hBurnDEV, unsigned char **pBuffer, int *
 	pSize  : 返回Buffer长度
 * 返回值: 0: 成功，其他为错误值
 * 作者  : xkd
-* 日期  : 2010.12.11
+* 日期  : 2017.3.31
 *******************************************************************************/
 int Burn_Ctrl_GetReserveBuffer(DEV_HANDLE hBurnDEV, unsigned char **pBuffer, int *pSize);
 

@@ -673,15 +673,15 @@ int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
         ret = Get_Data_Form_Buf(data_ptr->hBuf, buffer, DEFAULTPACKED, BURN_FLASE);
         if(ret != BURN_SUCCESS)
         {
-//          printf("Get Data Form Buf Failed\n");
-//          printf("***************************************************\n");
+            //printf("Get Data Form Buf Failed\n");
+            //printf("***************************************************\n");
 			usleep(20);
             continue;
         }
 		else
 		{
-//			printf("Get Data Form Buf Success ...\n");
-//			printf("========================= [%d] ===========================\n", num);
+			printf("Get Data Form Buf Success ...\n");
+			printf("========================= [%d] ===========================\n", num);
 		}
 #if 0
         //写入固定数据测试性能
