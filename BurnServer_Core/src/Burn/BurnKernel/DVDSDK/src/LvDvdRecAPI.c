@@ -865,14 +865,14 @@ Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CreateFile
+* 名称  : DVDSDK_CreateFile
 * 描述  : 创建文件，开始写数据
 * 参数  :
 	nDevNo : 设备号，0-n
 	pDir   : 目录节点指针, NULL为根目录, Xkd_DVDSDK_CreateDir的返回值
 	szFileName: 文件名称
 * 返回值: 文件节点指针，NULL：创建失败
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_DIR pDir, char *szFileName, uint64_t filesize)

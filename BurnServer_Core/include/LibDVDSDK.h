@@ -36,13 +36,13 @@
    2:  DVDSDK_HaveDisc()				判断是否有光盘
    3:  DVDSDK_LoadDisc();               有光盘则加载光盘
    4:  DVDSDK_GetDiscInfo				查询光盘信息
-   5:  Xkd_DVDSDK_SetWriteSpeed				设置光驱写倍速
-   6:  Xkd_DVDSDK_LockDoor					锁门
-   7:  Xkd_DVDSDK_FormatDisc				格式化光盘
-   8:  Xkd_DVDSDK_CreateDir					创建目录
-   9:  Xkd_DVDSDK_CreateFile				创建文件
-   10:  Xkd_DVDSDK_fillEmptyDataOnFirst		开始启动刻录
-   11:  Xkd_DVDSDK_SetFileLoca				设定刻录文件位置
+   5:  DVDSDK_SetWriteSpeed				设置光驱写倍速
+   6:  DVDSDK_LockDoor					锁门
+   7:  DVDSDK_FormatDisc				格式化光盘
+   8:  DVDSDK_CreateDir					创建目录
+   9:  DVDSDK_CreateFile				创建文件
+   10:  DVDSDK_fillEmptyDataOnFirst		开始启动刻录
+   11:  DVDSDK_SetFileLoca				设定刻录文件位置
    12:  Xkd_DVDSDK_WriteData				刻录数据
    13:    ......(刻录过程必须连续写入数据，流量可以变化)
    14:  Xkd_DVDSDK_CloseFile				关闭文件
@@ -233,10 +233,10 @@ int	Xkd_DVDSDK_GetTrayState(XKD_DVDDRV hDVD);
 * 名称  : Xkd_DVDSDK_LockDoor
 * 描述  : 锁定/解锁光驱门, 防止在刻录过程中意外打开
 * 参数  : 
-	hDVD : Xkd_DVDSDK_Load的返回值
+	hDVD : DVDSDK_Load的返回值
 	bLocked: TRUE:锁定, FALSE:解锁
 * 返回值: 0:成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 int Xkd_DVDSDK_LockDoor(XKD_DVDDRV hDVD, int bLocked);
@@ -349,59 +349,59 @@ int Xkd_DVDSDK_LoadDisc(XKD_DVDDRV hDVD);
 int Xkd_DVDSDK_DiscCanWrite(XKD_DVDDRV hDVD);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_FormatDisc
+* 名称  : DVDSDK_FormatDisc
 * 描述  : 格式化光盘, 分轨道, 创建UDF文件系统, 准备开始写数据; 目前只支持一个分区，2个轨道
 * 参数  : 
 	nDevNo : 设备号，0-n
 	szDiscName: 光盘名称
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *szDiscName);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetFileLoca
+* 名称  : DVDSDK_SetFileLoca
 * 描述  : 设定文件位置 (写文件前都需要调用这个函数)
 * 参数  : 
 	nDevNo : 设备号，0-n
 	FileNode : 文件节点
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd 
+* 作者  : passion 
 * 日期  : 2011.1.17
 *******************************************************************************/
 int Xkd_DVDSDK_SetFileLoca(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE FileNode);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_fillEmptyDataOnFirst
+* 名称  : DVDSDK_fillEmptyDataOnFirst
 * 描述  : 填充空数据，在格式化之后，开始刻录之前调用，避免开始刻录时写轨道数据的停滞，
           造成视频丢帧  (第一个文件前调用，之后的文件调用Xkd_DVDSDK_SetFileLoca)
 * 参数  : 
 	nDevNo : 设备号，0-n
 	fillsize: 填充大小，0为自动计算填充大小
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 int Xkd_DVDSDK_fillEmptyDataOnFirst(XKD_DVDDRV hDVD, unsigned int fillsize);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CreateDir
+* 名称  : DVDSDK_CreateDir
 * 描述  : 创建目录
 * 参数  : 
 	nDevNo : 设备号，0-n
 	szDirName : 目录名称，不能为空
 * 返回值: 目录节点指针, Xkd_DVDSDK_CreateFile函数会用到, NULL:创建目录失败
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
-* 修改  : 2010.12.21 xkd 
+* 修改  : 2017.4.21 passion 
           参数:	nDevNo : 设备号，0-n
 				szDirName : 要创建的目录,方式为"/root/test1dir/test2dir"
 *******************************************************************************/
 Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CreateFile
+* 名称  : DVDSDK_CreateFile
 * 描述  : 创建文件，开始写数据
 * 参数  : 
 	nDevNo : 设备号，0-n
@@ -409,7 +409,7 @@ Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName);
 	szFileName: 文件名称
 	filesize: 默认0
 * 返回值: 文件节点指针，NULL：创建失败
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_DIR pDir, char *szFileName, uint64_t filesize);
@@ -429,13 +429,13 @@ Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_DIR pDir, char
 int	Xkd_DVDSDK_WriteData(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile, unsigned char *pBuffer, int size);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CloseFile
+* 名称  : DVDSDK_CloseFile
 * 描述  : 关闭文件
 * 参数  : 
 	nDevNo : 设备号，0-n
 	pFile  : 文件节点指针，Xkd_DVDSDK_CreateFile的返回值
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 int Xkd_DVDSDK_CloseFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile);
