@@ -459,121 +459,121 @@ static int FindDiscType(char *pbuf,unsigned char * disclist,int * j)
 {
 	switch(*pbuf)
 	{
-		case LV_PROFILE_HD_DVD_RAM:
+		case PROFILE_HD_DVD_RAM:
 		{
 			disclist[(*j)++] = DISC_HDVD_RAM;
 			return DISC_HDVD_RAM;
 		}
-		case LV_PROFILE_HD_DVD_R:
+		case PROFILE_HD_DVD_R:
 		{
 			disclist[(*j)++] = DISC_HDVD_R;
 			return DISC_HDVD_R;
 		}
-		case LV_PROFILE_HD_DVD_ROM:
+		case PROFILE_HD_DVD_ROM:
 		{
 			disclist[(*j)++] = DISC_HDVD_ROM;
 			return DISC_HDVD_ROM;
 		}
-		case LV_PROFILE_BD_RE:
+		case PROFILE_BD_RE:
 		{
 			disclist[(*j)++] = DISC_BD_RE;
 			return DISC_BD_RE;
 		}
-		case LV_PROFILE_BD_R2:
+		case PROFILE_BD_R2:
 		{
 			disclist[(*j)++] = DISC_BD_R;
 			return DISC_UNKNOWN;
 		}
-		case LV_PROFILE_BD_R1:
+		case PROFILE_BD_R1:
 		{				
 			disclist[(*j)++] = DISC_BD_R_SEQ;
 			//disclist[(*j)++] = DISC_BD_R_SEQ;			//不确定 暂且按此
 			return DISC_BD_R;
 		}
-		case LV_PROFILE_BD_ROM:
+		case PROFILE_BD_ROM:
 		{				
 			disclist[(*j)++] = DISC_BD_ROM;
 			return DISC_BD_ROM;
 		}
-		case LV_PROFILE_DVD_R_P_D:	
+		case PROFILE_DVD_R_P_D:	
 		{				
 			disclist[(*j)++] = DISC_DVD_PLUS_R_DL;
 			disclist[(*j)++] = DISC_DVD_PLUS_RW_DL;
 			return DISC_DVD_PLUS_R_DL;
 		}
-		case LV_PROFILE_DVD_R_P:
+		case PROFILE_DVD_R_P:
 		{
 			disclist[(*j)++] = DISC_DVD_PLUS_R;
 			return DISC_DVD_PLUS_R;
 		}
-		case LV_PROFILE_DVD_RW_P:
+		case PROFILE_DVD_RW_P:
 		{
 			disclist[(*j)++] = DISC_DVD_PLUS_RW;
 			return DISC_DVD_PLUS_RW;
 		}
-		case LV_PROFILE_DVD_D:
+		case PROFILE_DVD_D:
 		{
 			disclist[(*j)++] = DISC_UNKNOWN;		
 			return DISC_UNKNOWN;	
 		}
-		case LV_PROFILE_DVD_R_D:
+		case PROFILE_DVD_R_D:
 		{
 			disclist[(*j)++] = DISC_DVD_R_DL;
 			disclist[(*j)++] = DISC_DVD_R_DL_LJ;	
 			return DISC_DVD_R_DL_LJ;			
 		}			
-		case LV_PROFILE_DVD_R_D1: 
+		case PROFILE_DVD_R_D1: 
 		{
 			disclist[(*j)++] = DISC_DVD_R_DL_SEQ;
 			return DISC_DVD_R_DL_SEQ;			
 		}
-		case LV_PROFILE_DVD_RW2:
+		case PROFILE_DVD_RW2:
 		{
 			disclist[(*j)++] = DISC_DVD_RW;
 			disclist[(*j)++] = DISC_DVD_RW_SEQ;
 			return DISC_DVD_RW;
 		}
-		case LV_PROFILE_DVD_RW1:
+		case PROFILE_DVD_RW1:
 		{
 			disclist[(*j)++] = DISC_DVD_RW_DL;
 			return DISC_DVD_RW_DL;
 		}
-		case LV_PROFILE_DVD_RAM:
+		case PROFILE_DVD_RAM:
 		{
 			disclist[(*j)++] = DISC_DVD_RAM;
 			return DISC_DVD_RAM;
 		}
-		case LV_PROFILE_DVD_R:
+		case PROFILE_DVD_R:
 		{
 			disclist[(*j)++] = DISC_DVD_R;
 			return DISC_DVD_R;
 		}
-		case LV_PROFILE_DVD_ROM:
+		case PROFILE_DVD_ROM:
 		{
 			disclist[(*j)++] = DISC_DVD_ROM;
 			return DISC_DVD_ROM;
 		}
-		case LV_PROFILE_CD_RW:
+		case PROFILE_CD_RW:
 		{
 			disclist[(*j)++] = DISC_CD_RW;
 			return DISC_CD_RW;
 		}
-		case LV_PROFILE_CD_R:
+		case PROFILE_CD_R:
 		{
 			disclist[(*j)++] = DISC_CD_R;
 			return DISC_CD_R;
 		}
-		case LV_PROFILE_CD_ROM:
+		case PROFILE_CD_ROM:
 		{
 			disclist[(*j)++] = DISC_CD_ROM;
 			return DISC_CD_ROM;
 		}
-		case LV_PROFILE_REMOVABLE:
+		case PROFILE_REMOVABLE:
 		{
 			disclist[(*j)++] = DISC_UNKNOWN;
 			return DISC_UNKNOWN;
 		}
-		case LV_PROFILE_NO_CURRENT:
+		case PROFILE_NO_CURRENT:
 		{
 			disclist[(*j)++] = DISC_UNKNOWN;
 			return DISC_UNKNOWN;
@@ -947,7 +947,7 @@ static int cdr_loadmedia(int fd)
 	return 0;
 }
 
-static int cdr_getdevinfo(int fd, LVDVD_DEV_INFO_T *pstDevInfo)
+static int cdr_getdevinfo(int fd, DVD_DEV_INFO_T *pstDevInfo)
 {
 	unsigned char header[512];
 	unsigned char *pbuf;
@@ -1462,7 +1462,7 @@ static struct CDR_CMD_T cdr_dvd = {
 	.cdr_getdoorstate       = cdr_getdoorstate,
 };
 
-int LvDVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd)
+int DVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd)
 {
 	*pCmd = &cdr_dvd;
 	return 0;

@@ -43,12 +43,12 @@
    9:  DVDSDK_CreateFile				创建文件
    10:  DVDSDK_fillEmptyDataOnFirst		开始启动刻录
    11:  DVDSDK_SetFileLoca				设定刻录文件位置
-   12:  Xkd_DVDSDK_WriteData				刻录数据
+   12:  DVDSDK_WriteData				刻录数据
    13:    ......(刻录过程必须连续写入数据，流量可以变化)
-   14:  Xkd_DVDSDK_CloseFile				关闭文件
-   15: Xkd_DVDSDK_GetUUID					获得UUID
-   16: Xkd_DVDSDK_SetRecvTrackData			写入UUID等其他隐藏数据
-   17: Xkd_DVDSDK_fillAllDiscEmptyData		填充剩余光盘空间，封盘前调用
+   14:  DVDSDK_CloseFile				关闭文件
+   15: DVDSDK_GetUUID					获得UUID
+   16: DVDSDK_SetRecvTrackData			写入UUID等其他隐藏数据
+   17: DVDSDK_fillAllDiscEmptyData		填充剩余光盘空间，封盘前调用
    18: Xkd_DVDSDK_CloseDisc					封盘，封闭后不能再次写入
    19: Xkd_DVDSDK_Tray(TRUE)				弹出托盘
       
@@ -172,7 +172,7 @@ typedef struct{
 	unsigned int discsize;		// 光盘容量(MB)
 	unsigned int usedsize;		// 已使用的大小(MB)	
 	unsigned int freesize;		// 可用大小(MB)
-}LVDVD_DISC_INFO_T;
+}DVD_DISC_INFO_T;
 
 // 光驱设备信息
 typedef struct{
@@ -180,7 +180,7 @@ typedef struct{
 	int  drvtype;						// 光驱类型			DVDDRIVER_TYPE
 	int  discsupts;						// 光盘支持总数
 	unsigned char disclist[255];		// 光盘里类型列表，见DVDDISC_TYPE
-}LVDVD_DEV_INFO_T;
+}DVD_DEV_INFO_T;
 
 #include <stdint.h>
 
@@ -251,7 +251,7 @@ int Xkd_DVDSDK_LockDoor(XKD_DVDDRV hDVD, int bLocked);
 * 作者  : xkd
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetDevInfo(XKD_DVDDRV hDVD, LVDVD_DEV_INFO_T *pDevInfo);
+int Xkd_DVDSDK_GetDevInfo(XKD_DVDDRV hDVD, DVD_DEV_INFO_T *pDevInfo);
 
 /*******************************************************************************
 * 名称  : DVDSDK_GetDiscInfo
@@ -263,7 +263,7 @@ int Xkd_DVDSDK_GetDevInfo(XKD_DVDDRV hDVD, LVDVD_DEV_INFO_T *pDevInfo);
 * 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetDiscInfo(XKD_DVDDRV hDVD, LVDVD_DISC_INFO_T *pDiscInfo);
+int Xkd_DVDSDK_GetDiscInfo(XKD_DVDDRV hDVD, DVD_DISC_INFO_T *pDiscInfo);
 
 /*******************************************************************************
 * 名称  : DVDSDK_HaveDisc
@@ -441,24 +441,24 @@ int	Xkd_DVDSDK_WriteData(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile, unsigned char *
 int Xkd_DVDSDK_CloseFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_fillAllDiscEmptyData
+* 名称  : DVDSDK_fillAllDiscEmptyData
 * 描述  : 填充光盘所有剩余空间(在刻录停止之后，封盘之前调用)
 * 参数  : 
 	nDevNo : 设备号，0-n
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
-* 修改  : 20111.1.17 modify by xkd for FUNC
+* 修改  : 2017.4.1 modify by passion for FUNC
 *******************************************************************************/
 int Xkd_DVDSDK_fillAllDiscEmptyData(XKD_DVDDRV hDVD);
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CloseDisc
+* 名称  : DVDSDK_CloseDisc
 * 描述  : 封闭刻录轨道; 调用该接口后，光盘将不可写;
 * 参数  : 
 	nDevNo : 设备号，0-n
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 int Xkd_DVDSDK_CloseDisc(XKD_DVDDRV hDVD);

@@ -186,7 +186,7 @@ DEV_HANDLE Burn_Dev_Init(const char *DevName)
 	//	unsigned char disclist[255];		// 光盘里类型列表，见DVDDISC_TYPE
 	//}LVDVD_DEV_INFO_T;
 
-    LVDVD_DEV_INFO_T pDevInfo0;
+    DVD_DEV_INFO_T pDevInfo0;
 	if( Xkd_DVDSDK_GetDevInfo(hBurnDEV->hDVD, &pDevInfo0) != ERROR_DVD_OK )
 	{
 		printf("Xkd_DVDSDK_GetDevInfo is failed\n");

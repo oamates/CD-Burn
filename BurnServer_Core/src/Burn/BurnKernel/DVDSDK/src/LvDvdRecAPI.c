@@ -28,21 +28,29 @@ typedef struct{
 	int  fd;					// 设备句柄
 	int	 isBusy;				// 忙标志
 	BOOL bRecording;			// 刻录标志
-	LVDVD_DEV_INFO_T stDevInfo;	// 设备信息
+	DVD_DEV_INFO_T stDevInfo;	// 设备信息
 	udfinfo_t  *pUdf;			// UDF 文件系统
 	struct CDR_CMD_T *pCmd;  	// 光驱命令
 }HDVD_DEV_T;
 
+DVDSDKInterface::DVDSDKInterface()
+{
+}
+
+DVDSDKInterface::~DVDSDKInterface()
+{
+}
+
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_Load
+* 名称  : DVDSDK_Load
 * 描述  : 加载光驱,
 * 参数  :
 	szDevName : 驱动名称，如: /dev/sr0, /dev/sr1
 * 返回值: 设备句柄，NULL为失败
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-XKD_DVDDRV Xkd_DVDSDK_Load(const char *szDevName)
+DVDDRV_HANDLE DVDSDKInterface::DVDSDK_Load(const char *szDevName)
 {
 	HDVD_DEV_T *pDVD = NULL;
 	int fd;
@@ -58,8 +66,8 @@ XKD_DVDDRV Xkd_DVDSDK_Load(const char *szDevName)
 	memset(pDVD, 0, sizeof(HDVD_DEV_T));
 	pDVD->maskid = MASK_ID;
 	pDVD->fd = fd;
-	LvDVDRec_GetCdrcmd(NULL, &pDVD->pCmd);
-	pDVD->pUdf = LvDVDRec_UdfCreate(pDVD->fd, UDFDATAMODE_DATA);
+	DVDRec_GetCdrcmd(NULL, &pDVD->pCmd);
+	pDVD->pUdf = DVDRec_UdfCreate(pDVD->fd, UDFDATAMODE_DATA);
 	if(!pDVD->pUdf)
 	{
 		DPERROR(("crate udf error\n"));
@@ -74,7 +82,7 @@ err_exit:
 	if(pDVD)
 	{
 		if(pDVD->pUdf)
-			LvDVDRec_UdfFree(pDVD->pUdf);
+			DVDRec_UdfFree(pDVD->pUdf);
 		free(pDVD);
 	}
 	if(fd > 0) close(fd);
@@ -82,53 +90,53 @@ err_exit:
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_UnLoad
+* 名称  : DVDSDK_UnLoad
 * 描述  : 卸载光驱
 * 参数  :
-	hDVD : Xkd_DVDSDK_Load的返回值
+	hDVD : DVDSDK_Load的返回值
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_UnLoad(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_UnLoad(DVDDRV_HANDLE hDVD)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
 
 	if(pDVD->pUdf)
 	{
-		//printf("Xkd_DVDSDK_UnLoad 1\n");
-		LvDVDRec_UdfFree(pDVD->pUdf);
-		//printf("Xkd_DVDSDK_UnLoad 2\n");
+		//printf("DVDSDK_UnLoad 1\n");
+		DVDRec_UdfFree(pDVD->pUdf);
+		//printf("DVDSDK_UnLoad 2\n");
 	}
 	/*if(pDVD->pCmd && pDVD->fd > 0)
 	{
-		//printf("Xkd_DVDSDK_UnLoad 3\n");
+		//printf("DVDSDK_UnLoad 3\n");
 		pDVD->pCmd->cdr_closetray(pDVD->fd);
-		//printf("Xkd_DVDSDK_UnLoad 4\n");
+		//printf("DVDSDK_UnLoad 4\n");
 	}*/
 
 
 	if(pDVD->fd > 0)
 		close(pDVD->fd);
 
-	//printf("Xkd_DVDSDK_UnLoad 5\n");
+	//printf("DVDSDK_UnLoad 5\n");
 	free(pDVD);
-	//printf("Xkd_DVDSDK_UnLoad ok\n");
+	//printf("DVDSDK_UnLoad ok\n");
 	return 0;
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_Tray
+* 名称  : DVDSDK_Tray
 * 描述  : 打开/关闭托盘
 * 参数  :
-	hDVD : Xkd_DVDSDK_Load的返回值
+	hDVD : DVDSDK_Load的返回值
 	bOpen  : TRUE:打开托盘, FALSE:关闭托盘
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int	Xkd_DVDSDK_Tray(XKD_DVDDRV hDVD, int bOpen)
+int	DVDSDKInterface::DVDSDK_Tray(DVDDRV_HANDLE hDVD, int bOpen)
 {
 	BOOL bRet;
 
@@ -151,15 +159,15 @@ int	Xkd_DVDSDK_Tray(XKD_DVDDRV hDVD, int bOpen)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetTrayState
+* 名称  : DVDSDK_GetTrayState
 * 描述  : 获得托盘状态(打开/关闭)
 * 参数  :
-	hDVD : Xkd_DVDSDK_Load的返回值
+	hDVD : DVDSDK_Load的返回值
 * 返回值: 1：打开，0：关闭，其他为错误代码
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int	Xkd_DVDSDK_GetTrayState(XKD_DVDDRV hDVD)
+int	DVDSDKInterface::DVDSDK_GetTrayState(DVDDRV_HANDLE hDVD)
 {
 	int iRet;
 
@@ -171,16 +179,16 @@ int	Xkd_DVDSDK_GetTrayState(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_LockDoor
+* 名称  : DVDSDK_LockDoor
 * 描述  : 锁定/解锁光驱门, 防止在刻录过程中意外打开
 * 参数  :
-	hDVD : Xkd_DVDSDK_Load的返回值
+	hDVD : DVDSDK_Load的返回值
 	bLocked: TRUE:锁定, FALSE:解锁
 * 返回值: 0:成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_LockDoor(XKD_DVDDRV hDVD, int bLocked)
+int DVDSDKInterface::DVDSDK_LockDoor(DVDDRV_HANDLE hDVD, int bLocked)
 {
 	BOOL bRet;
 	HANDLE_DEF;
@@ -197,37 +205,37 @@ int Xkd_DVDSDK_LockDoor(XKD_DVDDRV hDVD, int bLocked)
 
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetDevInfo
+* 名称  : DVDSDK_GetDevInfo
 * 描述  : 获得光驱信息
 * 参数  :
-	hDVD : Xkd_DVDSDK_Load的返回值
+	hDVD : DVDSDK_Load的返回值
 	pDevInfo   : 光驱信息指针
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetDevInfo(XKD_DVDDRV hDVD, LVDVD_DEV_INFO_T *pDevInfo)
+int DVDSDKInterface::DVDSDK_GetDevInfo(DVDDRV_HANDLE hDVD, DVD_DEV_INFO_T *pDevInfo)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
 
-	memset(&pDVD->stDevInfo, 0, sizeof(LVDVD_DEV_INFO_T));
+	memset(&pDVD->stDevInfo, 0, sizeof(DVD_DEV_INFO_T));
 	HCDR_CMD()->cdr_getdevinfo(HDEV_FD(), &pDVD->stDevInfo);
-	memcpy(pDevInfo, &pDVD->stDevInfo, sizeof(LVDVD_DEV_INFO_T));
+	memcpy(pDevInfo, &pDVD->stDevInfo, sizeof(DVD_DEV_INFO_T));
 	return 0;
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetDiscInfo
+* 名称  : DVDSDK_GetDiscInfo
 * 描述  : 获得碟片信息
 * 参数  :
 	nDevNo     : 设备号，0-n, -1为全部设备
 	pDiscInfo  : 碟片信息结构指针
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetDiscInfo(XKD_DVDDRV hDVD, LVDVD_DISC_INFO_T *pDiscInfo)
+int DVDSDKInterface::DVDSDK_GetDiscInfo(DVDDRV_HANDLE hDVD, DVD_DISC_INFO_T *pDiscInfo)
 {
 	int TrickCount,SessionCount,DiskStatus,Speed;
 	unsigned long long Capicity;
@@ -270,15 +278,15 @@ int Xkd_DVDSDK_GetDiscInfo(XKD_DVDDRV hDVD, LVDVD_DISC_INFO_T *pDiscInfo)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_HaveDisc
+* 名称  : DVDSDK_HaveDisc
 * 描述  : 判断是否有光盘
 * 参数  :
 	nDevNo     : 设备号，0-n, -1为全部设备
 * 返回值: TRUE: 有，FALSE：无
-* 作者  : xkd
+* 作者  : passsion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_HaveDisc(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_HaveDisc(DVDDRV_HANDLE hDVD)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
@@ -286,15 +294,15 @@ int Xkd_DVDSDK_HaveDisc(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetMediaExactType
+* 名称  : DVDSDK_GetMediaExactType
 * 描述  : 获取光盘类型(精确类型)
 * 参数  :
 	nDevNo : 设备号，0-n, -1为全部设备
 * 返回值: 光盘类型
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetMediaExactType(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_GetMediaExactType(DVDDRV_HANDLE hDVD)
 {
 	int iExactT;
 
@@ -308,15 +316,15 @@ int Xkd_DVDSDK_GetMediaExactType(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetMediaBasicType
+* 名称  : DVDSDK_GetMediaBasicType
 * 描述  : 获取光盘类型(基本类型)(用于设定光驱速度和复制光盘时)
 * 参数  :
 	nDevNo : 设备号，0-n, -1为全部设备
 * 返回值: 光盘类型
-* 作者  : xkd
-* 日期  : 2010.12.29
+* 作者  : passion
+* 日期  : 2017.4.1
 *******************************************************************************/
-int Xkd_DVDSDK_GetMediaBasicType(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_GetMediaBasicType(DVDDRV_HANDLE hDVD)
 {
 	int iBasicT,Ret = 0;
 
@@ -331,18 +339,18 @@ int Xkd_DVDSDK_GetMediaBasicType(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetWriteSpeed
+* 名称  : DVDSDK_SetWriteSpeed
 * 描述  : 设定刻录速度
 * 参数  :
 	nDevNo : 设备号，0-n, -1为全部设备
 	speed  : 速度，必须是 1 2 4 6 8 12
 	disctpye  : 光盘类型   	DVD_DISC = 0 ,DVD_DL_DISC = 1 ,CD_DISC = 2
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
-* 修改  : 2010.12.30 Modify by yanming add disctype
+* 修改  : 2017.4.30 Modify by passion add disctype
 *******************************************************************************/
-int Xkd_DVDSDK_SetWriteSpeed(XKD_DVDDRV hDVD, int speed, int disctype)
+int DVDSDKInterface::DVDSDK_SetWriteSpeed(DVDDRV_HANDLE hDVD, int speed, int disctype)
 {
 	int MaxReadSpeed,MaxWriteSpeed;
 	int DiscT = -1;
@@ -388,7 +396,7 @@ int Xkd_DVDSDK_SetWriteSpeed(XKD_DVDDRV hDVD, int speed, int disctype)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetCopySpeed
+* 名称  : DVDSDK_SetCopySpeed
 * 描述  : 设定光盘复制的速度
 * 参数  :
 	nSrcDevno : 源设备号，0-n
@@ -396,10 +404,10 @@ int Xkd_DVDSDK_SetWriteSpeed(XKD_DVDDRV hDVD, int speed, int disctype)
 	srctype  : 光盘类型:B_DVD_DISC = 0,DVD_DL_DISC = 1,DVD_DISC = 2,CD_DISC = 3
 	dsttype  : 光盘类型:B_DVD_DISC = 0,DVD_DL_DISC = 1,DVD_DISC = 2,CD_DISC = 3
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2010.1.14
+* 作者  : passion
+* 日期  : 2017.4.14
 *******************************************************************************/
-int Xkd_DVDSDK_SetCopySpeed(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst, int srctype, int dsttype)
+int DVDSDKInterface::DVDSDK_SetCopySpeed(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDst, int srctype, int dsttype)
 {
 
 	int SrcMaxReadSpeed, SrcMaxWriteSpeed;
@@ -539,15 +547,15 @@ ERROR:
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_LoadDisc
+* 名称  : DVDSDK_LoadDisc
 * 描述  : 加载光盘
 * 参数  :
 	nDevNo : 设备号，0-n
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_LoadDisc(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_LoadDisc(DVDDRV_HANDLE hDVD)
 {
 	int iRet;
 
@@ -567,15 +575,15 @@ int Xkd_DVDSDK_LoadDisc(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_DiscCanWrite
+* 名称  : DVDSDK_DiscCanWrite
 * 描述  : 判断光盘是否可写
 * 参数  :
 	nDevNo : 设备号，0-n
 * 返回值: 0: 可写，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_DiscCanWrite(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_DiscCanWrite(DVDDRV_HANDLE hDVD)
 {
 	int iRet;
 	uint64_t Capicity;
@@ -601,16 +609,16 @@ int Xkd_DVDSDK_DiscCanWrite(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_FormatDisc
+* 名称  : DVDSDK_FormatDisc
 * 描述  : 格式化光盘, 分轨道, 创建UDF文件系统, 准备开始写数据; 目前只支持一个分区，2个轨道
 * 参数  :
 	nDevNo : 设备号，0-n
 	szDiscName: 光盘名称
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *szDiscName)
+int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 {
 	int iRet;
 	uint64_t Capicity;
@@ -629,12 +637,12 @@ int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *szDiscName)
 	strcpy(disc_volid.logicalVolIdent, szDiscName);
 	strcpy(disc_volid.volIdent,        szDiscName);
 	strcpy(disc_volid.volSetIdent,     szDiscName);
-	strcpy(disc_volid.LVInfoTitle, 	      "xkd_DVD_1.0");
-	strcpy(disc_volid.LVInfoDataTime,     "2010-12-17");
-	strcpy(disc_volid.LVInfoEmail,        "xkd_work");
-	strcpy(disc_volid.fileSetIdent,       "xkd_DVD_1.0");
-	strcpy(disc_volid.copyrightFileIdent, "xkd_DVD_1.0");
-	strcpy(disc_volid.abstractFileIdent,  "xkd_DVD_1.0");
+	strcpy(disc_volid.LVInfoTitle, 	      "avs_DVD_1.0");
+	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
+	strcpy(disc_volid.LVInfoEmail,        "avs_work");
+	strcpy(disc_volid.fileSetIdent,       "avs_DVD_1.0");
+	strcpy(disc_volid.copyrightFileIdent, "avs_DVD_1.0");
+	strcpy(disc_volid.abstractFileIdent,  "avs_DVD_1.0");
 
 	iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
 	if(iRet)
@@ -657,7 +665,7 @@ int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *szDiscName)
 	}
 	//HCDR_CMD()->cdr_lockdoor(HDEV_FD());
 
-	LvDVDRec_UdfTreeFree(HUDF_HANLE());
+	DVDRec_UdfTreeFree(HUDF_HANLE());
 
 	MEMMOCLINE;
 	//创建根目录
@@ -703,38 +711,38 @@ int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *szDiscName)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetFileLoca
+* 名称  : DVDSDK_SetFileLoca
 * 描述  : 设定文件位置 (写文件前都需要调用这个函数)
 * 参数  :
 	nDevNo : 设备号，0-n
 	FileNode : 文件节点
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2011.1.17
+* 作者  : passion
+* 日期  : 2017.4.17
 *******************************************************************************/
-int Xkd_DVDSDK_SetFileLoca(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE FileNode)
+int DVDSDKInterface::DVDSDK_SetFileLoca(DVDDRV_HANDLE hDVD, DVDSDK_FILE FileNode)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
 
 	((FILDIRNODE *)(FileNode))->FileLoca = HUDF_HANLE()->m_CdRwDiskinfo->udffile.writenext - UDF_SYS_LEN;
-    DP(("+++++++++[Xkd_DVDSDK_SetFileLoca] File name = %s,File  location = %ld++++++++++\n",((FILDIRNODE *)(FileNode))->Name,((FILDIRNODE *)(FileNode))->FileLoca));
+    DP(("+++++++++[DVDSDK_SetFileLoca] File name = %s,File  location = %ld++++++++++\n",((FILDIRNODE *)(FileNode))->Name,((FILDIRNODE *)(FileNode))->FileLoca));
 
 	return 0;
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_FillEmptyDataOnFirst
+* 名称  : DVDSDK_FillEmptyDataOnFirst
 * 描述  : 填充空数据，在格式化之后，开始刻录之前调用，避免开始刻录时写轨道数据的停滞，
-          造成视频丢帧  (第一个文件前调用，之后的文件调用Xkd_DVDSDK_SetFileLoca)
+          造成视频丢帧  (第一个文件前调用，之后的文件调用DVDSDK_SetFileLoca)
 * 参数  :
 	nDevNo : 设备号，0-n
 	fullsize: 填充大小，0为自动计算填充大小
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_FillEmptyDataOnFirst(XKD_DVDDRV hDVD, unsigned int fullsize)
+int DVDSDKInterface::DVDSDK_FillEmptyDataOnFirst(DVDDRV_HANDLE hDVD, unsigned int fullsize)
 {
 	unsigned int nEmptySize;
 
@@ -753,8 +761,8 @@ int Xkd_DVDSDK_FillEmptyDataOnFirst(XKD_DVDDRV hDVD, unsigned int fullsize)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_Analysisdirectory
-* 描述  : 添加目录是对目录字符进行解析
+* 名称  : DVDSDK_Analysisdirectory
+* 描述  : 添加目录时对目录字符进行解析
 * 参数  :
 	szDirName : 目录名
 	len : 目录长度
@@ -762,11 +770,11 @@ int Xkd_DVDSDK_FillEmptyDataOnFirst(XKD_DVDDRV hDVD, unsigned int fullsize)
 	                返回值为:"/test1/test2"
     szRemainName:解析的字符
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2010.12.21
+* 作者  : passion
+* 日期  : 2017.4.21
 * 说明  : 目录第一个字符必须为"/"
 *******************************************************************************/
-static int Xkd_DVDSDK_Analysisdirectory(char * szDirName, int len, char ** szDirRemain, char * szAnalysisName)
+static int DVDSDK_Analysisdirectory(char * szDirName, int len, char ** szDirRemain, char * szAnalysisName)
 {
 	int i,j,start;
 	char tmpname[128];
@@ -806,20 +814,20 @@ static int Xkd_DVDSDK_Analysisdirectory(char * szDirName, int len, char ** szDir
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CreateDir
+* 名称  : DVDSDK_CreateDir
 * 描述  : 创建目录
 * 参数  :
 	nDevNo : 设备号，0-n
 	pParentDir: 父目录，为空为跟目录下创建
 	szDirName : 目录名称，不能为空
-* 返回值: 目录节点指针, Xkd_DVDSDK_CreateFile函数会用到, NULL:创建目录失败
-* 作者  : xkd
+* 返回值: 目录节点指针, DVDSDK_CreateFile函数会用到, NULL:创建目录失败
+* 作者  : passion
 * 日期  : 2017.3.31
-* 修改  : 2010.12.21 xkd
+* 修改  : 2017.4.21 passion
           参数:	nDevNo : 设备号，0-n
 				szDirName : 要创建的目录,方式为"/test/test1/test2"
 *******************************************************************************/
-Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName)
+DVDSDK_DIR DVDSDKInterface::DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName)
 {
 	FILDIRNODE *DirNode;
 	FILDIRNODE *tmpNode;
@@ -838,7 +846,7 @@ Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName)
 	iRet    = 0;
 	while((iRet == 0))
 	{
-		iRet = Xkd_DVDSDK_Analysisdirectory(szDirRemain, strlen(szDirRemain), &szDirRemain, szAnalysisName);
+		iRet = DVDSDK_Analysisdirectory(szDirRemain, strlen(szDirRemain), &szDirRemain, szAnalysisName);
 
 		if(iRet == -1)
 			break;
@@ -869,13 +877,13 @@ Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName)
 * 描述  : 创建文件，开始写数据
 * 参数  :
 	nDevNo : 设备号，0-n
-	pDir   : 目录节点指针, NULL为根目录, Xkd_DVDSDK_CreateDir的返回值
+	pDir   : 目录节点指针, NULL为根目录, DVDSDK_CreateDir的返回值
 	szFileName: 文件名称
 * 返回值: 文件节点指针，NULL：创建失败
 * 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_DIR pDir, char *szFileName, uint64_t filesize)
+DVDSDK_FILE DVDSDKInterface::DVDSDK_CreateFile(DVDDRV_HANDLE hDVD, DVDSDK_DIR pDir, char *szFileName, uint64_t filesize)
 {
 	FILDIRNODE *DirNode;
 	FILDIRNODE *pParent;
@@ -902,18 +910,18 @@ Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_DIR pDir, char
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_WriteData
+* 名称  : DVDSDK_WriteData
 * 描述  : 向文件中写数据, size = 32 * 1024
 * 参数  :
 	nDevNo : 设备号，0-n
-	pFile  : 文件节点指针，Xkd_DVDSDK_CreateFile的返回值
+	pFile  : 文件节点指针，DVDSDK_CreateFile的返回值
 	pBuffer: 数据buffer
 	size   : 数据大小，必须是 32*1024 的整数倍
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int	Xkd_DVDSDK_WriteData(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile, unsigned char *pBuffer, int size)
+int	DVDSDKInterface::DVDSDK_WriteData(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile, unsigned char *pBuffer, int size)
 {
 	int iRet;
 	HANDLE_DEF;
@@ -942,16 +950,16 @@ int	Xkd_DVDSDK_WriteData(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile, unsigned char *
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CloseFile
+* 名称  : DVDSDK_CloseFile
 * 描述  : 关闭文件
 * 参数  :
 	nDevNo : 设备号，0-n
-	pFile  : 文件节点指针，Xkd_DVDSDK_CreateFile的返回值
+	pFile  : 文件节点指针，DVDSDK_CreateFile的返回值
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_CloseFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile)
+int DVDSDKInterface::DVDSDK_CloseFile(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
@@ -963,16 +971,16 @@ int Xkd_DVDSDK_CloseFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_FillAllDiscEmptyData
+* 名称  : DVDSDK_FillAllDiscEmptyData
 * 描述  : 填充光盘所有剩余空间(在刻录停止之后，封盘之前调用)
 * 参数  :
 	nDevNo : 设备号，0-n
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
-* 修改  : 20111.1.17 modify by yanming for FUNC
+* 修改  : 2017.4.17 modify by passion for FUNC
 *******************************************************************************/
-int Xkd_DVDSDK_FillAllDiscEmptyData(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_FillAllDiscEmptyData(DVDDRV_HANDLE hDVD)
 {
 	char FillBuf[PACKET32_SIZE];
 	int FreeSize,MinSize;
@@ -988,12 +996,12 @@ int Xkd_DVDSDK_FillAllDiscEmptyData(XKD_DVDDRV hDVD)
 		return ERROR_DVD_WRITEERROR;
 	}
 
-	DiscType = Xkd_DVDSDK_GetMediaBasicType(hDVD);
+	DiscType = DVDSDK_GetMediaBasicType(hDVD);
 	if(( DiscType > CD_DISC )||( DiscType < B_DVD_DISC ))
 		return DiscType; //不是光盘类型就返回其错误值
 
 	//设定最大速度 (一般DVD最大速度16，当前盘小于16，则按当前盘的最大速设定)
-	Xkd_DVDSDK_SetWriteSpeed(hDVD, 16, DiscType);
+	DVDSDK_SetWriteSpeed(hDVD, 16, DiscType);
 
 	//单位为M
 	MinSize = ((HUDF_HANLE()->m_CdRwDiskinfo->udffile.tracksize / 512)/100) * 5;//剩余容量 按轨道容量的5/100来计算
@@ -1010,15 +1018,15 @@ int Xkd_DVDSDK_FillAllDiscEmptyData(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CloseDisc
+* 名称  : DVDSDK_CloseDisc
 * 描述  : 写入UDF文件系统，释放UDF文件系统, 关闭轨道; 调用该接口后，光盘将不可写;
 * 参数  :
 	nDevNo : 设备号，0-n
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_CloseDisc(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_CloseDisc(DVDDRV_HANDLE hDVD)
 {
 	int iRet;
 	HANDLE_DEF;
@@ -1036,7 +1044,7 @@ int Xkd_DVDSDK_CloseDisc(XKD_DVDDRV hDVD)
 	if(iRet)
 	{
 		DPERROR(("close disc error:%d\n", iRet));
-		LvDVDRec_UdfTreeFree(HUDF_HANLE());
+		DVDRec_UdfTreeFree(HUDF_HANLE());
 		HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
 		return iRet;
 	}
@@ -1058,23 +1066,23 @@ int Xkd_DVDSDK_CloseDisc(XKD_DVDDRV hDVD)
 	}
 
 	// 释放UDF目录树
-	LvDVDRec_UdfTreeFree(HUDF_HANLE());
+	DVDRec_UdfTreeFree(HUDF_HANLE());
 	HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
 
 	return 0;
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_CopyDisc
+* 名称  : DVDSDK_CopyDisc
 * 描述  : 光盘复制,直接轨道拷贝，但是保留轨道不复制
 * 参数  :
 	nSrcDevno : 源设备号，0-n
 	nDstDevno : 目的设备号，0-n
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
+int DVDSDKInterface::DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDst)
 {
 	int iRet,idisc1,idisc2;
 	int i = 0;
@@ -1084,7 +1092,7 @@ int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
 	//char Buffer[32];
 	//char TempStr[3];
 	int TrickCount, SessionCount, DiskStatus;
-	LVDVD_DISC_INFO_T SrcDiscInfo,DstDiscInfo;
+	DVD_DISC_INFO_T SrcDiscInfo,DstDiscInfo;
 	//struct partitionDesc pd;
 	uint8_t buf[PACKET32_SIZE];
 	HDVD_DEV_T *pDVDSrc = (HDVD_DEV_T*)HDVDSrc;
@@ -1101,8 +1109,8 @@ int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
 	memset(&TrackInfo,0,sizeof(CDR_TRACK_T));
 
 	//判断光盘类型是否相同
-	idisc1 = Xkd_DVDSDK_GetMediaBasicType(pDVDSrc);
-	idisc2 = Xkd_DVDSDK_GetMediaBasicType(pDVDDst);
+	idisc1 = DVDSDK_GetMediaBasicType(pDVDSrc);
+	idisc2 = DVDSDK_GetMediaBasicType(pDVDDst);
 
 	if(( idisc1 > CD_DISC )||( idisc1 < B_DVD_DISC ))
 	{
@@ -1156,8 +1164,8 @@ int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
 	}
 
 	//蓝光盘有25g和50g的要判断容量
-	Xkd_DVDSDK_GetDiscInfo(pDVDSrc, &SrcDiscInfo);
-	Xkd_DVDSDK_GetDiscInfo(pDVDDst, &DstDiscInfo);
+	DVDSDK_GetDiscInfo(pDVDSrc, &SrcDiscInfo);
+	DVDSDK_GetDiscInfo(pDVDDst, &DstDiscInfo);
 	DP(("SrcDiscInfo.discsize=%d,DstDiscInfo.discsize=%d\n",SrcDiscInfo.discsize,DstDiscInfo.discsize));
 	if(SrcDiscInfo.discsize > DstDiscInfo.discsize)
 	{
@@ -1165,7 +1173,7 @@ int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
 		return ERROR_DVD_CANTCOPYDISC;
 	}
 
-	Xkd_DVDSDK_SetCopySpeed(pDVDSrc, pDVDDst, idisc1, idisc2);
+	DVDSDK_SetCopySpeed(pDVDSrc, pDVDDst, idisc1, idisc2);
 
 	/*//获取uuid
 	uuid_generate(TempUUID);
@@ -1214,7 +1222,7 @@ int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_ResumeDisc
+* 名称  : DVDSDK_ResumeDisc
 * 描述  : 光盘恢复,如果在刻录过程中断电，调用该函数，恢复文件系统
 * 参数  :
 	nDevNo : 设备号，0-n
@@ -1223,11 +1231,11 @@ int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst)
 	FileName : 文件名称
 	FillSize : 填充的数据数(默认为64M)
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
-* 修改  : 2010.12.30 modify by yanming for Complete Func
+* 修改  : 2017.4.30 modify by passion for Complete Func
 *******************************************************************************/
-int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *DiscName, char *DirName, char *FileName, int FillSize)
+int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char *DirName, char *FileName, int FillSize)
 {
 	int iRet;
 	uint64_t Capicity;
@@ -1235,8 +1243,8 @@ int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *DiscName, char *DirName, char *
 	unsigned int nEmptySize = 0;
 	int TrickCount, SessionCount, DiskStatus;
 	DISC_VOLID_T disc_volid;
-	Xkd_DVDSDK_DIR  pDir;
-	Xkd_DVDSDK_FILE pNode;
+	DVDSDK_DIR  pDir;
+	DVDSDK_FILE pNode;
 	CDR_TRACK_T stTrack;
 
 	HANDLE_DEF;
@@ -1287,13 +1295,13 @@ int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *DiscName, char *DirName, char *
 	strcpy(disc_volid.volIdent,        DiscName);
 	strcpy(disc_volid.volSetIdent,     DiscName);
 // 	strcpy(disc_volid.LVInfoTitle, 	      "COMM_DVD_1.0");
-// 	strcpy(disc_volid.LVInfoDataTime,     "2010-12-17");
-// 	strcpy(disc_volid.LVInfoEmail,        "xkd_work");
-// 	strcpy(disc_volid.fileSetIdent,       "xkd_DVD_1.0");
-// 	strcpy(disc_volid.copyrightFileIdent, "xkd_DVD_1.0");
-// 	strcpy(disc_volid.abstractFileIdent,  "xkd_DVD_1.0");
+// 	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
+// 	strcpy(disc_volid.LVInfoEmail,        "avs_work");
+// 	strcpy(disc_volid.fileSetIdent,       "avs_DVD_1.0");
+// 	strcpy(disc_volid.copyrightFileIdent, "avs_DVD_1.0");
+// 	strcpy(disc_volid.abstractFileIdent,  "avs_DVD_1.0");
 	strcpy(disc_volid.LVInfoTitle, 	      "DVDRECORD");
-	strcpy(disc_volid.LVInfoDataTime,     "2011-12-17");
+	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
 	strcpy(disc_volid.LVInfoEmail,        "DVDRECORD");
 	strcpy(disc_volid.fileSetIdent,       "DVDRECORD");
 	strcpy(disc_volid.copyrightFileIdent, "DVDRECORD");
@@ -1330,12 +1338,12 @@ int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *DiscName, char *DirName, char *
 			HUDF_HANLE()->m_CdRwDiskinfo->udffile.trackid, &(HUDF_HANLE()->m_CdRwDiskinfo->udffile));
 
 	//创建目录和文件
-	pDir  = Xkd_DVDSDK_CreateDir(hDVD, DirName);
-	pNode = Xkd_DVDSDK_CreateFile(hDVD, pDir, FileName, 0);
+	pDir  = DVDSDK_CreateDir(hDVD, DirName);
+	pNode = DVDSDK_CreateFile(hDVD, pDir, FileName, 0);
 
 	if( NULL == pNode )
 	{
-		LvDVDRec_UdfTreeFree(HUDF_HANLE());
+		DVDRec_UdfTreeFree(HUDF_HANLE());
 		DPERROR(("filename is exist!\n"));
 		return ERROR_DVD_NAMEEXIST;
 	}
@@ -1350,24 +1358,24 @@ int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *DiscName, char *DirName, char *
 		               					 - nEmptySize;           //1040第二轨道起始
 	((HDVD_DEV_T*)hDVD)->bRecording = TRUE;
 	//写入文件系统 关闭轨道扇区
-	Xkd_DVDSDK_CloseDisc((HDVD_DEV_T*)hDVD);
+	DVDSDK_CloseDisc((HDVD_DEV_T*)hDVD);
 
 	return 0;
 }
 
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetReserveData
+* 名称  : DVDSDK_GetReserveData
 * 描述  : 获得保留轨道数据, 对于已经封盘的光盘才有效, 读取时调用
 * 参数  :
 	nDevNo : 设备号，0-n
 	pBuffer: 返回保留数据指针
 	pSize  : 返回Buffer长度
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetReserveData(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *pSize)
+int DVDSDKInterface::DVDSDK_GetReserveData(DVDDRV_HANDLE hDVD, unsigned char **pBuffer, int *pSize)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
@@ -1382,7 +1390,7 @@ int Xkd_DVDSDK_GetReserveData(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *pSi
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetReserveBuffer
+* 名称  : DVDSDK_GetReserveBuffer
 * 描述  : 获得保留轨道数据指针, 这个函数在保留轨道前调用，直接修改Buffer，在
 		  封盘时写入该数据,大小 32K， 刻录时调用
 * 参数  :
@@ -1390,10 +1398,10 @@ int Xkd_DVDSDK_GetReserveData(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *pSi
 	pBuffer: 返回保留数据指针
 	pSize  : 返回Buffer长度
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetReserveBuffer(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *pSize)
+int DVDSDKInterface::DVDSDK_GetReserveBuffer(DVDDRV_HANDLE hDVD, unsigned char **pBuffer, int *pSize)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
@@ -1404,16 +1412,16 @@ int Xkd_DVDSDK_GetReserveBuffer(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *p
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetTotalWriteSize
+* 名称  : DVDSDK_GetTotalWriteSize
 * 描述  : 获得光盘整个可写空间
 * 参数  :
 	nDevNo    : 设备号，0-n
 	pTotalSize: 返回整个可写空间
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetTotalWriteSize(XKD_DVDDRV hDVD, unsigned long long *pTotalSize)
+int DVDSDKInterface::DVDSDK_GetTotalWriteSize(DVDDRV_HANDLE hDVD, unsigned long long *pTotalSize)
 {
 	int iRet = 0;
 	HANDLE_DEF;
@@ -1436,16 +1444,16 @@ int Xkd_DVDSDK_GetTotalWriteSize(XKD_DVDDRV hDVD, unsigned long long *pTotalSize
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetFreeWriteSize
+* 名称  : DVDSDK_GetFreeWriteSize
 * 描述  : 获得剩余可写空间
 * 参数  :
 	nDevNo   : 设备号，0-n
 	pFreeSize: 返回剩余可写空间
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
-int Xkd_DVDSDK_GetFreeWriteSize(XKD_DVDDRV hDVD, unsigned long long *pFreeSize)
+int DVDSDKInterface::DVDSDK_GetFreeWriteSize(DVDDRV_HANDLE hDVD, unsigned long long *pFreeSize)
 {
 	int iRet = 0;
 	HANDLE_DEF;
@@ -1468,15 +1476,15 @@ int Xkd_DVDSDK_GetFreeWriteSize(XKD_DVDDRV hDVD, unsigned long long *pFreeSize)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_PrintProfile
+* 名称  : DVDSDK_PrintProfile
 * 描述  : 打印profile
 * 参数  :
 	nDevNo   : 设备号，0-n
 * 返回值: 0: 成功
-* 作者  : xkd
-* 日期  : 2011.1.14
+* 作者  : passion
+* 日期  : 2017.1.14
 *******************************************************************************/
-int Xkd_DVDSDK_PrintProfile(XKD_DVDDRV hDVD)
+int DVDSDKInterface::DVDSDK_PrintProfile(DVDDRV_HANDLE hDVD)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
@@ -1486,16 +1494,16 @@ int Xkd_DVDSDK_PrintProfile(XKD_DVDDRV hDVD)
 }
 
 /*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetRecordStatus
+* 名称  : DVDSDK_SetRecordStatus
 * 描述  : 设置光驱刻录状态（用于光盘格式化后刻录失败未封盘，再次格式化前设置刻录状态）
 
 * 参数  :
 	hDVD   : DVD驱动句柄
 * 返回值: 
-* 作者  : hexj
-* 日期  : 2014.8.5
+* 作者  : passion
+* 日期  : 2017.4.5
 *******************************************************************************/
-void Xkd_DVDSDK_SetRecordStatus(XKD_DVDDRV hDVD, BOOL bRecordStatus)
+void DVDSDKInterface::DVDSDK_SetRecordStatus(DVDDRV_HANDLE hDVD, BOOL bRecordStatus)
 {
 	HANDLE_DEF;
     pDVD->bRecording = bRecordStatus;
@@ -1506,24 +1514,24 @@ void Xkd_DVDSDK_SetRecordStatus(XKD_DVDDRV hDVD, BOOL bRecordStatus)
 * 描述  : UDF测试用
 * 参数  :
 * 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
+* 作者  : passion
 * 日期  : 2017.3.31
 *******************************************************************************/
 int LvDVDRec_udffstest(void)
 {
 	DP(("LvDVDRec_udffstest ...start!\n"));
-	udfinfo_t  *pUdf = LvDVDRec_UdfCreate(-1, UDFDATAMODE_DATA);
+	udfinfo_t  *pUdf =  DVDRec_UdfCreate(-1, UDFDATAMODE_DATA);
 	if(!pUdf)
 	{
 		DPERROR(("LvDVDRec_UdfCreate error\n"));
 		return -1;
 	}
 	DP(("LvDVDRec_udffstest ...start1!\n"));
-	LvDVDRec_GetCdrcmd(NULL, &pUdf->cdr_cmd);
+	DVDRec_GetCdrcmd(NULL, &pUdf->cdr_cmd);
 	DP(("LvDVDRec_udffstest ...start2!\n"));
 	pUdf->udf_cmd->udffstest(pUdf);
 	DP(("LvDVDRec_udffstest ...start3!\n"));
-	LvDVDRec_UdfFree(pUdf);
+	DVDRec_UdfFree(pUdf);
 	DP(("LvDVDRec_udffstest ...end!\n"));
 	return 0;
 }

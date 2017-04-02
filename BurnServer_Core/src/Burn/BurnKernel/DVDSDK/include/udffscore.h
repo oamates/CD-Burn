@@ -1,6 +1,6 @@
 /*********************************************************************************
-作者:xkd
-时间:2010-06-02
+作者:passion
+时间:2017-04-02
 功能:定义UDF文件系统MPEG数据流刻录接口
 **********************************************************************************/
 #ifndef __UDF_FSCORE_H__
@@ -15,21 +15,21 @@
 #define MEM_BUFFER_SIZE		(1024 * 1024 * 3)	// 3M
 
 //节点类型
-enum 
+enum NODETYPE
 {
    NODETYPE_FILE = 0 ,  //文件
    NODETYPE_DIR  = 1    //目录
 };
 
 //udf刻录模式
-enum
+enum UDFDATAMODE
 {
 	UDFDATAMODE_VIDEO = 0,  //视频模式
 	UDFDATAMODE_DATA  = 1,  //数据模式
 };
 
 //光盘状态
-enum 
+enum DVDSTATUS 
 {
    DVD_OPEN     = 0 ,   //打开
    DVD_CLOSED   = 1 ,   //关闭
@@ -202,7 +202,7 @@ struct UDF_CMD_T{
 
 	// 通过节点ID
 	FILDIRNODE *(*findnodebyid)(FILEDIRTREE *FileDirTree, int nodeid);
-	
+
 	// 判断目录下名称是否重复
 	FILDIRNODE *(*GetNodeInDir)(FILDIRNODE *pDirNode,  char *szName);
 
@@ -219,26 +219,26 @@ struct UDF_CMD_T{
 	int (*WriteStream)(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data, int length);
 
 	// 填充空数据到光盘最后, length可以为任意大小
-	int (*WriteEmptyStream)(udfinfo_t *pUdfInfo, uint8_t *Data, int length);	
-	
+	int (*WriteEmptyStream)(udfinfo_t *pUdfInfo, uint8_t *Data, int length);
+
 	// 封盘光盘
 	int (*CloseDisc)(udfinfo_t *pUdfInfo);
-	
+
 	// 在文件轨道写入空数据，需在格式化之后调用, 防止流刻录开始时写轨道的停滞，造成视频丢帧
 	int (*WriteFileTrackEmdpy)(udfinfo_t *pUdfInfo, uint32_t emptydize);
-	
+
 	// UDF文件系统测试
 	int (*udffstest)(udfinfo_t *pUdfInfo);
 };
 
 // 创建UDF
-udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode);
+udfinfo_t * DVDRec_UdfCreate(int fd, uint16_t DataMode);
 
 // 销毁UDF
-int LvDVDRec_UdfFree(udfinfo_t *pUdfInfo);
+int DVDRec_UdfFree(udfinfo_t *pUdfInfo);
 
 // 释放UDF文件系统目录
-int LvDVDRec_UdfTreeFree(udfinfo_t *pUdfInfo);
+int DVDRec_UdfTreeFree(udfinfo_t *pUdfInfo);
 
 #endif//__UDF_FSCORE_H__
 

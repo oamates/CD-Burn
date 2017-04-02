@@ -79,30 +79,30 @@ enum
 };
 
 
-#define 	LV_PROFILE_HD_DVD_RAM      0x52
-#define 	LV_PROFILE_HD_DVD_R        0x51
-#define 	LV_PROFILE_HD_DVD_ROM      0x50
-#define 	LV_PROFILE_BD_RE           0x43
-#define 	LV_PROFILE_BD_R2           0x42
-#define 	LV_PROFILE_BD_R1           0x41
-#define 	LV_PROFILE_BD_ROM          0x40
-#define 	LV_PROFILE_DVD_R_P_D       0x2b
-#define 	LV_PROFILE_DVD_RW_P_D      0x2a
-#define 	LV_PROFILE_DVD_R_P         0x1b
-#define 	LV_PROFILE_DVD_RW_P        0x1a
-#define 	LV_PROFILE_DVD_D           0x18
-#define 	LV_PROFILE_DVD_R_D         0x16
-#define 	LV_PROFILE_DVD_R_D1        0x15
-#define 	LV_PROFILE_DVD_RW2         0x14
-#define 	LV_PROFILE_DVD_RW1         0x13
-#define 	LV_PROFILE_DVD_RAM         0x12
-#define 	LV_PROFILE_DVD_R           0x11
-#define 	LV_PROFILE_DVD_ROM         0x10
-#define 	LV_PROFILE_CD_RW           0x0a
-#define 	LV_PROFILE_CD_R            0x09
-#define 	LV_PROFILE_CD_ROM          0x08
-#define 	LV_PROFILE_REMOVABLE       0x02
-#define 	LV_PROFILE_NO_CURRENT      0x00
+#define 	PROFILE_HD_DVD_RAM      0x52
+#define 	PROFILE_HD_DVD_R        0x51
+#define 	PROFILE_HD_DVD_ROM      0x50
+#define 	PROFILE_BD_RE           0x43
+#define 	PROFILE_BD_R2           0x42
+#define 	PROFILE_BD_R1           0x41
+#define 	PROFILE_BD_ROM          0x40
+#define 	PROFILE_DVD_R_P_D       0x2b
+#define 	PROFILE_DVD_RW_P_D      0x2a
+#define 	PROFILE_DVD_R_P         0x1b
+#define 	PROFILE_DVD_RW_P        0x1a
+#define 	PROFILE_DVD_D           0x18
+#define 	PROFILE_DVD_R_D         0x16
+#define 	PROFILE_DVD_R_D1        0x15
+#define 	PROFILE_DVD_RW2         0x14
+#define 	PROFILE_DVD_RW1         0x13
+#define 	PROFILE_DVD_RAM         0x12
+#define 	PROFILE_DVD_R           0x11
+#define 	PROFILE_DVD_ROM         0x10
+#define 	PROFILE_CD_RW           0x0a
+#define 	PROFILE_CD_R            0x09
+#define 	PROFILE_CD_ROM          0x08
+#define 	PROFILE_REMOVABLE       0x02
+#define 	PROFILE_NO_CURRENT      0x00
 
 
 typedef struct{
@@ -436,7 +436,7 @@ struct CDR_CMD_T{
 	int  (*cdr_closetrack)(int fd, CDR_TRACK_T *ptrack);								// 关闭轨道
 	int  (*cdr_closesession)(int fd, CDR_TRACK_T *ptrack);								// 关闭session
 	int  (*cdr_dpdevprofile)(int fd);													// 打印光驱profile
-	int  (*cdr_getdevinfo)(int fd, LVDVD_DEV_INFO_T * pDevInfo);	                    // 获取光驱厂商
+	int  (*cdr_getdevinfo)(int fd, DVD_DEV_INFO_T * pDevInfo);	                    // 获取光驱厂商
 	int  (*cdr_getmaxspeed)(int fd,int *MaxReadSpeed,int *MaxWriteSpeed);               // 获取光盘最大速度 
 	int  (*cdr_setspeed)(int fd,int ReadSpeed,int WriteSpeed,int DiscType);             // 设定最大速度 
 	int  (*cdr_getdiscusedsize)(int fd,int * usedsize);                                 // 获取光盘使用容量

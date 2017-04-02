@@ -33,48 +33,48 @@
   * 用户-实时刻录流程
    0:  DVDSDK_GetTrayState();           获取托盘状态，如果托盘是打开的需要关闭，否则跳到3执行
    1:  DVDSDK_Tray(FALSE)				关闭托盘
-   2:  Xkd_DVDSDK_HaveDisc()				判断是否有光盘
-   3:  Xkd_DVDSDK_LoadDisc();               有光盘则加载光盘
-   4:  Xkd_DVDSDK_GetDiscInfo				查询光盘信息
-   5:  Xkd_DVDSDK_SetWriteSpeed				设置光驱写倍速
-   6:  Xkd_DVDSDK_LockDoor					锁门
-   7:  Xkd_DVDSDK_FormatDisc				格式化光盘
-   8:  Xkd_DVDSDK_CreateDir					创建目录
-   9:  Xkd_DVDSDK_CreateFile				创建文件
-   10:  Xkd_DVDSDK_fillEmptyDataOnFirst		开始启动刻录
-   11:  Xkd_DVDSDK_SetFileLoca				设定刻录文件位置
-   12:  Xkd_DVDSDK_WriteData				刻录数据
+   2:  DVDSDK_HaveDisc()				判断是否有光盘
+   3:  DVDSDK_LoadDisc();               有光盘则加载光盘
+   4:  DVDSDK_GetDiscInfo				查询光盘信息
+   5:  DVDSDK_SetWriteSpeed				设置光驱写倍速
+   6:  DVDSDK_LockDoor					锁门
+   7:  DVDSDK_FormatDisc				格式化光盘
+   8:  DVDSDK_CreateDir					创建目录
+   9:  DVDSDK_CreateFile				创建文件
+   10:  DVDSDK_fillEmptyDataOnFirst		开始启动刻录
+   11:  DVDSDK_SetFileLoca				设定刻录文件位置
+   12:  DVDSDK_WriteData				刻录数据
    13:    ......(刻录过程必须连续写入数据，流量可以变化)
-   14:  Xkd_DVDSDK_CloseFile				关闭文件
-   15: Xkd_DVDSDK_GetUUID					获得UUID
-   16: Xkd_DVDSDK_SetRecvTrackData			写入UUID等其他隐藏数据
-   17: Xkd_DVDSDK_fillAllDiscEmptyData		填充剩余光盘空间，封盘前调用
-   18: Xkd_DVDSDK_CloseDisc					封盘，封闭后不能再次写入
-   19: Xkd_DVDSDK_Tray(TRUE)				弹出托盘
+   14:  DVDSDK_CloseFile				关闭文件
+   15: DVDSDK_GetUUID					获得UUID
+   16: DVDSDK_SetRecvTrackData			写入UUID等其他隐藏数据
+   17: DVDSDK_fillAllDiscEmptyData		填充剩余光盘空间，封盘前调用
+   18: DVDSDK_CloseDisc					封盘，封闭后不能再次写入
+   19: DVDSDK_Tray(TRUE)				弹出托盘
       
   * 用户-文件复制到光盘流程
-   1:  Xkd_DVDSDK_Tray(FALSE)				关闭托盘
-   2:  Xkd_DVDSDK_HaveDisc()				判断是否有光盘
-   3:  Xkd_DVDSDK_LoadDisc();               有光盘则加载光盘
-   4:  Xkd_DVDSDK_Tray(FALSE)				关闭托盘
-   5:  Xkd_DVDSDK_GetDiscInfo				查询光盘信息
-   6:  Xkd_DVDSDK_GetTotalWriteSize			获得可写大小，判断是否小于需要写入文件的大小
-   7:  Xkd_DVDSDK_SetWriteSpeed				设置光驱写倍速
-   8:  Xkd_DVDSDK_LockDoor					锁门
-   9:  Xkd_DVDSDK_FormatDisc				格式化光盘
+   1:  DVDSDK_Tray(FALSE)				关闭托盘
+   2:  DVDSDK_HaveDisc()				判断是否有光盘
+   3:  DVDSDK_LoadDisc();               有光盘则加载光盘
+   4:  DVDSDK_Tray(FALSE)				关闭托盘
+   5:  DVDSDK_GetDiscInfo				查询光盘信息
+   6:  DVDSDK_GetTotalWriteSize			获得可写大小，判断是否小于需要写入文件的大小
+   7:  DVDSDK_SetWriteSpeed				设置光驱写倍速
+   8:  DVDSDK_LockDoor					锁门
+   9:  DVDSDK_FormatDisc				格式化光盘
        while(n) {
-	    Xkd_DVDSDK_CopyFile					拷贝文件
+	    DVDSDK_CopyFile					拷贝文件
 	   }
-   10:  Xkd_DVDSDK_fillAllDiscEmptyData		填充剩余光盘空间，封盘前调用
-   11:  Xkd_DVDSDK_CloseDisc					封盘，封闭后不能再次写入
-   12:  Xkd_DVDSDK_Tray(TRUE)				弹出托盘
-   13:  Xkd_DVDSDK_LockDoor					解锁
+   10:  DVDSDK_fillAllDiscEmptyData		填充剩余光盘空间，封盘前调用
+   11:  DVDSDK_CloseDisc					封盘，封闭后不能再次写入
+   12:  DVDSDK_Tray(TRUE)				弹出托盘
+   13:  DVDSDK_LockDoor					解锁
    
 * 修改:
 *******************************************************************************/
 
-#ifndef __Xkd_DVDSDK_H__
-#define __Xkd_DVDSDK_H__
+#ifndef __DVDSDK_H__
+#define __DVDSDK_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -160,9 +160,9 @@ typedef enum{
 #define ERROR_DVD_SRCBLANKDISC		_ERRC(320)		// 源盘为空盘
 
 
-typedef void *Xkd_DVDSDK_DIR;		// 目录节点指针
-typedef void *Xkd_DVDSDK_FILE;		// 文件指针
-typedef void *XKD_DVDDRV;			// DVD驱动句柄
+typedef void *DVDSDK_DIR;		// 目录节点指针
+typedef void *DVDSDK_FILE;		// 文件指针
+typedef void *DVDDRV_HANDLE;			// DVD驱动句柄
 
 // 光盘信息
 typedef struct{
@@ -171,7 +171,7 @@ typedef struct{
 	unsigned int discsize;		// 光盘容量(MB)
 	unsigned int usedsize;		// 已使用的大小(MB)	
 	unsigned int freesize;		// 可用大小(MB)
-}LVDVD_DISC_INFO_T;
+}DVD_DISC_INFO_T;
 
 // 光驱设备信息
 typedef struct{
@@ -179,392 +179,401 @@ typedef struct{
 	int  drvtype;						// 光驱类型			DVDDRIVER_TYPE
 	int  discsupts;						// 光盘支持总数
 	unsigned char disclist[255];		// 光盘里类型列表，见DVDDISC_TYPE
-}LVDVD_DEV_INFO_T;
+}DVD_DEV_INFO_T;
 
 #include <stdint.h>
 
-/*******************************************************************************
-* 名称  : DVDSDK_Load
-* 描述  : 加载光驱,
-* 参数  : 
+class DVDSDKInterface
+{
+public:
+	DVDSDKInterface();
+	~DVDSDKInterface();
+public:
+	/*******************************************************************************
+	* 名称  : DVDSDK_Load
+	* 描述  : 加载光驱,
+	* 参数  :
 	szDevName : 驱动名称，如: /dev/sr0, /dev/sr1
-* 返回值: 设备句柄，NULL为失败
-* 作者  : passion
-* 日期  : 2017.3.31
-*******************************************************************************/
-XKD_DVDDRV Xkd_DVDSDK_Load(const char *szDevName);
+	* 返回值: 设备句柄，NULL为失败
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	DVDDRV_HANDLE DVDSDK_Load(const char *szDevName);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_UnLoad
-* 描述  : 卸载光驱
-* 参数  : 
-	hDVD : Xkd_DVDSDK_Load的返回值
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_UnLoad(XKD_DVDDRV hDVD);
+	/*******************************************************************************
+	* 名称  : DVDSDK_UnLoad
+	* 描述  : 卸载光驱
+	* 参数  :
+	hDVD : DVDSDK_Load的返回值
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_UnLoad(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_Tray
-* 描述  : 打开/关闭托盘
-* 参数  : 
-	hDVD : Xkd_DVDSDK_Load的返回值
+	/*******************************************************************************
+	* 名称  : DVDSDK_Tray
+	* 描述  : 打开/关闭托盘
+	* 参数  :
+	hDVD : DVDSDK_Load的返回值
 	bOpen  : TRUE:打开托盘, FALSE:关闭托盘
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int	Xkd_DVDSDK_Tray(XKD_DVDDRV hDVD, int bOpen);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int	DVDSDK_Tray(DVDDRV_HANDLE hDVD, int bOpen);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetTrayState
-* 描述  : 获得托盘状态(打开/关闭)
-* 参数  : 
-	hDVD : Xkd_DVDSDK_Load的返回值
-* 返回值: 1：打开，0：关闭，其他为错误代码
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int	Xkd_DVDSDK_GetTrayState(XKD_DVDDRV hDVD);
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetTrayState
+	* 描述  : 获得托盘状态(打开/关闭)
+	* 参数  :
+	hDVD : DVDSDK_Load的返回值
+	* 返回值: 1：打开，0：关闭，其他为错误代码
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int	DVDSDK_GetTrayState(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_LockDoor
-* 描述  : 锁定/解锁光驱门, 防止在刻录过程中意外打开
-* 参数  : 
-	hDVD : Xkd_DVDSDK_Load的返回值
+	/*******************************************************************************
+	* 名称  : DVDSDK_LockDoor
+	* 描述  : 锁定/解锁光驱门, 防止在刻录过程中意外打开
+	* 参数  :
+	hDVD : DVDSDK_Load的返回值
 	bLocked: TRUE:锁定, FALSE:解锁
-* 返回值: 0:成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_LockDoor(XKD_DVDDRV hDVD, int bLocked);
+	* 返回值: 0:成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_LockDoor(DVDDRV_HANDLE hDVD, int bLocked);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetDevInfo
-* 描述  : 获得光驱信息
-* 参数  : 
-	hDVD : Xkd_DVDSDK_Load的返回值
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetDevInfo
+	* 描述  : 获得光驱信息
+	* 参数  :
+	hDVD : DVDSDK_Load的返回值
 	pDevInfo   : 光驱信息指针
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetDevInfo(XKD_DVDDRV hDVD, LVDVD_DEV_INFO_T *pDevInfo);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetDevInfo(DVDDRV_HANDLE hDVD, DVD_DEV_INFO_T *pDevInfo);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetDiscInfo
-* 描述  : 获得碟片信息
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetDiscInfo
+	* 描述  : 获得碟片信息
+	* 参数  :
 	nDevNo     : 设备号，0-n, -1为全部设备
 	pDiscInfo  : 碟片信息结构指针
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetDiscInfo(XKD_DVDDRV hDVD, LVDVD_DISC_INFO_T *pDiscInfo);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetDiscInfo(DVDDRV_HANDLE hDVD, DVD_DISC_INFO_T *pDiscInfo);
 
-/*******************************************************************************
-* 名称  : DVDSDK_HaveDisc
-* 描述  : 判断是否有光盘
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_HaveDisc
+	* 描述  : 判断是否有光盘
+	* 参数  :
 	nDevNo     : 设备号，0-n, -1为全部设备
-* 返回值: TRUE: 有，FALSE：无  
-* 作者  : passion
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_HaveDisc(XKD_DVDDRV hDVD);
+	* 返回值: TRUE: 有，FALSE：无
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_HaveDisc(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetMediaExactType
-* 描述  : 获取光盘类型(精确类型)
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetMediaExactType
+	* 描述  : 获取光盘类型(精确类型)
+	* 参数  :
 	nDevNo : 设备号，0-n, -1为全部设备
-* 返回值: 光盘类型
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetMediaExactType(XKD_DVDDRV hDVD);
+	* 返回值: 光盘类型
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetMediaExactType(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetMediaBasicType
-* 描述  : 获取光盘类型(基本类型)(用于设定光驱速度和复制光盘时)
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetMediaBasicType
+	* 描述  : 获取光盘类型(基本类型)(用于设定光驱速度和复制光盘时)
+	* 参数  :
 	nDevNo : 设备号，0-n, -1为全部设备
-* 返回值: 光盘类型
-* 作者  : xkd
-* 日期  : 2010.12.29
-*******************************************************************************/
-int Xkd_DVDSDK_GetMediaBasicType(XKD_DVDDRV hDVD);
+	* 返回值: 光盘类型
+	* 作者  : passion
+	* 日期  : 2017.12.29
+	*******************************************************************************/
+	int DVDSDK_GetMediaBasicType(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetWriteSpeed
-* 描述  : 设定刻录速度
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_SetWriteSpeed
+	* 描述  : 设定刻录速度
+	* 参数  :
 	nDevNo : 设备号，0-n, -1为全部设备
 	speed  : 速度，必须是 1 2 4 6 8 12
-	disctpye  : 光盘类型   	DVD_DISC = 0 ,DVD_DL_DISC = 1 ,CD_DISC = 2  
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-* 修改  : 2010.12.30 Modify by xkd add disctype
-*******************************************************************************/
-int Xkd_DVDSDK_SetWriteSpeed(XKD_DVDDRV hDVD, int speed,int disctype);
+	disctpye  : 光盘类型   	DVD_DISC = 0 ,DVD_DL_DISC = 1 ,CD_DISC = 2
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	* 修改  : 2017.4.30 Modify by passion add disctype
+	*******************************************************************************/
+	int DVDSDK_SetWriteSpeed(DVDDRV_HANDLE hDVD, int speed, int disctype);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetCopySpeed
-* 描述  : 设定光盘复制的速度
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_SetCopySpeed
+	* 描述  : 设定光盘复制的速度
+	* 参数  :
 	nSrcDevno : 源设备号，0-n
 	nDstDevno : 目的设备号，0-n
 	srctype  : 光盘类型:B_DVD_DISC = 0,DVD_DL_DISC = 1,DVD_DISC = 2,CD_DISC = 3
 	dsttype  : 光盘类型:B_DVD_DISC = 0,DVD_DL_DISC = 1,DVD_DISC = 2,CD_DISC = 3
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2010.1.14
-*******************************************************************************/
-int Xkd_DVDSDK_SetCopySpeed(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst, int srctype, int dsttype);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.4.14
+	*******************************************************************************/
+	int DVDSDK_SetCopySpeed(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDst, int srctype, int dsttype);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_LoadDisc
-* 描述  : 加载光盘
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_LoadDisc
+	* 描述  : 加载光盘
+	* 参数  :
 	nDevNo : 设备号，0-n
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_LoadDisc(XKD_DVDDRV hDVD);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_LoadDisc(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_DiscCanWrite
-* 描述  : 判断光盘是否可写
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_DiscCanWrite
+	* 描述  : 判断光盘是否可写
+	* 参数  :
 	nDevNo : 设备号，0-n
-* 返回值: 0: 可写，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_DiscCanWrite(XKD_DVDDRV hDVD);
+	* 返回值: 0: 可写，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_DiscCanWrite(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_FormatDisc
-* 描述  : 格式化光盘, 分轨道, 创建UDF文件系统, 准备开始写数据; 目前只支持一个分区，2个轨道
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_FormatDisc
+	* 描述  : 格式化光盘, 分轨道, 创建UDF文件系统, 准备开始写数据; 目前只支持一个分区，2个轨道
+	* 参数  :
 	nDevNo : 设备号，0-n
 	szDiscName: 光盘名称
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int	Xkd_DVDSDK_FormatDisc(XKD_DVDDRV hDVD, char *szDiscName);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int	DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetFileLoca
-* 描述  : 设定文件位置 (写文件前都需要调用这个函数)
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_SetFileLoca
+	* 描述  : 设定文件位置 (写文件前都需要调用这个函数)
+	* 参数  :
 	nDevNo : 设备号，0-n
 	FileNode : 文件节点
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd 
-* 日期  : 2011.1.17
-*******************************************************************************/
-int Xkd_DVDSDK_SetFileLoca(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE FileNode);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.4.17
+	*******************************************************************************/
+	int DVDSDK_SetFileLoca(DVDDRV_HANDLE hDVD, DVDSDK_FILE FileNode);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_fillEmptyDataOnFirst
-* 描述  : 填充空数据，在格式化之后，开始刻录之前调用，避免开始刻录时写轨道数据的停滞，
-          造成视频丢帧  (第一个文件前调用，之后的文件调用Xkd_DVDSDK_SetFileLoca)
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_fillEmptyDataOnFirst
+	* 描述  : 填充空数据，在格式化之后，开始刻录之前调用，避免开始刻录时写轨道数据的停滞，
+	造成视频丢帧  (第一个文件前调用，之后的文件调用DVDSDK_SetFileLoca)
+	* 参数  :
 	nDevNo : 设备号，0-n
 	fillsize: 填充大小，0为自动计算填充大小
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_fillEmptyDataOnFirst(XKD_DVDDRV hDVD, unsigned int fillsize);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_fillEmptyDataOnFirst(DVDDRV_HANDLE hDVD, unsigned int fillsize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_CreateDir
-* 描述  : 创建目录
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_CreateDir
+	* 描述  : 创建目录
+	* 参数  :
 	nDevNo : 设备号，0-n
 	szDirName : 目录名称，不能为空
-* 返回值: 目录节点指针, Xkd_DVDSDK_CreateFile函数会用到, NULL:创建目录失败
-* 作者  : xkd
-* 日期  : 2017.3.31
-* 修改  : 2010.12.21 xkd 
-          参数:	nDevNo : 设备号，0-n
-				szDirName : 要创建的目录,方式为"/root/test1dir/test2dir"
-*******************************************************************************/
-Xkd_DVDSDK_DIR Xkd_DVDSDK_CreateDir(XKD_DVDDRV hDVD, char *szDirName);
+	* 返回值: 目录节点指针, DVDSDK_CreateFile函数会用到, NULL:创建目录失败
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	* 修改  : 2017.4.21 passion
+	参数:	nDevNo : 设备号，0-n
+	szDirName : 要创建的目录,方式为"/root/test1dir/test2dir"
+	*******************************************************************************/
+	DVDSDK_DIR DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_CreateFile
-* 描述  : 创建文件，开始写数据
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_CreateFile
+	* 描述  : 创建文件，开始写数据
+	* 参数  :
 	nDevNo : 设备号，0-n
-	pDir   : 目录节点指针, NULL为根目录, Xkd_DVDSDK_CreateDir的返回值
+	pDir   : 目录节点指针, NULL为根目录, DVDSDK_CreateDir的返回值
 	szFileName: 文件名称
 	filesize: 默认0
-* 返回值: 文件节点指针，NULL：创建失败
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-Xkd_DVDSDK_FILE Xkd_DVDSDK_CreateFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_DIR pDir, char *szFileName, uint64_t filesize);
+	* 返回值: 文件节点指针，NULL：创建失败
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	DVDSDK_FILE DVDSDK_CreateFile(DVDDRV_HANDLE hDVD, DVDSDK_DIR pDir, char *szFileName, uint64_t filesize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_WriteData
-* 描述  : 向文件中写数据, size = 32 * 1024
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_WriteData
+	* 描述  : 向文件中写数据, size = 32 * 1024
+	* 参数  :
 	nDevNo : 设备号，0-n
-	pFile  : 文件节点指针，Xkd_DVDSDK_CreateFile的返回值
+	pFile  : 文件节点指针，DVDSDK_CreateFile的返回值
 	pBuffer: 数据buffer
 	size   : 数据大小，必须是 32*1024 的整数倍
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int	Xkd_DVDSDK_WriteData(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile, unsigned char *pBuffer, int size);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int	DVDSDK_WriteData(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile, unsigned char *pBuffer, int size);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_CloseFile
-* 描述  : 关闭文件
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_CloseFile
+	* 描述  : 关闭文件
+	* 参数  :
 	nDevNo : 设备号，0-n
-	pFile  : 文件节点指针，Xkd_DVDSDK_CreateFile的返回值
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_CloseFile(XKD_DVDDRV hDVD, Xkd_DVDSDK_FILE pFile);
+	pFile  : 文件节点指针，DVDSDK_CreateFile的返回值
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_CloseFile(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_fillAllDiscEmptyData
-* 描述  : 填充光盘所有剩余空间(在刻录停止之后，封盘之前调用)
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_fillAllDiscEmptyData
+	* 描述  : 填充光盘所有剩余空间(在刻录停止之后，封盘之前调用)
+	* 参数  :
 	nDevNo : 设备号，0-n
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-* 修改  : 20111.1.17 modify by xkd for FUNC
-*******************************************************************************/
-int Xkd_DVDSDK_fillAllDiscEmptyData(XKD_DVDDRV hDVD);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	* 修改  : 2017.4.17 modify by passion for FUNC
+	*******************************************************************************/
+	int DVDSDK_fillAllDiscEmptyData(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_CloseDisc
-* 描述  : 封闭刻录轨道; 调用该接口后，光盘将不可写;
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_CloseDisc
+	* 描述  : 封闭刻录轨道; 调用该接口后，光盘将不可写;
+	* 参数  :
 	nDevNo : 设备号，0-n
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_CloseDisc(XKD_DVDDRV hDVD);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_CloseDisc(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_CopyDisc
-* 描述  : 光盘复制,直接轨道拷贝，但是保留轨道不复制
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_CopyDisc
+	* 描述  : 光盘复制,直接轨道拷贝，但是保留轨道不复制
+	* 参数  :
 	nSrcDevno : 源设备号，0-n
 	nDstDevno : 目的设备号，0-n
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_CopyDisc(XKD_DVDDRV HDVDSrc, XKD_DVDDRV HDVDDst);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDst);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_ResumeDisc
-* 描述  : 光盘恢复,如果在刻录过程中断电，调用该函数，恢复文件系统
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_ResumeDisc
+	* 描述  : 光盘恢复,如果在刻录过程中断电，调用该函数，恢复文件系统
+	* 参数  :
 	nDevNo : 设备号，0-n
 	DiscName : 光盘名称
 	DirName : 目录名称
 	FileName : 文件名称
 	FillSize : 填充的数据数
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-* 修改  : 2010.12.30 modify by xkd for Complete Func
-*******************************************************************************/
-int Xkd_DVDSDK_ResumeDisc(XKD_DVDDRV hDVD, char *DiscName, char *DirName, char *FileName, int FillSize);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	* 修改  : 2017.4.30 modify by passion for Complete Func
+	*******************************************************************************/
+	int DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char *DirName, char *FileName, int FillSize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetReserveData
-* 描述  : 获得保留轨道数据, 对于已经封盘的光盘才有效, 读取时调用
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetReserveData
+	* 描述  : 获得保留轨道数据, 对于已经封盘的光盘才有效, 读取时调用
+	* 参数  :
 	nDevNo : 设备号，0-n
 	pBuffer: 返回保留数据指针
 	pSize  : 返回Buffer长度
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetReserveData(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *pSize);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetReserveData(DVDDRV_HANDLE hDVD, unsigned char **pBuffer, int *pSize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetReserveBuffer
-* 描述  : 获得保留轨道数据指针, 这个函数在保留轨道前调用，直接修改Buffer，在
-		  封盘时写入该数据,大小 32K， 刻录时调用
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetReserveBuffer
+	* 描述  : 获得保留轨道数据指针, 这个函数在保留轨道前调用，直接修改Buffer，在
+	封盘时写入该数据,大小 32K， 刻录时调用
+	* 参数  :
 	nDevNo : 设备号，0-n
 	pBuffer: 返回保留数据指针
 	pSize  : 返回Buffer长度
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetReserveBuffer(XKD_DVDDRV hDVD, unsigned char **pBuffer, int *pSize);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetReserveBuffer(DVDDRV_HANDLE hDVD, unsigned char **pBuffer, int *pSize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetTotalWriteSize
-* 描述  : 获得光盘整个可写空间
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetTotalWriteSize
+	* 描述  : 获得光盘整个可写空间
+	* 参数  :
 	nDevNo    : 设备号，0-n
 	pTotalSize: 返回整个可写空间
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetTotalWriteSize(XKD_DVDDRV hDVD, unsigned long long *pTotalSize);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetTotalWriteSize(DVDDRV_HANDLE hDVD, unsigned long long *pTotalSize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_GetFreeWriteSize
-* 描述  : 获得剩余可写空间
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_GetFreeWriteSize
+	* 描述  : 获得剩余可写空间
+	* 参数  :
 	nDevNo   : 设备号，0-n
 	pFreeSize: 返回剩余可写空间
-* 返回值: 0: 成功，其他为错误值
-* 作者  : xkd
-* 日期  : 2017.3.31
-*******************************************************************************/
-int Xkd_DVDSDK_GetFreeWriteSize(XKD_DVDDRV hDVD, unsigned long long *pFreeSize);
+	* 返回值: 0: 成功，其他为错误值
+	* 作者  : passion
+	* 日期  : 2017.3.31
+	*******************************************************************************/
+	int DVDSDK_GetFreeWriteSize(DVDDRV_HANDLE hDVD, unsigned long long *pFreeSize);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_PrintProfile
-* 描述  : 打印profile
-* 参数  : 
+	/*******************************************************************************
+	* 名称  : DVDSDK_PrintProfile
+	* 描述  : 打印profile
+	* 参数  :
 	nDevNo   : 设备号，0-n
-* 返回值: 0: 成功
-* 作者  : xkd
-* 日期  : 2011.1.14
-*******************************************************************************/
-int Xkd_DVDSDK_PrintProfile(XKD_DVDDRV hDVD);
+	* 返回值: 0: 成功
+	* 作者  : passion
+	* 日期  : 2017.4.14
+	*******************************************************************************/
+	int DVDSDK_PrintProfile(DVDDRV_HANDLE hDVD);
 
-/*******************************************************************************
-* 名称  : Xkd_DVDSDK_SetRecordStatus
-* 描述  : 设置光驱刻录状态（用于光盘格式化后刻录失败未封盘，再次格式化前设置刻录状态）
+	/*******************************************************************************
+	* 名称  : DVDSDK_SetRecordStatus
+	* 描述  : 设置光驱刻录状态（用于光盘格式化后刻录失败未封盘，再次格式化前设置刻录状态）
 
-* 参数  :
+	* 参数  :
 	hDVD   : DVD驱动句柄
-* 返回值: 
-* 作者  : hexj
-* 日期  : 2014.8.5
-*******************************************************************************/
-void Xkd_DVDSDK_SetRecordStatus(XKD_DVDDRV hDVD, BOOL bRecordStatus);
+	* 返回值:
+	* 作者  : passion
+	* 日期  : 2017.4.5
+	*******************************************************************************/
+	void DVDSDK_SetRecordStatus(DVDDRV_HANDLE hDVD, BOOL bRecordStatus);
+
+};
+
 #ifdef __cplusplus
 }
 #endif  //__cplusplus
 
-#endif//__Xkd_DVDSDK_H__
+#endif//__DVDSDK_H__
