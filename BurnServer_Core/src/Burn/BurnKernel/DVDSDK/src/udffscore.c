@@ -302,10 +302,10 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 	int i, j, loc = disc->udffile.writenext;
 	struct anchorVolDescPtr * avdp;
 	
-	ext = LvDVDRecUdf_next_extent(disc->udf_disc.head, RESERVED);
+	ext = DVDRecUdf_next_extent(disc->udf_disc.head, RESERVED);
 	
 	// 设定第一个VRS结构描述，在16+1 位置
-	desc = LvDVDRecUdf_set_desc(pUdfInfo->m_hMem, &disc->udf_disc, ext, TAG_IDENT_AVDP, loc, sizeof(struct anchorVolDescPtr), NULL);
+	desc = DVDRecUdf_set_desc(pUdfInfo->m_hMem, &disc->udf_disc, ext, TAG_IDENT_AVDP, loc, sizeof(struct anchorVolDescPtr), NULL);
 
 	avdp = (struct anchorVolDescPtr *)desc->data->buffer;
 
@@ -319,11 +319,12 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 		for(j = 0; j < PACKET_BLOCK_32; j++)
 		{
 			desc->offset = loc;
-			avdp->descTag = LvDVDRecUdf_query_tag(&disc->udf_disc, ext, desc, 0);
+			avdp->descTag = DVDRecUdf_query_tag(&disc->udf_disc, ext, desc, 0);
 			memcpy(&buffer[j * CDROM_BLOCK], avdp, sizeof(struct anchorVolDescPtr));
 			loc++;
 		}
-		pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
+		//pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
+		pUdfInfo.cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
 	}
 	MEMFREE(pUdfInfo->m_hMem, desc->data->buffer);
 	desc->data->buffer = NULL;
@@ -334,12 +335,12 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 	struct cdrw_disc *disc = UdfCP->m_CdRwDiskinfo;
 	int i,j,loc = disc->udffile.writenext;
 	struct anchorVolDescPtr * avdp;	
-	ext = LvDVDRecUdf_next_extent(disc->udf_disc.head, RESERVED);
+	ext = DVDRecUdf_next_extent(disc->udf_disc.head, RESERVED);
 	//printf("write ----------- avdp\n");	
 	//avdp = MEMREALLOC(avdp, sizeof(struct anchorVolDescPtr));
 	
 	//设定第一个VRS结构描述，在16+1 位置
-	desc = LvDVDRecUdf_set_desc(&disc->udf_disc, ext, TAG_IDENT_AVDP, loc, sizeof(struct anchorVolDescPtr), NULL);
+	desc = DVDRecUdf_set_desc(&disc->udf_disc, ext, TAG_IDENT_AVDP, loc, sizeof(struct anchorVolDescPtr), NULL);
 
 	avdp = (struct anchorVolDescPtr *)desc->data->buffer;
 
@@ -351,7 +352,7 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 		for(j=0;j<PACKET_BLOCK_16;j++)
 		{
 			desc->offset = loc;
-			avdp->descTag = LvDVDRecUdf_query_tag(&disc->udf_disc, ext, desc, 0);
+			avdp->descTag = DVDRecUdf_query_tag(&disc->udf_disc, ext, desc, 0);
 			memcpy(&buffer[j*CDROM_BLOCK],avdp,sizeof(struct anchorVolDescPtr));
 			loc++;
 		}
@@ -444,13 +445,13 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
 
 #if 1
     //读取根目录,ROOT_FE,ROOT_FID
-    pspace = LvDVDRecUdf_next_extent(disc->udf_disc.head, FSD);
-    desc   = LvDVDRecUdf_next_desc(pspace->head, TAG_IDENT_FE);
+    pspace = DVDRecUdf_next_extent(disc->udf_disc.head, FSD);
+    desc   = DVDRecUdf_next_desc(pspace->head, TAG_IDENT_FE);
     fe = (struct fileEntry *)desc->data->buffer;
     memcpy(&buffer[offset * CDROM_BLOCK],fe,CDROM_BLOCK);
     offset++;
 
-    desc = LvDVDRecUdf_next_desc(desc, TAG_IDENT_FID);
+    desc = DVDRecUdf_next_desc(desc, TAG_IDENT_FID);
     fid  = (struct fileIdentDesc *)desc->data->buffer;
     //memcpy(&buffer[offset * CDROM_BLOCK], fid, CDROM_BLOCK);   	//modify by yanming 10.12.23 for more files or dirs
     memcpy(&buffer[offset * CDROM_BLOCK], fid, desc->data->length);
@@ -829,7 +830,7 @@ static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo)
 	DP(("UDF Fs To DVD Disc 1,fd=%d\n",pUdfInfo->fd));
 	//更新插入各个文件描述符，并更新对应文件长度和起始地址
 	//建立fsd及目录、文件
-	pspace = LvDVDRecUdf_next_extent(disc->udf_disc.head, FSD);
+	pspace = DVDRecUdf_next_extent(disc->udf_disc.head, FSD);
 	
 	DP(("UDF Fs To DVD Disc 2,fd=%d\n",pUdfInfo->fd));
 	// 建立FSD
@@ -850,8 +851,10 @@ static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo)
 }
 
 /****************************************************************************************************/
+//Class CUdfCmd
+
 // 添加目录或文件
-static FILDIRNODE *addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
+FILDIRNODE* CUdfCmd::addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
 {
 	//获取时间
 	timestamp	ts;
@@ -962,7 +965,7 @@ static FILDIRNODE *addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Par
 }
 
 // 获取目录数量
-static int getdircount(FILEDIRTREE *FileDirTree)
+int CUdfCmd::getdircount(FILEDIRTREE *FileDirTree)
 {
 	int i; int DirCount = 0;
 	FILDIRNODE * TmpNode;
@@ -980,7 +983,7 @@ static int getdircount(FILEDIRTREE *FileDirTree)
 }
 
 // 获取文件数量
-static int getfilecount(FILEDIRTREE *FileDirTree)
+int CUdfCmd::getfilecount(FILEDIRTREE *FileDirTree)
 {
 	int i; int fileCount = 0;
 	FILDIRNODE * TmpNode;
@@ -998,7 +1001,7 @@ static int getfilecount(FILEDIRTREE *FileDirTree)
 }
 
 // 初始化文件系统,初始化卷标和UDF文件系统描述符
-static int InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
+int CUdfCmd::InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
 {
 	//读取光盘容量，初始化相关信息
 	int iRet;
@@ -1041,7 +1044,7 @@ static int InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
 }
 
 // 写流数据到光盘文件, length可以为任意大小
-static int WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data, int length)
+int CUdfCmd::WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data, int length)
 {
 	int iRet;
 	if( !FileNode )
@@ -1062,7 +1065,7 @@ static int WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data,
 }
 
 // 填充空数据到光盘最后, length可以为任意大小
-static int WriteEmptyStream(udfinfo_t *pUdfInfo, uint8_t *Data, int length)
+int CUdfCmd::WriteEmptyStream(udfinfo_t *pUdfInfo, uint8_t *Data, int length)
 {
 	int iRet;
 
@@ -1076,7 +1079,7 @@ static int WriteEmptyStream(udfinfo_t *pUdfInfo, uint8_t *Data, int length)
 }
 
 // 封盘光盘
-static int CloseDisc(udfinfo_t *pUdfInfo)
+int CUdfCmd::CloseDisc(udfinfo_t *pUdfInfo)
 {
 	//更新LVID文件与目录数据
 	CDRWDISKINFO *disc = pUdfInfo->m_CdRwDiskinfo;
@@ -1101,7 +1104,7 @@ static int CloseDisc(udfinfo_t *pUdfInfo)
 }
 
 // 在文件轨道写入空数据，需在格式化之后调用, 防止流刻录开始时写轨道的停滞，造成视频丢帧
-static int WriteFileTrackEmdpy(udfinfo_t *pUdfInfo, uint32_t emptydize)
+int CUdfCmd::WriteFileTrackEmdpy(udfinfo_t *pUdfInfo, uint32_t emptydize)
 {
 	int i;
 	int iRet;
@@ -1122,7 +1125,7 @@ static int WriteFileTrackEmdpy(udfinfo_t *pUdfInfo, uint32_t emptydize)
 	return 0;
 }
 
-static int udffstest(udfinfo_t *pUdfInfo)
+int CUdfCmd::udffstest(udfinfo_t *pUdfInfo)
 {
 	DISC_VOLID_T disc_volid;
 	int i;
@@ -1133,15 +1136,15 @@ static int udffstest(udfinfo_t *pUdfInfo)
 	FILDIRNODE *DirNode;
 
 	memset(&disc_volid, 0, sizeof(DISC_VOLID_T));
-	strcpy(disc_volid.logicalVolIdent, "asdfasd");
-	strcpy(disc_volid.volIdent,        "asdfasd");
-	strcpy(disc_volid.volSetIdent,     "asdfasd");
-	strcpy(disc_volid.LVInfoTitle, 	      "asdfasd");
-	strcpy(disc_volid.LVInfoDataTime,     "2010-12-17");
-	strcpy(disc_volid.LVInfoEmail,        "asdfasd@163.com");
-	strcpy(disc_volid.fileSetIdent,       "asdfasd");
-	strcpy(disc_volid.copyrightFileIdent, "asdfasd");
-	strcpy(disc_volid.abstractFileIdent,  "asdfasd");
+	strcpy(disc_volid.logicalVolIdent, "aaaa");
+	strcpy(disc_volid.volIdent,        "aaaa");
+	strcpy(disc_volid.volSetIdent,     "aaaa");
+	strcpy(disc_volid.LVInfoTitle, 	      "aaaa");
+	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
+	strcpy(disc_volid.LVInfoEmail,        "aaaa@126.com");
+	strcpy(disc_volid.fileSetIdent,       "aaaa");
+	strcpy(disc_volid.copyrightFileIdent, "aaaa");
+	strcpy(disc_volid.abstractFileIdent,  "aaaa");
 	
 	DirNode = pUdfInfo->udf_cmd->addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, NULL, "udf_test_dir", 0, NODETYPE_DIR);
 	
@@ -1175,7 +1178,7 @@ static int udffstest(udfinfo_t *pUdfInfo)
 
 	//更新插入各个文件描述符，并更新对应文件长度和起始地址
 	//建立fsd及目录、文件
-	pspace = LvDVDRecUdf_next_extent(disc->udf_disc.head, FSD);
+	pspace = DVDRecUdf_next_extent(disc->udf_disc.head, FSD);
 	DP(("LvDVDRecUdf_next_extent \n"));
 	
 	// 建立FSD
@@ -1191,7 +1194,7 @@ static int udffstest(udfinfo_t *pUdfInfo)
 	
 	WriteFSDToDisc(pUdfInfo, UDF_SYS_LEN, pUdfInfo->m_DataMode);
 	
-	LvDVDRec_UdfTreeFree(pUdfInfo);
+	DVDRec_UdfTreeFree(pUdfInfo);
 	DP(("udffstest ok\n"));
 	
 	return 0;
@@ -1213,7 +1216,7 @@ static udfcmd_t udfcmd = {
 };
 
 // 创建UDF
-udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode)
+udfinfo_t * DVDRec_UdfCreate(int fd, uint16_t DataMode)
 {
 	MEMMOCLINE;
 	udfinfo_t * udfinfo = (udfinfo_t*)malloc(sizeof(udfinfo_t));
@@ -1247,7 +1250,7 @@ udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode)
 	udfinfo->m_CdRwDiskinfo = (CDRWDISKINFO *)MEMMALLOC(udfinfo->m_hMem, sizeof(CDRWDISKINFO));
 	if( udfinfo->m_CdRwDiskinfo == NULL ) 
 	{
-		LvDVDRec_UdfFree(udfinfo);
+		DVDRec_UdfFree(udfinfo);
 		DPERROR(("MEMMALLOC buffer failed!\n"));
 		return NULL;
 	}
@@ -1259,7 +1262,7 @@ udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode)
 	if(!udfinfo->m_CdRwDiskinfo->udfsys.pbuffer)
 	{
 		DPERROR(("MEMMALLOC udfsys buffer error\n"));
-		LvDVDRec_UdfFree(udfinfo);
+		DVDRec_UdfFree(udfinfo);
 		return NULL;
 	}
 
@@ -1269,7 +1272,7 @@ udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode)
 	if(!udfinfo->m_CdRwDiskinfo->udffile.pbuffer)
 	{
 		DPERROR(("MEMMALLOC udffile buffer error\n"));
-		LvDVDRec_UdfFree(udfinfo);
+		DVDRec_UdfFree(udfinfo);
 		return NULL;
 	}
 
@@ -1278,7 +1281,7 @@ udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode)
 	udfinfo->m_FileDirTree = (FILEDIRTREE *)MEMMALLOC(udfinfo->m_hMem, sizeof(FILEDIRTREE));
 	if( udfinfo->m_FileDirTree == NULL ) 
 	{
-		LvDVDRec_UdfFree(udfinfo);
+		DVDRec_UdfFree(udfinfo);
 		DPERROR(("MEMMALLOC buffer failed!\n"));
 		return NULL;
 	}
@@ -1295,7 +1298,7 @@ udfinfo_t *LvDVDRec_UdfCreate(int fd, uint16_t DataMode)
 }
 
 // 销毁UDF
-int LvDVDRec_UdfFree(udfinfo_t *pUdfInfo)
+int DVDRec_UdfFree(udfinfo_t *pUdfInfo)
 {
 	if(pUdfInfo)
 	{
@@ -1343,7 +1346,7 @@ int LvDVDRec_UdfFree(udfinfo_t *pUdfInfo)
 }
 
 // 释放UDF文件系统目录
-int LvDVDRec_UdfTreeFree(udfinfo_t *pUdfInfo)
+int DVDRec_UdfTreeFree(udfinfo_t *pUdfInfo)
 {
 	if(pUdfInfo)
 	{

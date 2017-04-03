@@ -13,7 +13,7 @@
 #include "debug.h"
 
 //下一个盘区的指针  找到fsd
-struct udf_extent *LvDVDRecUdf_next_extent(struct udf_extent *start_ext, enum udf_space_type type)
+struct udf_extent *DVDRecUdf_next_extent(struct udf_extent *start_ext, enum udf_space_type type)
 {
 	while (start_ext != NULL && !(start_ext->space_type & type))
 	{
@@ -103,7 +103,7 @@ static struct udf_extent *find_extent(struct udf_disc *disc, uint32_t start)
 }
 
 //设定盘区，用链表记录每个盘区的起始逻辑块和占用空间
-struct udf_extent *LvDVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum udf_space_type type, uint32_t start, uint32_t blocks)
+struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum udf_space_type type, uint32_t start, uint32_t blocks)
 {
 	struct udf_extent *start_ext, *new_ext;
 
@@ -228,7 +228,7 @@ struct udf_extent *LvDVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enu
 }
 
 //下一个描述符指针
-struct udf_desc *LvDVDRecUdf_next_desc(struct udf_desc *start_desc, uint16_t ident)
+struct udf_desc *DVDRecUdf_next_desc(struct udf_desc *start_desc, uint16_t ident)
 {
 	while (start_desc != NULL && start_desc->ident != ident)
 		start_desc = start_desc->next;
@@ -237,7 +237,7 @@ struct udf_desc *LvDVDRecUdf_next_desc(struct udf_desc *start_desc, uint16_t ide
 }
 
 //寻找描述符
-struct udf_desc *LvDVDRecUdf_find_desc(struct udf_extent *ext, uint32_t offset)
+struct udf_desc *DVDRecUdf_find_desc(struct udf_extent *ext, uint32_t offset)
 {
 	struct udf_desc *start_desc;
 
@@ -258,7 +258,7 @@ struct udf_desc *LvDVDRecUdf_find_desc(struct udf_extent *ext, uint32_t offset)
 }
 
 //设定描述符，在指定位置，分配描述符数据块
-struct udf_desc *LvDVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct udf_extent *ext, 
+struct udf_desc *DVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct udf_extent *ext, 
 	                      uint16_t ident, uint32_t offset, uint32_t length, 
 	                      struct udf_data *data)
 {
@@ -272,7 +272,7 @@ struct udf_desc *LvDVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct 
 	new_desc->length = length;
 	if (data == NULL)
 	{
-		new_desc->data = LvDVDRecUdf_alloc_data(hMem, length);
+		new_desc->data = DVDRecUdf_alloc_data(hMem, length);
 	}
 	else
 	{
@@ -285,7 +285,7 @@ struct udf_desc *LvDVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct 
 	}
 	else
 	{
-		start_desc = LvDVDRecUdf_find_desc(ext, offset);
+		start_desc = DVDRecUdf_find_desc(ext, offset);
 		if (start_desc == NULL)
 		{
 			new_desc->next = ext->head;
@@ -314,7 +314,7 @@ struct udf_desc *LvDVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct 
 }
 
 //为描述符追加数据
-void LvDVDRecUdf_append_data(struct udf_desc *desc, struct udf_data *data)
+void DVDRecUdf_append_data(struct udf_desc *desc, struct udf_data *data)
 {
 	struct udf_data *ndata = desc->data;
 
@@ -327,14 +327,14 @@ void LvDVDRecUdf_append_data(struct udf_desc *desc, struct udf_data *data)
 	data->prev = ndata;
 }
 
-void* LvDVDRecUdf_realloc(void *hMem,struct udf_desc *desc,unsigned long long size)
+void* DVDRecUdf_realloc(void *hMem,struct udf_desc *desc,unsigned long long size)
 {
 	desc->data->buffer = MEMREALLOC(hMem,desc->data->buffer,size);
 	return desc->data->buffer;
 }
 
 //分配数据
-struct udf_data *LvDVDRecUdf_alloc_data(void *hMem, int length)
+struct udf_data *DVDRecUdf_alloc_data(void *hMem, int length)
 {
 	struct udf_data *data;
 

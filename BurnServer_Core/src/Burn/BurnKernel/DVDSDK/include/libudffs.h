@@ -164,34 +164,34 @@ struct udf_data
 };
 
 /* crc.c */
-uint16_t LvDVDRecUdf_crc(uint8_t *, uint32_t, uint16_t);
+uint16_t DVDRecUdf_crc(uint8_t *, uint32_t, uint16_t);
 
 /* extent.c */
-struct udf_extent *LvDVDRecUdf_next_extent(struct udf_extent *, enum udf_space_type);
+struct udf_extent *DVDRecUdf_next_extent(struct udf_extent *, enum udf_space_type);
 //uint32_t next_extent_size(struct udf_extent *, enum udf_space_type, uint32_t, uint32_t);
 //struct udf_extent *prev_extent(struct udf_extent *, enum udf_space_type);
 //uint32_t prev_extent_size(struct udf_extent *, enum udf_space_type, uint32_t, uint32_t);
 //struct udf_extent *find_extent(struct udf_disc *, uint32_t);
-struct udf_extent *LvDVDRecUdf_set_extent(void *hMem, struct udf_disc *, enum udf_space_type, uint32_t,uint32_t);
-struct udf_desc *LvDVDRecUdf_next_desc(struct udf_desc *, uint16_t);
-struct udf_desc *LvDVDRecUdf_find_desc(struct udf_extent *, uint32_t);
-struct udf_desc *LvDVDRecUdf_set_desc(void *hMem, struct udf_disc *, struct udf_extent *, uint16_t, uint32_t, uint32_t, struct udf_data *);
-void LvDVDRecUdf_append_data(struct udf_desc *, struct udf_data *);
-void* LvDVDRecUdf_realloc(void *hMem,struct udf_desc *desc,unsigned long long size);//add by yanming 10.12.23
-struct udf_data *LvDVDRecUdf_alloc_data(void *hMem, int);
+struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *, enum udf_space_type, uint32_t,uint32_t);
+struct udf_desc *DVDRecUdf_next_desc(struct udf_desc *, uint16_t);
+struct udf_desc *DVDRecUdf_find_desc(struct udf_extent *, uint32_t);
+struct udf_desc *DVDRecUdf_set_desc(void *hMem, struct udf_disc *, struct udf_extent *, uint16_t, uint32_t, uint32_t, struct udf_data *);
+void DVDRecUdf_append_data(struct udf_desc *, struct udf_data *);
+void* DVDRecUdf_realloc(void *hMem,struct udf_desc *desc,unsigned long long size);//add by passion 17.4.23
+struct udf_data *DVDRecUdf_alloc_data(void *hMem, int);
 
 
 /* file.c */
-tag LvDVDRecUdf_query_tag(struct udf_disc *, struct udf_extent *, struct udf_desc *, uint16_t);
-tag LvDVDRecUdf_udf_query_tag(struct udf_disc *, uint16_t, uint16_t, uint32_t, struct udf_data *, uint16_t,uint16_t jump);
-struct udf_desc *LvDVDRecUdf_udf_create(void *hMem, struct udf_disc *, struct udf_extent *, uint32_t, 
+tag DVDRecUdf_query_tag(struct udf_disc *, struct udf_extent *, struct udf_desc *, uint16_t);
+tag DVDRecUdf_udf_query_tag(struct udf_disc *, uint16_t, uint16_t, uint32_t, struct udf_data *, uint16_t,uint16_t jump);
+struct udf_desc *DVDRecUdf_udf_create(void *hMem, struct udf_disc *, struct udf_extent *, uint32_t, 
 										struct udf_desc *, uint8_t, timestamp *ts, uint8_t, uint16_t,uint16_t,uint32_t);
 //void insert_data(struct udf_disc *disc, struct udf_extent *pspace, struct udf_desc *desc, struct udf_data *data);
-int LvDVDRecUdf_insert_fid(void *hMem, struct udf_disc *, struct udf_extent *, struct udf_desc *, uint8_t *, uint8_t ,int ,uint8_t,uint16_t,uint32_t);
-int LvDVDRec_Utf8ToUnicode(unsigned char * pSrc, unsigned char * pDst, int buflen, int * slen);//utf-8 ת unicode
+int DVDRecUdf_insert_fid(void *hMem, struct udf_disc *, struct udf_extent *, struct udf_desc *, uint8_t *, uint8_t ,int ,uint8_t,uint16_t,uint32_t);
+int DVDRec_Utf8ToUnicode(unsigned char * pSrc, unsigned char * pDst, int buflen, int * slen);//utf-8 ת unicode
 //int LvDVDRecUdf_encode_utf8(char *, char *, char *, int);
 //int LvDVDRecUdf_EncUnicodeStr(uint8_t *instr,uint8_t * outstr,int inlen,int outMaxlen);
-int LvDVDRecUdf_insert_desc(struct udf_desc *desc);
+int DVDRecUdf_insert_desc(struct udf_desc *desc);
 
 static inline void clear_bits(uint8_t *bitmap, uint32_t offset, uint64_t length)
 {
