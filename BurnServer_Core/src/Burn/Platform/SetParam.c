@@ -55,7 +55,7 @@ int Burn_Set_PrintProfile(DEV_HANDLE hBurnDEV)
 #endif
 
 /*设置平台无关层接收数据接口方式*/
-int Burn_Set_Data_Interface(DEV_HANDLE hBurnDEV, INTERFACE_TYPE interface1)
+int CBurnDev::Burn_Set_Data_Interface(DEV_HANDLE hBurnDEV, INTERFACE_TYPE interface1)
 {
     if(hBurnDEV != NULL)
     {
@@ -67,9 +67,9 @@ int Burn_Set_Data_Interface(DEV_HANDLE hBurnDEV, INTERFACE_TYPE interface1)
 }
 
 /*对硬盘信息结构体中的指定元素进行设置*/
-int Burn_Set_Disk(DEV_HANDLE hBurnDEV, BURN_BOOL use_disk, char *backup_path, unsigned long backupsize, unsigned long alarmsize)
+int CBurnDev::Burn_Set_Disk(DEV_HANDLE hBurnDEV, BURN_BOOL use_disk, char *backup_path, unsigned long backupsize, unsigned long alarmsize)
 {
-    BURN_DISK_INFO_T *b_disk_ptr;
+    BURN_DISK_INFO *b_disk_ptr;
     
     b_disk_ptr = get_disk_info(hBurnDEV);
     if(b_disk_ptr == NULL)
@@ -89,9 +89,9 @@ int Burn_Set_Disk(DEV_HANDLE hBurnDEV, BURN_BOOL use_disk, char *backup_path, un
 }
 
 /*对光盘信息结构体中的指定元素进行设置*/
-int Burn_Set_Disc(DEV_HANDLE hBurnDEV, int type, int maxspeed, unsigned long alarmsize, unsigned long alarmwarningsize)
+int CBurnDev::Burn_Set_Disc(DEV_HANDLE hBurnDEV, int type, int maxspeed, unsigned long alarmsize, unsigned long alarmwarningsize)
 {
-    BURN_DISC_INFO_T *b_disc_ptr;
+    BURN_DISC_INFO *b_disc_ptr;
     
     b_disc_ptr = get_disc_info(hBurnDEV);
     if(b_disc_ptr == NULL)
@@ -112,7 +112,7 @@ int Burn_Set_Disc(DEV_HANDLE hBurnDEV, int type, int maxspeed, unsigned long ala
 /*设置光盘使用大小情况*/
 int set_disc_size_var(DEV_HANDLE hBurnDEV, BURN_BOOL has_disc, unsigned long discsize, unsigned long usedsize, unsigned long freesize)
 {
-    BURN_DISC_INFO_T *b_disc_ptr;
+    BURN_DISC_INFO *b_disc_ptr;
     
     b_disc_ptr = get_disc_info(hBurnDEV);
     if(b_disc_ptr == NULL)
@@ -185,7 +185,7 @@ int set_running_state(DEV_HANDLE hBurnDEV, RUNNING_STATE state)
 #if 1
 RUNNING_INFO get_running_info(DEV_HANDLE hBurnDEV)
 {
-    BURN_RUN_STATE_T *b_running_ptr;
+    BURN_RUN_STATE *b_running_ptr;
     
     b_running_ptr = get_run_state(hBurnDEV);
     if(b_running_ptr == NULL)
@@ -200,7 +200,7 @@ RUNNING_INFO get_running_info(DEV_HANDLE hBurnDEV)
 
 RUNNING_STATE get_running_state(DEV_HANDLE hBurnDEV)
 {
-    BURN_RUN_STATE_T *b_running_ptr;
+    BURN_RUN_STATE *b_running_ptr;
     
     b_running_ptr = get_run_state(hBurnDEV);
     if(b_running_ptr == NULL)
@@ -230,7 +230,7 @@ int set_running_info(DEV_HANDLE hBurnDEV, RUNNING_INFO info)
 }
 #endif
 
-int Set_Burn_Buffer_Size(DEV_HANDLE hBurnDEV, unsigned long buf_size)
+int CBurnDev::Set_Burn_Buffer_Size(DEV_HANDLE hBurnDEV, unsigned long buf_size)
 {
     BURN_DATA_T *data_ptr;
 
@@ -247,9 +247,9 @@ int Set_Burn_Buffer_Size(DEV_HANDLE hBurnDEV, unsigned long buf_size)
 }
 
 
-int Burn_Set_DiscAlarmSize(DEV_HANDLE hBurnDEV, int alarm_size)
+int CBurnDev::Burn_Set_DiscAlarmSize(DEV_HANDLE hBurnDEV, int alarm_size)
 {
-	BURN_DISC_INFO_T *b_disc_info_ptr;;
+	BURN_DISC_INFO *b_disc_info_ptr;;
 
 	b_disc_info_ptr = get_disc_info(hBurnDEV);
 	if(b_disc_info_ptr != NULL)
@@ -266,9 +266,9 @@ int Burn_Set_DiscAlarmSize(DEV_HANDLE hBurnDEV, int alarm_size)
 	return BURN_FAILURE;
 }
 
-int Burn_Set_DiscAlarmWarningSize(DEV_HANDLE hBurnDEV, int alarm_warning_size)
+int CBurnDev::Burn_Set_DiscAlarmWarningSize(DEV_HANDLE hBurnDEV, int alarm_warning_size)
 {
-    BURN_DISC_INFO_T *b_disc_info_ptr;;
+    BURN_DISC_INFO *b_disc_info_ptr;;
 
     b_disc_info_ptr = get_disc_info(hBurnDEV);
     if(b_disc_info_ptr != NULL)
@@ -285,7 +285,7 @@ int Burn_Set_DiscAlarmWarningSize(DEV_HANDLE hBurnDEV, int alarm_warning_size)
     return BURN_FAILURE;
 }
 
-int Burn_Set_Event_Callback(DEV_HANDLE hBurnDEV, CB_EVENTS important_events, void *val)
+int CBurnDev::Burn_Set_Event_Callback(DEV_HANDLE hBurnDEV, CB_EVENTS important_events, void *val)
 {
 	CALLBACK_T *b_callback_ptr;
 
@@ -302,7 +302,7 @@ int Burn_Set_Event_Callback(DEV_HANDLE hBurnDEV, CB_EVENTS important_events, voi
 	return BURN_SUCCESS;
 }
 
-int Burn_Do_Event_Callback(DEV_HANDLE hBurnDEV, BURN_RUN_STATE_T  *run_state)
+int Burn_Do_Event_Callback(DEV_HANDLE hBurnDEV, BURN_RUN_STATE  *run_state)
 {
 	CALLBACK_T *b_callback_ptr;
 
@@ -323,9 +323,9 @@ int Burn_Do_Event_Callback(DEV_HANDLE hBurnDEV, BURN_RUN_STATE_T  *run_state)
 	return BURN_FAILURE;	
 }
 
-int Burn_Set_DiscName(DEV_HANDLE hBurnDEV, char *name)
+int CBurnDev::Burn_Set_DiscName(DEV_HANDLE hBurnDEV, char *name)
 {
-	BURN_DISC_INFO_T *b_disc_info_ptr;;
+	BURN_DISC_INFO *b_disc_info_ptr;;
 
 #ifdef WIN32
 	SetDiscVolumeLabel(hBurnDEV->hDVD, name);

@@ -292,7 +292,7 @@ int clear_stream_database(DEV_HANDLE hBurnDEV)
 
                 //Çå¿ÕRing_Buffer
                 printf("[Database, clear_stream_database] Begin to release ring buffer\n");
-                int nRet = Ring_Buffer_Release(hBurnDEV->data.hBuf);
+                int nRet = RingBuffer_Release(hBurnDEV->data.hBuf);
                 if (nRet == 0)
                 {
                     printf("[Database, clear_stream_database] Release ring buffer success!\n");
@@ -380,7 +380,7 @@ int config_rtsp_and_ts_param(DEV_HANDLE hBurnDEV)
 static char rt_set_filename[1000];
 static char rt_used_filename[1000];
 static int  filename_cnt = 0;
-int Burn_Set_RT_File_Name(char *filename)
+int CBurnData::Burn_Set_RT_File_Name(char *filename)
 {
     if(filename == NULL)
     {
@@ -398,7 +398,7 @@ int Burn_Set_RT_File_Name(char *filename)
     return BURN_SUCCESS;
 }
 
-int Set_RT_File_Name_Update(void)
+int CBurnData::Set_RT_File_Name_Update(void)
 {
     bzero(rt_used_filename, sizeof(rt_used_filename));
     
@@ -409,13 +409,13 @@ int Set_RT_File_Name_Update(void)
     return BURN_SUCCESS;
 }
 
-void Burn_Get_RT_File_Name(char *filename)
+void CBurnData::Burn_Get_RT_File_Name(char *filename)
 {
     if(strlen(rt_used_filename) <= 2)
 	{
 		printf("strlen(rt_used_filename) <= 2\n");
         strcpy(filename, "test.ts");
-		Burn_Set_RT_File_Name("test.ts");
+		CBurnData::Burn_Set_RT_File_Name("test.ts");
 	}
     else
 	{

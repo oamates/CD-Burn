@@ -285,7 +285,7 @@ static int write_file_to_disc(DEV_HANDLE hBurnDEV, FILE_HANDLE FileHandle, char 
 	{
         num += size;
 //		ret = Xkd_DVDSDK_WriteData(hBurnDEV->hDVD, FileHandle, buffer, size);
-		ret = Burn_Ctrl_WriteData(hBurnDEV, FileHandle, buffer, size);
+		ret = CBurnCtrl::Burn_Ctrl_WriteData(hBurnDEV, FileHandle, buffer, size);
         if(ret != 0)
         {
             printf("========= Write [%s] [%ld] Is Failed =========\n", fileName, num);
@@ -306,7 +306,7 @@ static int write_file_to_disc(DEV_HANDLE hBurnDEV, FILE_HANDLE FileHandle, char 
 }
 
 
-int Burn_File_Form_Local_File(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_path)
+int CBurnFileOpr::Burn_File_Form_Local_File(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_path)
 {
     FILE_HANDLE hFile;
     DIR_HANDLE  hDir = NULL;
@@ -336,7 +336,7 @@ int Burn_File_Form_Local_File(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_pa
 
     //光盘上创建文件
     printf("Create File [%s] On Disc\n", file_name);
-    hFile = Burn_Ctrl_CreateFile(hBurnDEV, hDir, file_name);
+	hFile = CBurnCtrl::Burn_Ctrl_CreateFile(hBurnDEV, hDir, file_name);
     if(!hFile)
     {
         printf("Get File Handle Failed\n");
@@ -363,7 +363,7 @@ int Burn_File_Form_Local_File(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_pa
     //关闭文件
     printf("Start Close File...\n");
 //	ret = Xkd_DVDSDK_CloseFile(hBurnDEV->hDVD,hFile);
-	retClose = Burn_Ctrl_CloseFile(hBurnDEV,hFile);
+	retClose = CBurnCtrl::Burn_Ctrl_CloseFile(hBurnDEV, hFile);
     if(retClose != 0)
     {
         printf("Close [%s] Failed\n", file_name);
@@ -404,14 +404,14 @@ int burn_local_file(DEV_HANDLE hBurnDEV)
             printf("Start Burn [%s]\n", file_path);
 #if 10
 
-            ret = Burn_File_Form_Local_File(hBurnDEV, burn_dir, file_path);
+            ret = CBurnFileOpr::Burn_File_Form_Local_File(hBurnDEV, burn_dir, file_path);
 //            if(ret == BURN_SUCCESS)
             {
                 //将完成的文件路径从等待队列中删除
-                Burn_Ctrl_DelBurnLocalFile(hBurnDEV, file_path);
+				CBurnCtrl::Burn_Ctrl_DelBurnLocalFile(hBurnDEV, file_path);
 
                 //将完成的文件路径加入完成队列中
-                Burn_Ctrl_AddCompletedFile(hBurnDEV, file_path);
+				Burn_Ctrl_AddCompletedFile(hBurnDEV, file_path);
             }
 #endif
         }
@@ -425,7 +425,7 @@ int burn_local_file(DEV_HANDLE hBurnDEV)
     return BURN_SUCCESS;
 }
 
-int Burn_Dir_Form_Local_Dir(DEV_HANDLE hBurnDEV, char *burn_dir, char *burn_path)
+int CBurnFileOpr::Burn_Dir_Form_Local_Dir(DEV_HANDLE hBurnDEV, char *burn_dir, char *burn_path)
 {
     DIR *srcDir;
     struct dirent *dirEnt;
@@ -483,7 +483,7 @@ int Burn_Local_Dir(DEV_HANDLE hBurnDEV)
         if(dir_path != NULL)
         {
             printf("[Burn_Local_Dir] Start Burn [%s]\n", dir_path);
-            ret = Burn_Dir_Form_Local_Dir(hBurnDEV, burn_dir, dir_path);
+            ret = CBurnFileOpr::Burn_Dir_Form_Local_Dir(hBurnDEV, burn_dir, dir_path);
             if(ret == BURN_SUCCESS)
             {
                 printf("Burn Dir Success\n");
@@ -494,7 +494,7 @@ int Burn_Local_Dir(DEV_HANDLE hBurnDEV)
             }
 
             //将完成的目录路径从等待队列中删除
-            Burn_Ctrl_DelBurnLocalDir(hBurnDEV, dir_path);
+            CBurnCtrl::Burn_Ctrl_DelBurnLocalDir(hBurnDEV, dir_path);
         }
         else
         {
@@ -539,7 +539,7 @@ int Burn_Specific_Dir_To_Disc(DEV_HANDLE hBurnDEV, char *dir_path)
 }
 #endif
 #if 1
-int Burn_Specific_Dir_To_Disc(DEV_HANDLE hBurnDEV, char *dir_path)
+int CBurnFileOpr::Burn_Specific_Dir_To_Disc(DEV_HANDLE hBurnDEV, char *dir_path)
 {
     bool has_dir = BURN_FLASE;
     DIR *srcDir;
@@ -587,7 +587,7 @@ int Burn_Specific_Dir_To_Disc(DEV_HANDLE hBurnDEV, char *dir_path)
     if(has_dir == BURN_FLASE)
     {
         printf("Burn Only One Dir = %s\n", dir_path);
-        Burn_Ctrl_AddBurnLocalDir(hBurnDEV, NULL, dir_path); 
+		CBurnCtrl::Burn_Ctrl_AddBurnLocalDir(hBurnDEV, NULL, dir_path);
     }
     else
     {
@@ -606,12 +606,12 @@ int Burn_Specific_Dir_To_Disc(DEV_HANDLE hBurnDEV, char *dir_path)
             if (S_ISDIR(st.st_mode))
             {
                 printf("Burn Add Dir [%s]\n", file_path);
-                Burn_Ctrl_AddBurnLocalDir(hBurnDEV, dirEnt->d_name, file_path);
+				CBurnCtrl::Burn_Ctrl_AddBurnLocalDir(hBurnDEV, dirEnt->d_name, file_path);
             }
             else
             {
                 printf("Burn Add File [%s]\n", file_path);
-                Burn_Ctrl_AddBurnLocalFile(hBurnDEV, NULL, file_path);
+				CBurnCtrl::Burn_Ctrl_AddBurnLocalFile(hBurnDEV, NULL, file_path);
             }
         }   
     }
@@ -644,7 +644,7 @@ int Start_Burn_Local_List(DEV_HANDLE hBurnDEV)
 
 }
 
-int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
+int CBurnFileOpr::Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
 {
     int ret;
     int num = 0;
@@ -670,7 +670,7 @@ int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
     while(hBurnDEV->burn_state != B_STOP)
 //    while(test_flag)
     {
-        ret = Get_Data_Form_Buf(data_ptr->hBuf, buffer, DEFAULTPACKED, BURN_FLASE);
+        ret = GetDataFormBuf(data_ptr->hBuf, buffer, DEFAULTPACKED, BURN_FLASE);
         if(ret != BURN_SUCCESS)
         {
             //printf("Get Data Form Buf Failed\n");
@@ -691,7 +691,7 @@ int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
         num ++;
 //		ret = Xkd_DVDSDK_WriteData(hBurnDEV->hDVD, hFile, buffer, DEFAULTPACKED);
 //        printf("***********************Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData hBurnDEV: %p, hFile:%p, num:%d \r\n", (void*)hBurnDEV, (void*)hFile, num);
-		ret = Burn_Ctrl_WriteData(hBurnDEV, hFile, buffer, DEFAULTPACKED);
+		ret = CBurnCtrl::Burn_Ctrl_WriteData(hBurnDEV, hFile, buffer, DEFAULTPACKED);
 //        printf("***********************After Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData hBurnDEV: %p, hFile:%p, num:%d\r\n", (void*)hBurnDEV, (void*)hFile, num);
 
         if(ret != 0)
@@ -708,7 +708,7 @@ int Write_Dev_Buf_Data_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hFile)
     //关闭文件
     printf("Start Close File..., write num: %d\n",num);
 //	ret = Xkd_DVDSDK_CloseFile(hBurnDEV->hDVD, hFile);
-	ret = Burn_Ctrl_CloseFile(hBurnDEV, hFile);
+	ret = CBurnCtrl::Burn_Ctrl_CloseFile(hBurnDEV, hFile);
     if(ret != 0)
     {
         printf("Close Stream File Failed\n");

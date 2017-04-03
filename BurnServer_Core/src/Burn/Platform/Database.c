@@ -9,7 +9,7 @@
 #define DEV_MAX_NUM    6
 
 
-static BURN_INFO_T* dev_info[DEV_MAX_NUM] = {NULL, NULL, NULL, NULL, NULL, NULL};
+static BURN_INFO* dev_info[DEV_MAX_NUM] = {NULL, NULL, NULL, NULL, NULL, NULL};
 
 
 BURN_DATA_T* get_burn_data(DEV_HANDLE hBurnDEV)
@@ -25,7 +25,7 @@ int create_dev_database(DEV_HANDLE hBurnDEV)
     {
         if(dev_info[i] == NULL)
         {
-            dev_info[i] = (BURN_INFO_T*) calloc(1, sizeof(BURN_INFO_T));
+            dev_info[i] = (BURN_INFO*) calloc(1, sizeof(BURN_INFO));
             dev_info[i]->dev_id = i;
             hBurnDEV->data.buf_size = 10 * 1024 * 1024;
             hBurnDEV->dev_id = i;
@@ -36,7 +36,7 @@ int create_dev_database(DEV_HANDLE hBurnDEV)
     return BURN_FAILURE;
 }
 
-int Create_Burn_Environment(DEV_HANDLE hBurnDEV)
+int CBurnData::Create_Burn_Environment(DEV_HANDLE hBurnDEV)
 {
     BURN_DATA_T *data_ptr;
 	int          ret;
@@ -53,7 +53,7 @@ int Create_Burn_Environment(DEV_HANDLE hBurnDEV)
         printf("[Database, Create_Burn_Environment] data_ptr->hBuf is NULL\n");
     }
 
-    ret = Ring_Buffer_Init(&(data_ptr->hBuf), data_ptr->buf_size);
+    ret = RingBuffer_Init(&(data_ptr->hBuf), data_ptr->buf_size);
 	if(ret == 0)
 		return BURN_SUCCESS;
 	else
@@ -75,15 +75,15 @@ int remove_dev_database(DEV_HANDLE hBurnDEV)
     return BURN_SUCCESS;
 }
 
-BURN_INFO_T* get_burn_database(DEV_HANDLE hBurnDEV)
+BURN_INFO* get_burn_database(DEV_HANDLE hBurnDEV)
 {
     return dev_info[hBurnDEV->dev_id];
 }
 
 
-BURN_DEV_INFO_T* get_dev_info(DEV_HANDLE hBurnDEV)
+BURN_DEV_INFO* get_dev_info(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *burn_info_ptr;
+    BURN_INFO *burn_info_ptr;
 
     burn_info_ptr = get_burn_database(hBurnDEV);
     if(burn_info_ptr == NULL)
@@ -96,9 +96,9 @@ BURN_DEV_INFO_T* get_dev_info(DEV_HANDLE hBurnDEV)
 }
 
 
-BURN_DISC_INFO_T* get_disc_info(DEV_HANDLE hBurnDEV)
+BURN_DISC_INFO* get_disc_info(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *burn_info_ptr;
+    BURN_INFO *burn_info_ptr;
 
     burn_info_ptr = get_burn_database(hBurnDEV);
     if(burn_info_ptr == NULL)
@@ -111,9 +111,9 @@ BURN_DISC_INFO_T* get_disc_info(DEV_HANDLE hBurnDEV)
 }
 
 
-BURN_DISK_INFO_T* get_disk_info(DEV_HANDLE hBurnDEV)
+BURN_DISK_INFO* get_disk_info(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *burn_info_ptr;
+    BURN_INFO *burn_info_ptr;
 
     burn_info_ptr = get_burn_database(hBurnDEV);
     if(burn_info_ptr == NULL)
@@ -126,9 +126,9 @@ BURN_DISK_INFO_T* get_disk_info(DEV_HANDLE hBurnDEV)
 }
 
 
-BURN_RUN_STATE_T* get_run_state(DEV_HANDLE hBurnDEV)
+BURN_RUN_STATE* get_run_state(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *b_info_ptr;
+    BURN_INFO *b_info_ptr;
 
     b_info_ptr = get_burn_database(hBurnDEV);
     if(b_info_ptr == NULL)
@@ -156,9 +156,9 @@ BURN_FILE_T* get_burn_file_info(DEV_HANDLE hBurnDEV)
 }
 #endif
 
-BURN_PARAM_T* get_burn_param(DEV_HANDLE hBurnDEV)
+BURN_PARAM* get_burn_param(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *b_info_ptr;
+    BURN_INFO *b_info_ptr;
 
     b_info_ptr = get_burn_database(hBurnDEV);
     if(b_info_ptr == NULL)
@@ -170,9 +170,9 @@ BURN_PARAM_T* get_burn_param(DEV_HANDLE hBurnDEV)
     return &(b_info_ptr->burn_param);
 }
 
-BURN_FILE_T* get_burn_file_state(DEV_HANDLE hBurnDEV)
+BURN_FILE* get_burn_file_state(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *b_info_ptr;
+    BURN_INFO *b_info_ptr;
 
     b_info_ptr = get_burn_database(hBurnDEV);
     if(b_info_ptr == NULL)
@@ -186,7 +186,7 @@ BURN_FILE_T* get_burn_file_state(DEV_HANDLE hBurnDEV)
 
 CALLBACK_T* get_callback_info(DEV_HANDLE hBurnDEV)
 {
-    BURN_INFO_T *burn_info_ptr;
+    BURN_INFO *burn_info_ptr;
 
     printf("in get_callback_info\n");
     burn_info_ptr = get_burn_database(hBurnDEV);
@@ -202,7 +202,7 @@ CALLBACK_T* get_callback_info(DEV_HANDLE hBurnDEV)
 
 int set_disc_used_add(DEV_HANDLE hBurnDEV, int byte)
 {
-    BURN_DISC_INFO_T *disc_info_ptr;
+    BURN_DISC_INFO *disc_info_ptr;
 
     disc_info_ptr = get_disc_info(hBurnDEV);
     if(disc_info_ptr == NULL)
@@ -219,7 +219,7 @@ int set_disc_used_add(DEV_HANDLE hBurnDEV, int byte)
 
 int set_disk_used_add(DEV_HANDLE hBurnDEV, int byte)
 {
-    BURN_DISK_INFO_T *disk_info_ptr;
+    BURN_DISK_INFO *disk_info_ptr;
 
     disk_info_ptr = get_disk_info(hBurnDEV);
     if(disk_info_ptr == NULL)

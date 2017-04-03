@@ -30,7 +30,7 @@ static int close_burn_flag = 0;
 //#define RTSP_TEST
 
 //回调函数
-int important_events(DEV_HANDLE hBurnDEV, const BURN_RUN_STATE_T *run_state, void *val)
+int important_events(DEV_HANDLE hBurnDEV, const BURN_RUN_STATE *run_state, void *val)
 {
 	int ret;
 
@@ -145,7 +145,7 @@ TEST:
 	//配置光盘信息
 	while(1)
 	{
-		ret = Burn_Ctrl_Dev_Get_DiscInfo(hBurnDEV);
+		ret = BurnCtrlDevGetDiscInfo(hBurnDEV);
     	if(ret != BURN_SUCCESS)
 	    {
 			switch(ret)
@@ -178,7 +178,7 @@ TEST:
 		else
 			break;
 
-		Burn_Ctrl_DevTray(hBurnDEV, B_DEV_TRAY_OPEN);
+		BurnCtrlDevTray(hBurnDEV, B_DEV_TRAY_OPEN);
 		printf("[%d]Please Change Disc, Push Any Key To Continue ...\n", ret);
 		getchar();
 	}
@@ -287,7 +287,7 @@ sleep(3);
 			break;
 		
 
-		Burn_Ctrl_DevTray(hBurnDEV, B_DEV_TRAY_OPEN);
+		BurnCtrlDevTray(hBurnDEV, B_DEV_TRAY_OPEN);
 		printf("Please Change Disc, Push Any Key To Continue ...\n");
 		getchar();
 	}
@@ -441,7 +441,7 @@ sleep(3);
 sleep(1);
     printf("Dev[%d] begin to Close Disc 11111111111111\n", hBurnDEV->dev_id);
     //封盘指令
-    ret = Burn_Ctrl_CloseDisc(hBurnDEV);
+    ret = BurnCtrlCloseDisc(hBurnDEV);
     if(ret != BURN_SUCCESS)
     {
         printf("Close Disc Failed\n");
@@ -454,7 +454,7 @@ sleep(1);
 #if 1
     sleep(2);
     //弹出光驱
-    ret = Burn_Ctrl_DevTray(hBurnDEV, B_DEV_TRAY_OPEN);
+    ret = BurnCtrlDevTray(hBurnDEV, B_DEV_TRAY_OPEN);
 #endif
     printf("Burn Ctrl Dev Tray Success\n");
 #endif
@@ -503,7 +503,7 @@ void *BurnLocalFileThrFxn(void *args)
 	//配置光盘信息
 	while(1)
 	{
-		ret = Burn_Ctrl_Dev_Get_DiscInfo(hBurnDEV);
+		ret = BurnCtrlDevGetDiscInfo(hBurnDEV);
     	if(ret != BURN_SUCCESS)
 	    {
 			switch(ret)
@@ -536,7 +536,7 @@ void *BurnLocalFileThrFxn(void *args)
 		else
 			break;
 
-		Burn_Ctrl_DevTray(hBurnDEV, B_DEV_TRAY_OPEN);
+		BurnCtrlDevTray(hBurnDEV, B_DEV_TRAY_OPEN);
 		printf("[%d]Please Change Disc, Push Any Key To Continue ...\n", ret);
 		getchar();
 	}
@@ -642,7 +642,7 @@ sleep(3);
 			break;
 		
 
-		Burn_Ctrl_DevTray(hBurnDEV, B_DEV_TRAY_OPEN);
+		BurnCtrlDevTray(hBurnDEV, B_DEV_TRAY_OPEN);
 		printf("Please Change Disc, Push Any Key To Continue ...\n");
 		getchar();
 	}
@@ -700,7 +700,7 @@ sleep(3);
 #if 1
 sleep(1);
     //封盘指令
-    ret = Burn_Ctrl_CloseDisc(hBurnDEV);
+    ret = BurnCtrlCloseDisc(hBurnDEV);
     if(ret != BURN_SUCCESS)
     {
         printf("Close Disc Failed\n");
@@ -713,7 +713,7 @@ sleep(1);
 #if 1
     sleep(2);
     //弹出光驱
-    ret = Burn_Ctrl_DevTray(hBurnDEV, B_DEV_TRAY_OPEN);
+    ret = BurnCtrlDevTray(hBurnDEV, B_DEV_TRAY_OPEN);
 #endif
     printf("Burn Ctrl Dev Tray Success\n");
 
@@ -742,7 +742,7 @@ int main(int argc, char *argv[])
     int        ret = 0;
 //    char      *file_path;
 
-	DEV_SYS_INFO_T      dev_sys_info;
+	DEV_SYS_INFO      dev_sys_info;
 
     if(argc < 3)
     {

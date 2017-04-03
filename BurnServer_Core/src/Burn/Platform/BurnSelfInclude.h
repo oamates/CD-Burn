@@ -5,13 +5,13 @@
 BURN_DATA_T* get_burn_data(DEV_HANDLE hBurnDEV);
 int create_dev_database(DEV_HANDLE hBurnDEV);
 int remove_dev_database(DEV_HANDLE hBurnDEV);
-BURN_INFO_T* get_burn_database(DEV_HANDLE hBurnDEV);
-BURN_DEV_INFO_T* get_dev_info(DEV_HANDLE hBurnDEV);
-BURN_DISC_INFO_T* get_disc_info(DEV_HANDLE hBurnDEV);
-BURN_DISK_INFO_T* get_disk_info(DEV_HANDLE hBurnDEV);
-BURN_RUN_STATE_T* get_run_state(DEV_HANDLE hBurnDEV);
-BURN_PARAM_T* get_burn_param(DEV_HANDLE hBurnDEV);
-BURN_FILE_T* get_burn_file_state(DEV_HANDLE hBurnDEV);
+BURN_INFO* get_burn_database(DEV_HANDLE hBurnDEV);
+BURN_DEV_INFO* get_dev_info(DEV_HANDLE hBurnDEV);
+BURN_DISC_INFO* get_disc_info(DEV_HANDLE hBurnDEV);
+BURN_DISK_INFO* get_disk_info(DEV_HANDLE hBurnDEV);
+BURN_RUN_STATE* get_run_state(DEV_HANDLE hBurnDEV);
+BURN_PARAM* get_burn_param(DEV_HANDLE hBurnDEV);
+BURN_FILE* get_burn_file_state(DEV_HANDLE hBurnDEV);
 CALLBACK_T* get_callback_info(DEV_HANDLE hBurnDEV);
 int set_disc_used_add(DEV_HANDLE hBurnDEV, int byte);
 int set_disk_used_add(DEV_HANDLE hBurnDEV, int byte);
@@ -32,7 +32,7 @@ int set_completed_file_name(DEV_HANDLE hBurnDEV, char *name);
 int set_disc_size_var(DEV_HANDLE hBurnDEV, BURN_BOOL has_disc, unsigned long discsize, unsigned long usedsize, unsigned long freesize);
 RUNNING_INFO get_running_info(DEV_HANDLE hBurnDEV);
 RUNNING_STATE get_running_state(DEV_HANDLE hBurnDEV);
-int Burn_Do_Event_Callback(DEV_HANDLE hBurnDEV, BURN_RUN_STATE_T  *run_state);
+int Burn_Do_Event_Callback(DEV_HANDLE hBurnDEV, BURN_RUN_STATE  *run_state);
 
 /*Contrl.c*/
 int	Burn_Ctrl_AddCompletedFile(DEV_HANDLE hBurnDEV, char *file_path);

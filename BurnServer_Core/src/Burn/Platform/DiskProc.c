@@ -10,9 +10,9 @@
 
 //int set_disk_used_add(DEV_HANDLE hBurnDEV, int byte);
 
-int Set_Disk_Param(DEV_HANDLE hBurnDEV, BURN_BOOL use_dev, int backup_size, int alarm_size, char *disk_path)
+int CDiskOpr::Set_Disk_Param(DEV_HANDLE hBurnDEV, BURN_BOOL use_dev, int backup_size, int alarm_size, char *disk_path)
 {
-    BURN_DISK_INFO_T *disk_info_ptr;
+    BURN_DISK_INFO *disk_info_ptr;
 
     disk_info_ptr = get_disk_info(hBurnDEV);
     if(disk_info_ptr == NULL)
@@ -43,7 +43,7 @@ int Set_Disk_Param(DEV_HANDLE hBurnDEV, BURN_BOOL use_dev, int backup_size, int 
 
 int set_disk_write_flag(DEV_HANDLE hBurnDEV, BURN_BOOL write_flag)
 {
-    BURN_DISK_INFO_T *disk_info_ptr;
+    BURN_DISK_INFO *disk_info_ptr;
 
     disk_info_ptr = get_disk_info(hBurnDEV);
     if(disk_info_ptr == NULL)
@@ -59,7 +59,7 @@ int set_disk_write_flag(DEV_HANDLE hBurnDEV, BURN_BOOL write_flag)
 
 BURN_BOOL is_write_backup_file(DEV_HANDLE hBurnDEV)
 {
-    BURN_DISK_INFO_T *disk_info_ptr;
+    BURN_DISK_INFO *disk_info_ptr;
 
     disk_info_ptr = get_disk_info(hBurnDEV);
     if(disk_info_ptr == NULL)
@@ -73,7 +73,7 @@ BURN_BOOL is_write_backup_file(DEV_HANDLE hBurnDEV)
 
 BURN_BOOL is_use_disk(DEV_HANDLE hBurnDEV)
 {
-    BURN_DISK_INFO_T* disk_info_ptr;
+    BURN_DISK_INFO* disk_info_ptr;
 
     disk_info_ptr = get_disk_info(hBurnDEV);
     if(disk_info_ptr == NULL)
@@ -85,10 +85,10 @@ BURN_BOOL is_use_disk(DEV_HANDLE hBurnDEV)
     return disk_info_ptr->use_disk;
 }
 
-int Disk_Create_BackUpFile(DEV_HANDLE hBurnDEV, const char *file_name)
+int CDiskOpr::Disk_Create_BackUpFile(DEV_HANDLE hBurnDEV, const char *file_name)
 {
     char file_path[1000];
-    BURN_DISK_INFO_T* disk_info_ptr;
+    BURN_DISK_INFO* disk_info_ptr;
 
     if(is_use_disk(hBurnDEV) == BURN_FLASE)
     {
@@ -135,7 +135,7 @@ int Disk_Write_BackUpFile(DEV_HANDLE hBurnDEV, char *buf, int buf_size)
 	return BURN_SUCCESS;
 }
 
-int Disk_Read_BackUpFile(DEV_HANDLE hBurnDEV, char *buf, int buf_size)
+int CDiskOpr::Disk_Read_BackUpFile(DEV_HANDLE hBurnDEV, char *buf, int buf_size)
 {
     if((hBurnDEV->fd == NULL) || (is_use_disk(hBurnDEV) == BURN_FLASE))
     {
@@ -146,7 +146,7 @@ int Disk_Read_BackUpFile(DEV_HANDLE hBurnDEV, char *buf, int buf_size)
     return fread(buf, buf_size, 1, hBurnDEV->fd);
 }
 
-int Disk_Close_BackUpFile(DEV_HANDLE hBurnDEV)
+int CDiskOpr::Disk_Close_BackUpFile(DEV_HANDLE hBurnDEV)
 {
     if((hBurnDEV->fd == NULL) || (is_use_disk(hBurnDEV) == BURN_FLASE))
     {
@@ -160,7 +160,7 @@ int Disk_Close_BackUpFile(DEV_HANDLE hBurnDEV)
 	return BURN_SUCCESS;
 }
 
-int Start_Disk_BackUp(DEV_HANDLE hBurnDEV)
+int CDiskOpr::Start_Disk_BackUp(DEV_HANDLE hBurnDEV)
 {
     if((hBurnDEV->fd == NULL) || (is_use_disk(hBurnDEV) == BURN_FLASE) || (hBurnDEV == NULL))
     {
@@ -171,7 +171,7 @@ int Start_Disk_BackUp(DEV_HANDLE hBurnDEV)
 	return set_disk_write_flag(hBurnDEV, BURN_TRUE);
 }
 
-int Stop_Disk_BackUp(DEV_HANDLE hBurnDEV)
+int CDiskOpr::Stop_Disk_BackUp(DEV_HANDLE hBurnDEV)
 {
 	set_disk_write_flag(hBurnDEV, BURN_FLASE);
 

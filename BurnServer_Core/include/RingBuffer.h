@@ -20,21 +20,21 @@ typedef struct
 	char *TailPtr;
     int   BufSize;
 	int   used;
-}st_BufferType;
+}stBufferType;
 
-typedef st_BufferType   *RingBuffer;
+typedef stBufferType   *RingBuffer;
 
-int Ring_Buffer_Init(RingBuffer *hBuf, int BufferSize);
+int RingBuffer_Init(RingBuffer *hBuf, int BufferSize);
 
-int Ring_Buffer_Release(RingBuffer hBuf);
+int RingBuffer_Release(RingBuffer hBuf);
 
-int Get_Free_Space_Len(RingBuffer hBuf);
+int GetFreeSpaceLen(RingBuffer hBuf);
 
-int Get_Valid_Data_Len(RingBuffer hBuf);
+int GetValidDataLen(RingBuffer hBuf);
 
-int Fill_Data_To_Buf(RingBuffer hBuf, char *buf_ptr, int len, int block);
+int FillDataToBuf(RingBuffer hBuf, char *buf_ptr, int len, int block);
 
-int Get_Data_Form_Buf(RingBuffer hBuf, char *buf_ptr, int size, int block);
+int GetDataFormBuf(RingBuffer hBuf, char *buf_ptr, int size, int block);
 // #ifdef LINUX
 #ifdef __cplusplus
 }

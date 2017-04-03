@@ -319,7 +319,7 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
 
         Print_Stream_Struct(hStream);
 
-        Burn_Get_RT_File_Name(file_name);
+        CBurnData::Burn_Get_RT_File_Name(file_name);
 #ifdef RTSP_TEST
 		char process_path[256] = {0};
 		char process_name[256] = {0};
@@ -333,14 +333,14 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
         //光盘上创建文件
         printf("Create File [%s] On Disc\n", file_name);
         sleep(2);
-        hFile = Burn_Ctrl_CreateFile(hBurnDEV, NULL, file_name);
+        hFile = CBurnCtrl::Burn_Ctrl_CreateFile(hBurnDEV, NULL, file_name);
         if(!hFile)
         {
             char file_update_name[1000];
             printf("Get File Handle Failed, Try Change Name\n");
-            Set_RT_File_Name_Update();
-            Burn_Get_RT_File_Name(file_update_name);
-            hFile = Burn_Ctrl_CreateFile(hBurnDEV, NULL, file_update_name);
+			CBurnData::Set_RT_File_Name_Update();
+			CBurnData::Burn_Get_RT_File_Name(file_update_name);
+			hFile = CBurnCtrl::Burn_Ctrl_CreateFile(hBurnDEV, NULL, file_update_name);
             if(!hFile)
             {
                 printf("Get File Handle Failed\n");
@@ -355,7 +355,7 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
 
         printf("Write Dev Buf Data To File\n");
 		usleep(500*1000);
-        ret = Write_Dev_Buf_Data_To_File(hBurnDEV, hFile);
+        ret = CBurnFileOpr::Write_Dev_Buf_Data_To_File(hBurnDEV, hFile);
         if(ret == 1)
         {
             printf("Write_Dev_Buf_Data_To_File Failed\n");
@@ -366,7 +366,7 @@ int Start_Stream_Burning(DEV_HANDLE hBurnDEV)
             printf("Write_Dev_Buf_Data_To_File Burn_Ctrl_WriteData Failed\n");
             Stop_Stream_Burning(hBurnDEV);
             printf("out Stop_Stream_Burning Failed\n");
-            if (Burn_Ctrl_CloseFile(hBurnDEV, hFile) != 0)
+			if (CBurnCtrl::Burn_Ctrl_CloseFile(hBurnDEV, hFile) != 0)
             {
                 printf("out Burn_Ctrl_CloseFile Failed\n");
             }
@@ -387,7 +387,7 @@ int Stop_Stream_Burning(DEV_HANDLE hBurnDEV)
     RTSPTS_HANDLE *hStream;
 
 	printf("Stop Burning Disc...\n");
-	if(Get_Running_Burn_State(hBurnDEV) == B_STOP)
+	if (CBurnDevInfo::Get_Running_Burn_State(hBurnDEV) == B_STOP)
 	{
 		printf("BurnServer Is Stop Now\n");
 		return BURN_SUCCESS;	
@@ -408,7 +408,7 @@ int Stop_Stream_Burning(DEV_HANDLE hBurnDEV)
         //TODO Release hStream
     }
 
-    return Burn_Ctrl_StopBurn(hBurnDEV);
+	return CBurnCtrl::BurnCtrlStopBurn(hBurnDEV);
 }
 
 int Init_Stream_Subsystem(DEV_HANDLE hBurnDEV)

@@ -37,7 +37,7 @@ int Set_Stream_Service_Mode(DEV_HANDLE hBurnDEV)
         return BURN_FAILURE;
     }
 
-    ret = Burn_Set_Data_Interface(hBurnDEV, B_STREAM);
+	ret = CBurnDev::Burn_Set_Data_Interface(hBurnDEV, B_STREAM);
     if(ret != BURN_SUCCESS)
     {
         printf("Set Burn Mode Failed\n");

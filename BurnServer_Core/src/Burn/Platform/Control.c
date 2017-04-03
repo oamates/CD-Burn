@@ -11,6 +11,7 @@
 //int set_tray_state(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT state);
 //int set_burn_state(DEV_HANDLE hBurnDEV, BURN_STAT state);
 
+#define MB_SIZE  1*1024*1024
 
 int read_sys_version_info(char *file_path, char *buf)
 {
@@ -69,7 +70,12 @@ int extract_str(const char *head,  char *end,
 	return 0;
 }
 
-int Burn_Get_DeviceNum(DEV_SYS_INFO_T *dev_sys_info_ptr)
+//////////////////////////////////////////////////////////////////////////
+//CBurnDev Definiton
+CBurnDev::CBurnDev(){};
+CBurnDev::~CBurnDev(){};
+
+int CBurnDev::Burn_Get_DeviceNum(DEV_SYS_INFO *dev_sys_info_ptr)
 {
 	if(dev_sys_info_ptr == NULL)
 	{
@@ -124,10 +130,10 @@ int Burn_Get_DeviceNum(DEV_SYS_INFO_T *dev_sys_info_ptr)
 }
 
 /*光驱设备初始化*/
-DEV_HANDLE Burn_Dev_Init(const char *DevName)
+DEV_HANDLE CBurnDev::Burn_Dev_Init(const char *DevName)
 {
     DEV_HANDLE       hBurnDEV;
-	BURN_DEV_INFO_T *b_dev_info_ptr;
+	BURN_DEV_INFO *b_dev_info_ptr;
 	static int Init_Dev_Cnt = 0;
 	static int Device_Cnt = 0;
     int ret;
@@ -281,7 +287,21 @@ DEV_HANDLE Burn_Dev_Init(const char *DevName)
 	}
 }
 
-int	Burn_Ctrl_DevTray(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT bOpen)
+//////////////////////////////////////////////////////////////////////////
+//CBurnCtrl Definition
+
+CBurnCtrl::CBurnCtrl()
+{
+	/*m_handleDev = NULL;
+	memset(m_szDiscName, 0, 260);
+	m_trayStat = B_DEV_TRAY_CLOSE;
+	m_interfaceType = B_FILE;*/
+}
+
+CBurnCtrl::~CBurnCtrl()
+{}
+
+int	CBurnCtrl::BurnCtrlDevTray(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT bOpen)
 {
     int ret;
 
@@ -313,13 +333,13 @@ int	Burn_Ctrl_DevTray(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT bOpen)
     return BURN_FAILURE;
 }
 
-int Burn_Ctrl_LoadDisc(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::BurnCtrlLoadDisc(DEV_HANDLE hBurnDEV)
 {
     int ret=0;
 
 
 #ifdef LINUX		
-	ret = Xkd_DVDSDK_LoadDisc(hBurnDEV->hDVD);
+	ret = DVDSDK_LoadDisc(hBurnDEV->hDVD);
 	if (ret == BURN_SUCCESS) 
 		return BURN_FAILURE;
 #endif
@@ -331,18 +351,6 @@ int Burn_Ctrl_LoadDisc(DEV_HANDLE hBurnDEV)
 
     printf("Failed to Load Disc\n");
     return BURN_FAILURE;
-}
-
-int Burn_Ctrl_LockDoor(DEV_HANDLE hBurnDEV, int bLocked)
-{
-    int ret = BURN_SUCCESS;
-
-#ifdef LINUX		
-    ret = Xkd_DVDSDK_LockDoor(hBurnDEV->hDVD, bLocked);
-    if (ret != 0) 
-        ret = BURN_FAILURE;
-#endif
-    return ret;
 }
 
 int Burn_Ctrl_FormatDisc(DEV_HANDLE hBurnDEV, char *szDiscName)
@@ -366,7 +374,7 @@ int Burn_Ctrl_FormatDisc(DEV_HANDLE hBurnDEV, char *szDiscName)
     return BURN_FAILURE;
 }
 
-int Burn_Ctrl_StartBurn(DEV_HANDLE hBurnDEV, INTERFACE_TYPE type)
+int CBurnCtrl::BurnCtrlStartBurn(DEV_HANDLE hBurnDEV, INTERFACE_TYPE type)
 {
     int ret=0;
 
@@ -395,7 +403,7 @@ int Burn_Ctrl_StartBurn(DEV_HANDLE hBurnDEV, INTERFACE_TYPE type)
 
 #ifdef WINDOWS
 		printf("Start Windows Burn Dev[%d] Handle[%x][%x]...\n", hBurnDEV->dev_id, hBurnDEV, hBurnDEV->hDVD);
-		BURN_RUN_STATE_T *b_run_state_ptr;
+		BURN_RUN_STATE *b_run_state_ptr;
         BURN_DEVICE_INFORMATION devInfo;
 
 		b_run_state_ptr = get_run_state(hBurnDEV);
@@ -454,7 +462,7 @@ int Burn_Ctrl_StartBurn(DEV_HANDLE hBurnDEV, INTERFACE_TYPE type)
     return ret;
 }
 
-int Burn_Ctrl_StopBurn(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::BurnCtrlStopBurn(DEV_HANDLE hBurnDEV)
 {
     int ret=0;
 
@@ -463,28 +471,27 @@ int Burn_Ctrl_StopBurn(DEV_HANDLE hBurnDEV)
     return BURN_SUCCESS;
 }
 
-
-int Burn_Ctrl_CopyDisc(DEV_HANDLE hDevSrc, DEV_HANDLE hDevDst)
+int CBurnCtrl::BurnCtrlCopyDisc(DEV_HANDLE hDevSrc, DEV_HANDLE hDevDst)
 {
     return BURN_SUCCESS;
 }
 
-int Burn_Ctrl_ResumeDisc(DEV_HANDLE hBurnDEV, char *DiscName, char *DirName, char *FileName, int FillSize)
+int CBurnCtrl::BurnCtrlResumeDisc(DEV_HANDLE hBurnDEV, char *DiscName, char *DirName, char *FileName, int FillSize)
 {
     return BURN_SUCCESS;
 }
 
-int Burn_Ctrl_GetReserveData(DEV_HANDLE hBurnDEV, unsigned char **pBuffer, int *pSize)
+int CBurnCtrl::BurnCtrlGetReserveData(DEV_HANDLE hBurnDEV, unsigned char **pBuffer, int *pSize)
 {
     return BURN_SUCCESS;
 }
 
-int Burn_Ctrl_GetReserveBuffer(DEV_HANDLE hBurnDEV, unsigned char **pBuffer, int *pSize)
+int CBurnCtrl::BurnCtrlGetReserveBuffer(DEV_HANDLE hBurnDEV, unsigned char **pBuffer, int *pSize)
 {
     return BURN_SUCCESS;
 }
 
-int Burn_Ctrl_CloseDisc(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::BurnCtrlCloseDisc(DEV_HANDLE hBurnDEV)
 {
     int ret=0;
 
@@ -517,7 +524,7 @@ int Burn_Ctrl_CloseDisc(DEV_HANDLE hBurnDEV)
         return BURN_FAILURE;
     }
 	printf("");
-    ret = Ring_Buffer_Release(data_ptr->hBuf);
+    ret = RingBuffer_Release(data_ptr->hBuf);
 	if (ret == BURN_SUCCESS)
 	{
 		printf("Ring_Buffer_Release Success!\n");
@@ -527,6 +534,88 @@ int Burn_Ctrl_CloseDisc(DEV_HANDLE hBurnDEV)
 	return BURN_SUCCESS;
 
 }
+
+int CBurnCtrl::BurnCtrlUpdateBurningProject(DEV_HANDLE hBurnDEV)
+{
+#ifdef WINDOWS
+#if 0
+	printf("Update Windows Handle\n");
+	DestroyBurnHandle(hBurnDEV->hDVD);
+
+	hBurnDEV->hDVD = CreateBurnHandle();
+	if (hBurnDEV->hDVD == NULL) 
+	{
+		printf("Failed to Create Burn Handle\n");
+		return BURN_FAILURE;
+	}
+
+	ScanDevice(hBurnDEV->hDVD);
+
+	CreateDataProject(hBurnDEV->hDVD);
+#endif
+#endif
+
+	return BURN_SUCCESS;
+}
+
+FILE_HANDLE CBurnCtrl::Burn_Ctrl_CreateFile(DEV_HANDLE hBurnDEV, DIR_HANDLE hBurnDir, char *file_name)
+{
+	int  ret = 0;
+	char name[300];
+	FILE_HANDLE hFile = NULL;
+
+	bzero(name, sizeof(name));
+	strcpy(name, file_name);
+
+
+	printf("hBurnDir == %s, file_name == %s\n", hBurnDir, name);
+#ifdef LINUX			
+	hFile = Xkd_DVDSDK_CreateFile(hBurnDEV->hDVD, hBurnDir, name, 0);
+	if (!hFile)
+	{
+		printf("Get File Handle Failed\n");
+		return NULL;
+	}
+
+	//设定文件位置 (写文件前都需要调用这个函数)
+	Xkd_DVDSDK_SetFileLoca(hBurnDEV->hDVD, hFile);
+	printf("Xkd_DVDSDK_SetFileLocal  is ok! \n");
+
+	return hFile;
+#endif
+
+	printf("Failed to Create File\n");
+	return NULL;
+}
+
+int	CBurnCtrl::Burn_Ctrl_WriteData(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile, char *buf, int size)
+{
+	int ret = 0;
+	BURN_DISC_INFO *b_disc_info_ptr;
+
+#if 1
+	b_disc_info_ptr = get_disc_info(hBurnDEV);
+	if (b_disc_info_ptr != NULL)
+	{
+		b_disc_info_ptr->writecnt += size;
+
+		if (b_disc_info_ptr->writecnt >= MB_SIZE)
+		{
+			b_disc_info_ptr->writecnt -= MB_SIZE;
+			b_disc_info_ptr->usedsize++;
+			b_disc_info_ptr->freesize--;
+		}
+	}
+#endif
+#ifdef LINUX		
+	return Xkd_DVDSDK_WriteData(hBurnDEV->hDVD, hBurnFile, buf, size);
+#endif
+
+
+	printf("Failed to Write Data\n");
+	return BURN_FAILURE;
+}
+
 
 /*
  * 文件操作类
@@ -567,66 +656,19 @@ Xkd_DVDSDK_DIR Burn_Ctrl_CreateDir(DEV_HANDLE hBurnDEV, char *DirName)
 }
 #endif
 
-FILE_HANDLE Burn_Ctrl_CreateFile(DEV_HANDLE hBurnDEV, DIR_HANDLE hBurnDir, char *file_name)
+int CBurnCtrl::Burn_Ctrl_LockDoor(DEV_HANDLE hBurnDEV, int bLocked)
 {
-    int  ret=0;
-    char name[300];
-	FILE_HANDLE hFile=NULL;
+	int ret = BURN_SUCCESS;
 
-    bzero(name, sizeof(name));
-    strcpy(name, file_name);
-
-
-	printf("hBurnDir == %s, file_name == %s\n", hBurnDir, name);
-#ifdef LINUX			
-	hFile = Xkd_DVDSDK_CreateFile (hBurnDEV->hDVD, hBurnDir, name, 0);
-	if(!hFile)
-	{
-		printf("Get File Handle Failed\n");
-		return NULL;
-	}
-
-	//设定文件位置 (写文件前都需要调用这个函数)
-	Xkd_DVDSDK_SetFileLoca(hBurnDEV->hDVD, hFile);
-	printf("Xkd_DVDSDK_SetFileLocal  is ok! \n");
-
-	return hFile;
-#endif
-
-    printf("Failed to Create File\n");
-    return NULL;
-}
-
-#define MB_SIZE  1*1024*1024
-int	Burn_Ctrl_WriteData(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile, char *buf, int size)
-{
-    int ret=0;
-	BURN_DISC_INFO_T *b_disc_info_ptr;
-	
-#if 1
-	b_disc_info_ptr = get_disc_info(hBurnDEV);
-	if(b_disc_info_ptr != NULL)
-	{
-		b_disc_info_ptr->writecnt  += size;	
-
-		if(b_disc_info_ptr->writecnt >= MB_SIZE)
-		{
-			b_disc_info_ptr->writecnt -= MB_SIZE;	
-			b_disc_info_ptr->usedsize++;
-			b_disc_info_ptr->freesize--;
-		}
-	}
-#endif
 #ifdef LINUX		
-   	return Xkd_DVDSDK_WriteData (hBurnDEV->hDVD, hBurnFile, buf, size);
+	ret = Xkd_DVDSDK_LockDoor(hBurnDEV->hDVD, bLocked);
+	if (ret != 0)
+		ret = BURN_FAILURE;
 #endif
-
-
-    printf("Failed to Write Data\n");
-    return BURN_FAILURE;
+	return ret;
 }
 
-int	Burn_Ctrl_CloseFile(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile)
+int	CBurnCtrl::Burn_Ctrl_CloseFile(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile)
 {
 
 #ifdef LINUX		
@@ -638,7 +680,7 @@ int	Burn_Ctrl_CloseFile(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile)
     return BURN_FAILURE;
 }
 
-int	Burn_Ctrl_AddBurnLocalFile(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_path)
+int	CBurnCtrl::Burn_Ctrl_AddBurnLocalFile(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_path)
 {
     int i;
     BURN_DATA_T *data_ptr;
@@ -691,7 +733,7 @@ int	Burn_Ctrl_AddBurnLocalFile(DEV_HANDLE hBurnDEV, char *burn_dir, char *file_p
     return BURN_FAILURE;
 }
 
-int	Burn_Ctrl_DelBurnLocalFile(DEV_HANDLE hBurnDEV, char *file_path)
+int	CBurnCtrl::Burn_Ctrl_DelBurnLocalFile(DEV_HANDLE hBurnDEV, char *file_path)
 {
     int i;
     BURN_DATA_T *data_ptr;
@@ -728,7 +770,7 @@ int	Burn_Ctrl_DelBurnLocalFile(DEV_HANDLE hBurnDEV, char *file_path)
 }
 
 
-int	Burn_Ctrl_AddBurnLocalDir(DEV_HANDLE hBurnDEV, char *burn_dir, char *dir_path)
+int	CBurnCtrl::Burn_Ctrl_AddBurnLocalDir(DEV_HANDLE hBurnDEV, char *burn_dir, char *dir_path)
 {
     int i;
     BURN_DATA_T *data_ptr;
@@ -779,7 +821,7 @@ int	Burn_Ctrl_AddBurnLocalDir(DEV_HANDLE hBurnDEV, char *burn_dir, char *dir_pat
     return BURN_FAILURE;
 }
 
-int	Burn_Ctrl_DelBurnLocalDir(DEV_HANDLE hBurnDEV, char *dir_path)
+int	CBurnCtrl::Burn_Ctrl_DelBurnLocalDir(DEV_HANDLE hBurnDEV, char *dir_path)
 {
     int i;
     BURN_DATA_T *data_ptr;
@@ -869,31 +911,9 @@ int	Burn_Ctrl_DelCompletedFile(DEV_HANDLE hBurnDEV, char *file_path)
     return BURN_FAILURE;
 }
 
-int Burn_Ctrl_Update_Burning_Project(DEV_HANDLE hBurnDEV)
-{
-#ifdef WINDOWS
-#if 0
-    printf("Update Windows Handle\n");
-    DestroyBurnHandle(hBurnDEV->hDVD);
-
-    hBurnDEV->hDVD = CreateBurnHandle();
-    if (hBurnDEV->hDVD == NULL) 
-    {
-        printf("Failed to Create Burn Handle\n");
-        return BURN_FAILURE;
-    }
-
-    ScanDevice(hBurnDEV->hDVD);
-
-    CreateDataProject(hBurnDEV->hDVD);
-#endif
-#endif
-
-    return BURN_SUCCESS;
-}
 
 
-DEV_TRAY_STAT Burn_Ctrl_Dev_Get_TrayState(DEV_HANDLE hBurnDEV)
+DEV_TRAY_STAT CBurnCtrl::Burn_Ctrl_Dev_Get_TrayState(DEV_HANDLE hBurnDEV)
 {
 #ifdef LINUX
 	if( Xkd_DVDSDK_GetTrayState(hBurnDEV->hDVD) ) 
@@ -907,7 +927,7 @@ DEV_TRAY_STAT Burn_Ctrl_Dev_Get_TrayState(DEV_HANDLE hBurnDEV)
 	return B_DEV_TRAY_CLOSE;	
 }
 
-int Burn_Ctrl_Dev_Get_HaveDisc(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Burn_Ctrl_Dev_Get_HaveDisc(DEV_HANDLE hBurnDEV)
 {
 	printf("Is Have Disc?\n");
 #ifdef LINUX
@@ -940,9 +960,9 @@ int Burn_Ctrl_Dev_Get_HaveDisc(DEV_HANDLE hBurnDEV)
 	return BURN_SUCCESS;	
 }
 
-int Burn_Ctrl_Dev_LoadDisc(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Burn_Ctrl_Dev_LoadDisc(DEV_HANDLE hBurnDEV)
 {
-	BURN_DISC_INFO_T *b_disc_info_ptr;
+	BURN_DISC_INFO *b_disc_info_ptr;
 
 	printf("Start Load Disc ... \n");
 #ifdef LINUX	
@@ -1062,7 +1082,7 @@ int Burn_Ctrl_Dev_LoadDisc(DEV_HANDLE hBurnDEV)
 	return BURN_SUCCESS;
 }
 
-int Burn_Ctrl_Dev_Get_DiscCanWrite(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Burn_Ctrl_Dev_Get_DiscCanWrite(DEV_HANDLE hBurnDEV)
 {
 	printf("Is Disc Can Be Write?\n");
 #ifdef LINUX	
@@ -1083,10 +1103,10 @@ int Burn_Ctrl_Dev_Get_DiscCanWrite(DEV_HANDLE hBurnDEV)
 	return BURN_SUCCESS;
 }
 
-int Burn_Ctrl_Dev_FormatDisc(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Burn_Ctrl_Dev_FormatDisc(DEV_HANDLE hBurnDEV)
 {
 	int ret=0;
-	BURN_DISC_INFO_T *b_disc_info_ptr;;
+	BURN_DISC_INFO *b_disc_info_ptr;;
 	printf("Start Format Disc ... \n");
 
 	b_disc_info_ptr = get_disc_info(hBurnDEV);
@@ -1153,9 +1173,9 @@ int Start_Burning_State_WatchDog(DEV_HANDLE hBurnDEV)
 
 
 /* 获取光盘状态 */
-int Burn_Ctrl_Dev_Get_DiscInfo(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::BurnCtrlDevGetDiscInfo(DEV_HANDLE hBurnDEV)
 {
-	BURN_DISC_INFO_T *b_disc_info_ptr=NULL;
+	BURN_DISC_INFO *b_disc_info_ptr=NULL;
 	int ret=0;
 
 	/************* 获取托盘状态 **************/
@@ -1354,12 +1374,9 @@ int Burn_Ctrl_Dev_Get_DiscInfo(DEV_HANDLE hBurnDEV)
 	return BURN_SUCCESS;
 }
 
-
-
-
-int Burn_Ctrl_Dev_Get_Ready(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Burn_Ctrl_Dev_Get_Ready(DEV_HANDLE hBurnDEV)
 {
-	BURN_DISC_INFO_T *b_disc_info_ptr=NULL;
+	BURN_DISC_INFO *b_disc_info_ptr=NULL;
 
 #ifdef LINUX
     pthread_t           StateThread;
@@ -1370,7 +1387,7 @@ int Burn_Ctrl_Dev_Get_Ready(DEV_HANDLE hBurnDEV)
 #endif
     int ret;
 
-	ret = Burn_Ctrl_Dev_Get_DiscInfo(hBurnDEV);
+	ret = BurnCtrlDevGetDiscInfo(hBurnDEV);
 	if(ret != BURN_SUCCESS)
 		return ret;
 
@@ -1421,23 +1438,23 @@ int Burn_Ctrl_Dev_Get_Ready(DEV_HANDLE hBurnDEV)
     return BURN_SUCCESS;      
 }
 
-int Start_Local_File_Burning(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Start_Local_File_Burning(DEV_HANDLE hBurnDEV)
 {
-	return Burn_Ctrl_StartBurn(hBurnDEV, B_FILE);	
+	return CBurnCtrl::BurnCtrlStartBurn(hBurnDEV, B_FILE);	
 }
 
-int Stop_Local_File_Burning(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Stop_Local_File_Burning(DEV_HANDLE hBurnDEV)
 {
-    return Burn_Ctrl_StopBurn(hBurnDEV);	
+    return BurnCtrlStopBurn(hBurnDEV);	
 }
 
-int Set_Local_File_Service_Mode(DEV_HANDLE hBurnDEV)
+int CBurnCtrl::Set_Local_File_Service_Mode(DEV_HANDLE hBurnDEV)
 {
 	printf("Set Service Mode Is Local File\n");
-	return Burn_Set_Data_Interface(hBurnDEV, B_FILE);	
+	return CBurnDev::Burn_Set_Data_Interface(hBurnDEV, B_FILE);	
 }
 
-void Burn_Ctrl_SetRecordStatus(DEV_HANDLE hBurnDEV, BOOL bRecordStatus)
+void CBurnCtrl::Burn_Ctrl_SetRecordStatus(DEV_HANDLE hBurnDEV, BOOL bRecordStatus)
 {
     printf("Set Recording Status: %d\n", bRecordStatus);
 #ifdef LINUX		

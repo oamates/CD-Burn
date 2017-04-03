@@ -11,9 +11,9 @@
 //int Stop_Disk_BackUp(DEV_HANDLE hBurnDEV);
 
 #if 1
-int	Burn_Get_TrayState(DEV_HANDLE hBurnDEV)
+int	CBurnDevInfo::Burn_Get_TrayState(DEV_HANDLE hBurnDEV)
 {
-	BURN_RUN_STATE_T *b_run_state_ptr;
+	BURN_RUN_STATE *b_run_state_ptr;
 	b_run_state_ptr = get_run_state(hBurnDEV);
 	if(b_run_state_ptr == NULL)
 	{
@@ -25,9 +25,9 @@ int	Burn_Get_TrayState(DEV_HANDLE hBurnDEV)
 }
 
 
-int Burn_Get_DevInfo(DEV_HANDLE hBurnDEV, BURN_DEV_INFO_T *pDevInfo)
+int CBurnDevInfo::Burn_Get_DevInfo(DEV_HANDLE hBurnDEV, BURN_DEV_INFO *pDevInfo)
 {
-    BURN_DEV_INFO_T *b_dev_info_ptr;
+    BURN_DEV_INFO *b_dev_info_ptr;
 
     b_dev_info_ptr = get_dev_info(hBurnDEV);
     if(b_dev_info_ptr == NULL)
@@ -35,14 +35,14 @@ int Burn_Get_DevInfo(DEV_HANDLE hBurnDEV, BURN_DEV_INFO_T *pDevInfo)
         printf("Get b_dev_info_ptr == NULL\n");
         return BURN_FAILURE;
     }
-    memcpy(pDevInfo, b_dev_info_ptr, sizeof(BURN_DEV_INFO_T));
+    memcpy(pDevInfo, b_dev_info_ptr, sizeof(BURN_DEV_INFO));
 
     return BURN_SUCCESS;
 }
 
-int Burn_Get_DiscInfo(DEV_HANDLE hBurnDEV, BURN_DISC_INFO_T *pDiscInfo)
+int CBurnDevInfo::Burn_Get_DiscInfo(DEV_HANDLE hBurnDEV, BURN_DISC_INFO *pDiscInfo)
 {
-    BURN_DISC_INFO_T *b_disc_info_ptr;
+    BURN_DISC_INFO *b_disc_info_ptr;
 
     b_disc_info_ptr = get_disc_info(hBurnDEV);
     if(b_disc_info_ptr == NULL)
@@ -50,15 +50,15 @@ int Burn_Get_DiscInfo(DEV_HANDLE hBurnDEV, BURN_DISC_INFO_T *pDiscInfo)
         printf("Get b_disc_info_ptr == NULL\n");
         return BURN_FAILURE;
     }
-    memcpy(pDiscInfo, b_disc_info_ptr, sizeof(BURN_DISC_INFO_T));
+    memcpy(pDiscInfo, b_disc_info_ptr, sizeof(BURN_DISC_INFO));
 
     return BURN_SUCCESS;
 
 }
 
-int Burn_Get_DiskInfo(DEV_HANDLE hBurnDEV, BURN_DISK_INFO_T *pDiscInfo)
+int CBurnDevInfo::Burn_Get_DiskInfo(DEV_HANDLE hBurnDEV, BURN_DISK_INFO *pDiscInfo)
 {
-    BURN_DISK_INFO_T *b_disk_info_ptr;
+    BURN_DISK_INFO *b_disk_info_ptr;
 
     b_disk_info_ptr = get_disk_info(hBurnDEV);
     if(b_disk_info_ptr == NULL)
@@ -66,12 +66,12 @@ int Burn_Get_DiskInfo(DEV_HANDLE hBurnDEV, BURN_DISK_INFO_T *pDiscInfo)
         printf("Get b_disk_info_ptr == NULL\n");
         return BURN_FAILURE;
     }
-    memcpy(pDiscInfo, b_disk_info_ptr, sizeof(BURN_DISK_INFO_T));
+    memcpy(pDiscInfo, b_disk_info_ptr, sizeof(BURN_DISK_INFO));
 
     return BURN_SUCCESS;
 }
 
-int Burn_Get_DiscCanWrite(DEV_HANDLE hBurnDEV)
+int CBurnDevInfo::Burn_Get_DiscCanWrite(DEV_HANDLE hBurnDEV)
 {
     return BURN_SUCCESS;
 }
@@ -149,7 +149,7 @@ int Burn_Call_CallBack(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT tray_state, RUNNING_ST
 {
 	printf("========== In Burn Call CallBack ===========\n");
 #if 1
-    BURN_RUN_STATE_T *b_running_ptr;
+    BURN_RUN_STATE *b_running_ptr;
   
     b_running_ptr = get_run_state(hBurnDEV);
     if(b_running_ptr == NULL)
@@ -172,8 +172,8 @@ void *StateThrFxn(void *args)
 {
     int ret=0;
     DEV_HANDLE hBurnDEV;
-	BURN_DISC_INFO_T *b_disc_info_ptr;
-	BURN_RUN_STATE_T *b_run_state_ptr;
+	BURN_DISC_INFO *b_disc_info_ptr;
+	BURN_RUN_STATE *b_run_state_ptr;
 
     printf(" =============== State Thread Start ==============\n");
 
@@ -191,7 +191,7 @@ void *StateThrFxn(void *args)
 		goto cleanup;
 	}
 
-    BURN_DISK_INFO_T* disk_info_ptr;
+    BURN_DISK_INFO* disk_info_ptr;
 
     disk_info_ptr = get_disk_info(hBurnDEV);
     if(disk_info_ptr == NULL)
@@ -236,7 +236,7 @@ void *StateThrFxn(void *args)
 		printf("Alarm Size Is [%d] MB, ", b_disc_info_ptr->alarmsize);
         printf("Alarm Warning Size Is [%d] MB, ", b_disc_info_ptr->alarmwarningsize);
         printf("Buffer Size Is [%d] KB, ", ((&(hBurnDEV->data))->buf_size)/1024);
-        printf("Free Size Is [%d] KB ", Get_Free_Space_Len((&(hBurnDEV->data))->hBuf)/1024);
+        printf("Free Size Is [%d] KB ", GetFreeSpaceLen((&(hBurnDEV->data))->hBuf)/1024);
 
         time_t tCurTime = time(NULL);
         char tmpbuf[80];
@@ -268,7 +268,7 @@ void *StateThrFxn(void *args)
 				printf("============= Dev[%d] Disk Free Size Is [%d] MB, Alarm Size Is [%d] MB, Alarm Warning Size Is [%d] MB =============\n"
                     , hBurnDEV->dev_id, disk_info_ptr->freesize, disk_info_ptr->alarmsize, b_disc_info_ptr->alarmwarningsize);	
 
-				Stop_Disk_BackUp(hBurnDEV);	
+				CDiskOpr::Stop_Disk_BackUp(hBurnDEV);	
 			}	
 		}
 
@@ -289,9 +289,9 @@ cleanup:
 	return 0;
 }
 
-int Get_Burn_Info(DEV_HANDLE hBurnDEV, BURN_INFO_T *burn_info)
+int CBurnDevInfo::Get_Burn_Info(DEV_HANDLE hBurnDEV, BURN_INFO *burn_info)
 {
-    BURN_INFO_T *burn_info_ptr;
+    BURN_INFO *burn_info_ptr;
 
     burn_info_ptr = get_burn_database(hBurnDEV);
     if(burn_info_ptr == NULL)
@@ -300,14 +300,14 @@ int Get_Burn_Info(DEV_HANDLE hBurnDEV, BURN_INFO_T *burn_info)
         return BURN_FAILURE;
     }
 	
-	memcpy(burn_info, burn_info_ptr, sizeof(BURN_INFO_T));
+	memcpy(burn_info, burn_info_ptr, sizeof(BURN_INFO));
 		
 	return BURN_SUCCESS;
 }
 
-int Get_Burn_File_State(DEV_HANDLE hBurnDEV, BURN_FILE_T  *burn_file_info)
+int CBurnDevInfo::Get_Burn_File_State(DEV_HANDLE hBurnDEV, BURN_FILE  *burn_file_info)
 {
-    BURN_FILE_T *burn_file_info_ptr;
+    BURN_FILE *burn_file_info_ptr;
 
 	burn_file_info_ptr = get_burn_file_state(hBurnDEV);
     if(burn_file_info_ptr == NULL)
@@ -316,7 +316,7 @@ int Get_Burn_File_State(DEV_HANDLE hBurnDEV, BURN_FILE_T  *burn_file_info)
         return BURN_FAILURE;
     }
 
-	memcpy(burn_file_info, burn_file_info_ptr, sizeof(BURN_FILE_T));
+	memcpy(burn_file_info, burn_file_info_ptr, sizeof(BURN_FILE));
 		
 	return BURN_SUCCESS;
 }
@@ -358,7 +358,7 @@ int set_burn_state(DEV_HANDLE hBurnDEV, BURN_STAT state)
     return BURN_SUCCESS;
 }
 
-BURN_STAT Get_Running_Burn_State(DEV_HANDLE hBurnDEV)
+BURN_STAT CBurnDevInfo::Get_Running_Burn_State(DEV_HANDLE hBurnDEV)
 {
     if(hBurnDEV == NULL)
     {
@@ -371,7 +371,7 @@ BURN_STAT Get_Running_Burn_State(DEV_HANDLE hBurnDEV)
 
 int set_tray_state(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT state)
 {
-    BURN_RUN_STATE_T *b_run_ptr;
+    BURN_RUN_STATE *b_run_ptr;
     
     b_run_ptr = get_run_state(hBurnDEV);
     if(b_run_ptr == NULL)
@@ -385,9 +385,9 @@ int set_tray_state(DEV_HANDLE hBurnDEV, DEV_TRAY_STAT state)
     return BURN_SUCCESS;
 }
 
-DEV_TRAY_STAT Get_Running_Tray_State(DEV_HANDLE hBurnDEV)
+DEV_TRAY_STAT CBurnDevInfo::Get_Running_Tray_State(DEV_HANDLE hBurnDEV)
 {
-    BURN_RUN_STATE_T *b_run_ptr;
+    BURN_RUN_STATE *b_run_ptr;
     
     b_run_ptr = get_run_state(hBurnDEV);
     if(b_run_ptr == NULL)
@@ -402,7 +402,7 @@ DEV_TRAY_STAT Get_Running_Tray_State(DEV_HANDLE hBurnDEV)
 
 int set_running_state(DEV_HANDLE hBurnDEV, RUNNING_STATE state)
 {
-    BURN_RUN_STATE_T *b_run_ptr;
+    BURN_RUN_STATE *b_run_ptr;
     
     b_run_ptr = get_run_state(hBurnDEV);
     if(b_run_ptr == NULL)
@@ -416,9 +416,9 @@ int set_running_state(DEV_HANDLE hBurnDEV, RUNNING_STATE state)
     return BURN_SUCCESS;
 }
 
-RUNNING_STATE Get_Running_State(DEV_HANDLE hBurnDEV)
+RUNNING_STATE CBurnDevInfo::Get_Running_State(DEV_HANDLE hBurnDEV)
 {
-    BURN_RUN_STATE_T *b_run_ptr;
+    BURN_RUN_STATE *b_run_ptr;
     
     b_run_ptr = get_run_state(hBurnDEV);
     if(b_run_ptr == NULL)
@@ -433,7 +433,7 @@ RUNNING_STATE Get_Running_State(DEV_HANDLE hBurnDEV)
 
 int set_running_info(DEV_HANDLE hBurnDEV, RUNNING_INFO state)
 {
-    BURN_RUN_STATE_T *b_run_ptr;
+    BURN_RUN_STATE *b_run_ptr;
     
     b_run_ptr = get_run_state(hBurnDEV);
     if(b_run_ptr == NULL)
@@ -447,9 +447,9 @@ int set_running_info(DEV_HANDLE hBurnDEV, RUNNING_INFO state)
     return BURN_SUCCESS;
 }
 
-RUNNING_INFO Get_Running_info(DEV_HANDLE hBurnDEV)
+RUNNING_INFO CBurnDevInfo::Get_Running_info(DEV_HANDLE hBurnDEV)
 {
-    BURN_RUN_STATE_T *b_run_ptr;
+    BURN_RUN_STATE *b_run_ptr;
     
     b_run_ptr = get_run_state(hBurnDEV);
     if(b_run_ptr == NULL)
@@ -464,7 +464,7 @@ RUNNING_INFO Get_Running_info(DEV_HANDLE hBurnDEV)
 
 int set_burning_file_name(DEV_HANDLE hBurnDEV, char *name)
 {
-    BURN_FILE_T *b_file_ptr;
+    BURN_FILE *b_file_ptr;
     
     b_file_ptr = get_burn_file_state(hBurnDEV);
     if(b_file_ptr == NULL)
@@ -478,9 +478,9 @@ int set_burning_file_name(DEV_HANDLE hBurnDEV, char *name)
     return BURN_SUCCESS;
 }
 
-char *Get_Burning_File_Name(DEV_HANDLE hBurnDEV)
+char* CBurnDevInfo::Get_Burning_File_Name(DEV_HANDLE hBurnDEV)
 {
-    BURN_FILE_T *b_file_ptr;
+    BURN_FILE *b_file_ptr;
     
     b_file_ptr = get_burn_file_state(hBurnDEV);
     if(b_file_ptr == NULL)
@@ -495,7 +495,7 @@ char *Get_Burning_File_Name(DEV_HANDLE hBurnDEV)
 
 int set_completed_file_name(DEV_HANDLE hBurnDEV, char *name)
 {
-    BURN_FILE_T *b_file_ptr;
+    BURN_FILE *b_file_ptr;
     
     b_file_ptr = get_burn_file_state(hBurnDEV);
     if(b_file_ptr == NULL)
@@ -509,9 +509,9 @@ int set_completed_file_name(DEV_HANDLE hBurnDEV, char *name)
     return BURN_SUCCESS;
 }
 
-char *Get_Completed_File_Name(DEV_HANDLE hBurnDEV)
+char* CBurnDevInfo::Get_Completed_File_Name(DEV_HANDLE hBurnDEV)
 {
-    BURN_FILE_T *b_file_ptr;
+    BURN_FILE *b_file_ptr;
     
     b_file_ptr = get_burn_file_state(hBurnDEV);
     if(b_file_ptr == NULL)

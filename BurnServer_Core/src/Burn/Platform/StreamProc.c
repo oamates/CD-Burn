@@ -18,7 +18,7 @@ int Burn_Stream_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile)
 
     while(1)
     {
-        ret = Get_Data_Form_Buf(hBurnDEV->hBuf, buf, WRITE_SIZE, BURN_TRUE);
+        ret = GetDataFormBuf(hBurnDEV->hBuf, buf, WRITE_SIZE, BURN_TRUE);
         if(ret == BURN_FAILURE)
         {
             printf("Get Stream Failed\n");
@@ -26,7 +26,7 @@ int Burn_Stream_To_File(DEV_HANDLE hBurnDEV, FILE_HANDLE hBurnFile)
             continue;
         }
 
-        ret = Burn_Ctrl_WriteData(hBurnDEV, hBurnFile, buf, WRITE_SIZE);
+        ret = CBurnCtrl::Burn_Ctrl_WriteData(hBurnDEV, hBurnFile, buf, WRITE_SIZE);
         if(ret == BURN_FAILURE)
         {
             printf("Write Stream Data Failed\n");
@@ -49,6 +49,6 @@ int Fill_Data_To_Dev_Buf(DEV_HANDLE hBurnDEV, char *buf_ptr, int len, int block)
         return BURN_FAILURE;
     }
 
-    return Fill_Data_To_Buf(data_ptr->hBuf, buf_ptr, len, block);
+    return FillDataToBuf(data_ptr->hBuf, buf_ptr, len, block);
 //    return 0;
 }

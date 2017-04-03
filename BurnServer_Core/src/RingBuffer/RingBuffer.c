@@ -21,10 +21,10 @@
 //typedef st_BufferType   *RingBuffer;
 
 //static sem_t buf_sem;
-static st_BufferType BufferType_TT[RING_BUFFER_NUM];
+static stBufferType BufferType_TT[RING_BUFFER_NUM];
 
 /* common receive buffer init */
-int Ring_Buffer_Init(RingBuffer *hBuf, int BufferSize)
+int RingBuffer_Init(RingBuffer *hBuf, int BufferSize)
 { 
 //	sem_init(&buf_sem, 0, 1);
 
@@ -66,7 +66,7 @@ int Ring_Buffer_Init(RingBuffer *hBuf, int BufferSize)
     return -1;
 }
 
-int Ring_Buffer_Release(RingBuffer hBuf)
+int RingBuffer_Release(RingBuffer hBuf)
 { 
     if(hBuf == NULL)
     {
@@ -136,7 +136,7 @@ static void SubBufferPtr(RingBuffer hBuf, char **ptr)
 	}
 }
 #endif
-int Get_Free_Space_Len(RingBuffer hBuf)
+int GetFreeSpaceLen(RingBuffer hBuf)
 {
 #if 0
 	if(hBuf->WritePtr >= hBuf->ReadPtr)
@@ -165,7 +165,7 @@ int Get_Free_Space_Len(RingBuffer hBuf)
 	}
 }
 
-int Get_Valid_Data_Len(RingBuffer hBuf)
+int GetValidDataLen(RingBuffer hBuf)
 {
 //	printf("[Get_Valid_Data_Len] \n");
 	if(hBuf == NULL)
@@ -218,11 +218,11 @@ static int fill_to_buf(RingBuffer hBuf, char *buf_ptr, int len)
 	return 0;
 }
 
-int Fill_Data_To_Buf(RingBuffer hBuf, char *buf_ptr, int len, int block)
+int FillDataToBuf(RingBuffer hBuf, char *buf_ptr, int len, int block)
 {
 #if 1
 //	printf("Get_Free_Space_Len = %d, len = %d\n", Get_Free_Space_Len(hBuf), len);
-	if (Get_Free_Space_Len(hBuf) >= len)
+	if (GetFreeSpaceLen(hBuf) >= len)
 	{
 		fill_to_buf(hBuf, buf_ptr, len);
         return 0;
@@ -233,7 +233,7 @@ int Fill_Data_To_Buf(RingBuffer hBuf, char *buf_ptr, int len, int block)
 		{
 			usleep(10 * 1000);
             printf("=========================================================Fill_Data_To_Buf wait!!!!!!\n");
-			if (Get_Free_Space_Len(hBuf) >= len) 
+			if (GetFreeSpaceLen(hBuf) >= len) 
 			{
 		        fill_to_buf(hBuf, buf_ptr, len);
 				return 0;
@@ -250,12 +250,12 @@ int Fill_Data_To_Buf(RingBuffer hBuf, char *buf_ptr, int len, int block)
 	return -1;
 }
 
-int Get_Data_Form_Buf(RingBuffer hBuf, char *buf_ptr, int size, int block)
+int GetDataFormBuf(RingBuffer hBuf, char *buf_ptr, int size, int block)
 {
     int i;
 
 //	printf("[Get_Valid_Data_Len = %d], len = %d \n", Get_Valid_Data_Len(hBuf), size);
-    if(Get_Valid_Data_Len(hBuf) < size)
+    if(GetValidDataLen(hBuf) < size)
     {
 //	printf("[Get_Data_Form_Buf] 1\n");
         if(block == 1)
@@ -265,7 +265,7 @@ int Get_Data_Form_Buf(RingBuffer hBuf, char *buf_ptr, int size, int block)
             while(1)
             {       
 			    usleep(10 * 1000);
-                if(Get_Valid_Data_Len(hBuf) >= size)
+                if(GetValidDataLen(hBuf) >= size)
                 {
                     for(i = 0; i < size; i++)
                     {
@@ -358,7 +358,7 @@ void main(void)
 
     RingBuffer          hBuf;
 
-    Ring_Buffer_Init(&hBuf, 1000);
+    RingBuffer_Init(&hBuf, 1000);
 
     if (pthread_create(&writeThread, &attr, writeThrFxn, hBuf)) {
             printf("[MAIN] Failed to create ctrl thread", __LINE__);
