@@ -160,42 +160,6 @@ typedef struct{
 	char abstractFileIdent[32];
 }DISC_VOLID_T;
 
-// UDF文件系统结构
-struct UDFINFO_T{
-	// 设备句柄
-	int fd;
-	
-	//数据模式
-	int m_DataMode;
-
-	// 当前文件位置
-	//uint32_t m_CurrentFileLocation;	
-	
-	void *m_hMem;
-	uint8_t *m_pMemBuffer;
-
-	// 临时使用的Buffer : 32 * 2048
-	uint8_t	pPackBuff[PACKET32_SIZE];
-
-	// 保留扇区Buffer : 32 * 2048, 用于存放UUID等信息
-	//uint8_t	pUUIDBuff[PACKET32_SIZE];
-
-	//光盘信息结构
-	CDRWDISKINFO *m_CdRwDiskinfo;
-	
-	//文件目录树
-	FILEDIRTREE *m_FileDirTree;
-	
-	// UDF cmd
-	udfcmd_t *udf_cmd;
-	
-	// mmc cmd
-	struct CDR_CMD_T *cdr_cmd;
-
-	//class CCdrcmd
-	CCDRCmd cdrCmd;
-};
-
 class CUdfCmd
 {
 public:
@@ -238,6 +202,44 @@ public:
 
 	// UDF文件系统测试
 	int(*udffstest)(udfinfo_t *pUdfInfo);
+};
+
+// UDF文件系统结构
+struct UDFINFO_T{
+	// 设备句柄
+	int fd;
+	
+	//数据模式
+	int m_DataMode;
+
+	// 当前文件位置
+	//uint32_t m_CurrentFileLocation;	
+	
+	void *m_hMem;
+	uint8_t *m_pMemBuffer;
+
+	// 临时使用的Buffer : 32 * 2048
+	uint8_t	pPackBuff[PACKET32_SIZE];
+
+	// 保留扇区Buffer : 32 * 2048, 用于存放UUID等信息
+	//uint8_t	pUUIDBuff[PACKET32_SIZE];
+
+	//光盘信息结构
+	CDRWDISKINFO *m_CdRwDiskinfo;
+	
+	//文件目录树
+	FILEDIRTREE *m_FileDirTree;
+	
+	// UDF cmd
+	udfcmd_t *udf_cmd;
+	
+	// mmc cmd
+	struct CDR_CMD_T *cdr_cmd;
+
+	//
+	CUdfCmd	udfCmd;
+	//class CCdrcmd
+	CCDRCmd cdrCmd;
 };
 
 //struct UDF_CMD_T{

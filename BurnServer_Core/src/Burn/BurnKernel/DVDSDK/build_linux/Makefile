@@ -1,17 +1,18 @@
 
 # Name and type of the target for this Makefile
-TARGETLIB := ../lib/libDVDSDK.a
+ifeq ($(debug),1)
+ TARGETLIB := ../lib/debug/libDVDSDK.a
+else
+ TARGETLIB := ../lib/release/libDVDSDK.a
+endif
 
-CC = arm-hisiv200-linux-gcc
-AR = arm-hisiv200-linux-ar
-#CC = gcc
-#AR = ar
+CC = g++
+AR = ar
 RM = rm -f
 
 INC_DIR += -I../include
 INC_DIR += -I../lib
-#INC_DIR += -I/usr/include
-#INC_DIR += /opt/hisi-linux/x86-arm/arm-hisiv200-linux/target/usr/include
+INC_DIR += -I/usr/include
 
 SRC = ../src/LvDvdRecAPI.c \
 	  ../src/cdr_cmd.c \
@@ -31,7 +32,12 @@ CFLAGS += $(LIBS_DIR)
 CFLAGS += -g
 CFLAGS += -DLINUX
 CFLAGS += -D_FILE_OFFSET_BITS=64 -D_LARGE_FILE 
-CFLAGS += -DDEBUG -g3
+#CFLAGS += -Wall -O2
+ifeq ($(debug),1)
+ CFLAGS += -DDEBUG -g
+else 
+ CFLAGS += -O2  
+endif
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@ 
@@ -45,3 +51,4 @@ clean:
 	rm -f $(SRCOBJ) $(TARGETLIB)
 
 
+	

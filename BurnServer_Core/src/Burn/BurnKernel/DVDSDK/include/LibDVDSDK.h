@@ -388,7 +388,7 @@ public:
 	* 作者  : passion
 	* 日期  : 2017.3.31
 	*******************************************************************************/
-	int DVDSDK_fillEmptyDataOnFirst(DVDDRV_HANDLE hDVD, unsigned int fillsize);
+	int DVDSDK_FillEmptyDataOnFirst(DVDDRV_HANDLE hDVD, unsigned int fillsize);
 
 	/*******************************************************************************
 	* 名称  : DVDSDK_CreateDir
@@ -455,7 +455,7 @@ public:
 	* 日期  : 2017.3.31
 	* 修改  : 2017.4.17 modify by passion for FUNC
 	*******************************************************************************/
-	int DVDSDK_fillAllDiscEmptyData(DVDDRV_HANDLE hDVD);
+	int DVDSDK_FillAllDiscEmptyData(DVDDRV_HANDLE hDVD);
 
 	/*******************************************************************************
 	* 名称  : DVDSDK_CloseDisc

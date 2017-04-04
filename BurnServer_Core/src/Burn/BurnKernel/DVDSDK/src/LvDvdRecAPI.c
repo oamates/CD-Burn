@@ -238,7 +238,8 @@ int DVDSDKInterface::DVDSDK_GetDevInfo(DVDDRV_HANDLE hDVD, DVD_DEV_INFO_T *pDevI
 int DVDSDKInterface::DVDSDK_GetDiscInfo(DVDDRV_HANDLE hDVD, DVD_DISC_INFO_T *pDiscInfo)
 {
 	int TrickCount,SessionCount,DiskStatus,Speed;
-	unsigned long long Capicity;
+	//unsigned long long Capicity;
+	uint64_t Capicity;
 
 	HANDLE_DEF;
 	VALID_HANDLE();
@@ -256,7 +257,7 @@ int DVDSDKInterface::DVDSDK_GetDiscInfo(DVDDRV_HANDLE hDVD, DVD_DISC_INFO_T *pDi
 	pDiscInfo->discsize = (Capicity/512);    //除以512及为M单位容量
 
 	//获取光盘使用容量 单位M
-	HCDR_CMD()->cdr_getdiscusedsize(HDEV_FD(),&pDiscInfo->usedsize);
+	HCDR_CMD()->cdr_getdiscusedsize(HDEV_FD(),(int*)&pDiscInfo->usedsize);
 
 	//剩余容量
 	pDiscInfo->freesize = pDiscInfo->discsize - pDiscInfo->usedsize;
@@ -669,7 +670,8 @@ int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 
 	MEMMOCLINE;
 	//创建根目录
-	HUDF_HANLE()->udf_cmd->addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree, NULL, "", 0, NODETYPE_DIR);
+	//HUDF_HANLE()->udf_cmd->addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree, NULL, "", 0, NODETYPE_DIR);
+	HUDF_HANLE()->udfCmd.addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree, NULL, "", 0, NODETYPE_DIR);
 
 	sleep(1);
 
@@ -687,7 +689,7 @@ int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 
 	HUDF_HANLE()->m_CdRwDiskinfo->nDiskCapicity = Capicity;
 
-	iRet = HUDF_HANLE()->udf_cmd->InitUdfFs(HUDF_HANLE(), &disc_volid);
+	iRet = HUDF_HANLE()->udfCmd.InitUdfFs(HUDF_HANLE(), &disc_volid);
 	if(iRet)
 	{
 		DPERROR(("init udf fs error:%d\n", iRet));
@@ -755,7 +757,7 @@ int DVDSDKInterface::DVDSDK_FillEmptyDataOnFirst(DVDDRV_HANDLE hDVD, unsigned in
 	nEmptySize = fullsize ? fullsize : (1024 * 1024 * 64);
 	nEmptySize &= ~(PACKET32_SIZE - 1);	// 64K对其
 
-	HUDF_HANLE()->udf_cmd->WriteFileTrackEmdpy(HUDF_HANLE(), nEmptySize);
+	HUDF_HANLE()->udfCmd.WriteFileTrackEmdpy(HUDF_HANLE(), nEmptySize);
 
 	return 0;
 }
@@ -851,14 +853,14 @@ DVDSDK_DIR DVDSDKInterface::DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName
 		if(iRet == -1)
 			break;
 		if(DirNode == NULL)
-			DirNode = HUDF_HANLE()->udf_cmd->findnodebyid(HUDF_HANLE()->m_FileDirTree, 0);
+			DirNode = HUDF_HANLE()->udfCmd.findnodebyid(HUDF_HANLE()->m_FileDirTree, 0);
 
 		if (DirNode == NULL)
 		{
-			DirNode = HUDF_HANLE()->udf_cmd->addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
+			DirNode = HUDF_HANLE()->udfCmd.addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
 									NULL, "", 0, NODETYPE_DIR);//没根目录 则创建根目录
 		}
-		tmpNode = HUDF_HANLE()->udf_cmd->GetNodeInDir(DirNode, szAnalysisName);
+		tmpNode = HUDF_HANLE()->udfCmd.GetNodeInDir(DirNode, szAnalysisName);
 		if(tmpNode)
 		{
 			DP(("Dir name:%s exist\n", szDirName));
@@ -866,7 +868,7 @@ DVDSDK_DIR DVDSDKInterface::DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName
 			continue;//return NULL;
 		}
 		MEMMOCLINE;
-		DirNode = HUDF_HANLE()->udf_cmd->addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
+		DirNode = HUDF_HANLE()->udfCmd.addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
 						(FILDIRNODE*)DirNode, szAnalysisName, 0, NODETYPE_DIR);
 	}
 	return DirNode;
@@ -897,10 +899,10 @@ DVDSDK_FILE DVDSDKInterface::DVDSDK_CreateFile(DVDDRV_HANDLE hDVD, DVDSDK_DIR pD
 	if(pDir)
 		pParent = (FILDIRNODE*)pDir;
 	else
-		pParent = HUDF_HANLE()->udf_cmd->findnodebyid(HUDF_HANLE()->m_FileDirTree, 0);
+		pParent = HUDF_HANLE()->udfCmd.findnodebyid(HUDF_HANLE()->m_FileDirTree, 0);
 
 	MEMMOCLINE;
-	DirNode = HUDF_HANLE()->udf_cmd->addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
+	DirNode = HUDF_HANLE()->udfCmd.addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
 				pParent, szFileName, filesize, NODETYPE_FILE);
 	if(!DirNode)
 	{
@@ -940,7 +942,7 @@ int	DVDSDKInterface::DVDSDK_WriteData(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile, uns
 	// 设定文件位置
 	//HUDF_HANLE(nDevNo)->m_CurrentFileLocation = HUDF_HANLE(nDevNo)->m_CdRwDiskinfo->udffile.writestart - UDF_SYS_LEN;
 
-	iRet = HUDF_HANLE()->udf_cmd->WriteStream(HUDF_HANLE(), pFile, pBuffer, size);
+	iRet = HUDF_HANLE()->udfCmd.WriteStream(HUDF_HANLE(), static_cast<FILDIRNODE*>(pFile), pBuffer, size);
 	if(iRet)
 	{
 		DPERROR(("WriteStream error:%d,fd=%d\n", iRet,HDEV_FD()));
@@ -1011,7 +1013,7 @@ int DVDSDKInterface::DVDSDK_FillAllDiscEmptyData(DVDDRV_HANDLE hDVD)
 		//DP(("FreeSize=%d,MinSize=%d\n",FreeSize,MinSize));
 		if(FreeSize < MinSize)
 			break;
-		HUDF_HANLE()->udf_cmd->WriteEmptyStream(HUDF_HANLE(), FillBuf, PACKET32_SIZE);
+		HUDF_HANLE()->udfCmd.WriteEmptyStream(HUDF_HANLE(), (uint8_t*)FillBuf, PACKET32_SIZE);
 	}
 
 	return 0;
@@ -1040,7 +1042,7 @@ int DVDSDKInterface::DVDSDK_CloseDisc(DVDDRV_HANDLE hDVD)
 	pDVD->bRecording = FALSE;
 
 	//写入udf文件系统
-	iRet = HUDF_HANLE()->udf_cmd->CloseDisc(HUDF_HANLE());
+	iRet = HUDF_HANLE()->udfCmd.CloseDisc(HUDF_HANLE());
 	if(iRet)
 	{
 		DPERROR(("close disc error:%d\n", iRet));
@@ -1316,10 +1318,10 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	HUDF_HANLE()->m_CdRwDiskinfo->nDiskCapicity = Capicity;
 
 	//创建根目录
-	HUDF_HANLE()->udf_cmd->addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree, NULL, "", 0, NODETYPE_DIR);
+	HUDF_HANLE()->udfCmd.addnode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree, NULL, "", 0, NODETYPE_DIR);
 
 	//初始化文件系统
-	iRet = HUDF_HANLE()->udf_cmd->InitUdfFs(HUDF_HANLE(), &disc_volid);
+	iRet = HUDF_HANLE()->udfCmd.InitUdfFs(HUDF_HANLE(), &disc_volid);
 	if(iRet)
 	{
 		DPERROR(("init udf fs error:%d\n", iRet));
@@ -1382,9 +1384,9 @@ int DVDSDKInterface::DVDSDK_GetReserveData(DVDDRV_HANDLE hDVD, unsigned char **p
 	DVD_INRECORD();
 
 	HCDR_CMD()->cdr_readtrack(HDEV_FD(),UDF_UUID_ADDR,
-		     HUDF_HANLE()->m_CdRwDiskinfo->ExtenData,PACKET16_SIZE);
+		     (uint8_t*)(HUDF_HANLE()->m_CdRwDiskinfo->ExtenData),PACKET16_SIZE);
 
-	*pBuffer = HUDF_HANLE()->m_CdRwDiskinfo->ExtenData;
+	*pBuffer = (unsigned char*)HUDF_HANLE()->m_CdRwDiskinfo->ExtenData;
 	*pSize   = PACKET16_SIZE;
 	return 0;
 }
@@ -1406,7 +1408,7 @@ int DVDSDKInterface::DVDSDK_GetReserveBuffer(DVDDRV_HANDLE hDVD, unsigned char *
 	HANDLE_DEF;
 	VALID_HANDLE();
 
-	*pBuffer = HUDF_HANLE()->m_CdRwDiskinfo->ExtenData;
+	*pBuffer = (unsigned char*)HUDF_HANLE()->m_CdRwDiskinfo->ExtenData;
 	*pSize   = PACKET16_SIZE;
 	return 0;
 }
@@ -1529,7 +1531,7 @@ int LvDVDRec_udffstest(void)
 	DP(("LvDVDRec_udffstest ...start1!\n"));
 	DVDRec_GetCdrcmd(NULL, &pUdf->cdr_cmd);
 	DP(("LvDVDRec_udffstest ...start2!\n"));
-	pUdf->udf_cmd->udffstest(pUdf);
+	pUdf->udfCmd.udffstest(pUdf);
 	DP(("LvDVDRec_udffstest ...start3!\n"));
 	DVDRec_UdfFree(pUdf);
 	DP(("LvDVDRec_udffstest ...end!\n"));

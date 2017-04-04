@@ -6,6 +6,9 @@
 #include "drvcomm.h"
 #include "cdr_cmd.h"
 #include <time.h>
+#ifdef LINUX
+#include <sys/time.h>
+#endif
 
 #define WRITE_TRYNUMS	400
 
@@ -584,6 +587,7 @@ static int FindDiscType(char *pbuf,unsigned char * disclist,int * j)
 
 }
 
+#if 0
 /*************************** CDR_CMD_T 结构函数***************************************/
 // 锁定托盘
 static BOOL cdr_lockdoor(int fd)
@@ -1461,13 +1465,13 @@ static struct CDR_CMD_T cdr_dvd = {
 	.cdr_getdiscusedsize    = cdr_getdiscusedsize,
 	.cdr_getdoorstate       = cdr_getdoorstate,
 };
-
+#endif
+static struct CDR_CMD_T cdr_dvd = {};
 int DVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd)
 {
 	*pCmd = &cdr_dvd;
 	return 0;
 }
-
 
 /*************************** class CDRCmd ***************************************/
 // 锁定托盘
