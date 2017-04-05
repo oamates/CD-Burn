@@ -1612,7 +1612,7 @@ int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
 		return ERROR_DVD_NODISC;
 	}
 	// 加锁仓门
-	cdr_lockdoor(fd);
+	CDR_LockDoor(fd);
 
 	if (!GetDiscInfo(fd, &stdisc_info))
 	{
@@ -1643,7 +1643,7 @@ int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
 		return ERROR_DVD_RESERVETRACKERR;
 	}
 
-	if (cdr_gettrackinfo(fd, 1, &stTrack) != 0)
+	if (CDR_GetTrackinfo(fd, 1, &stTrack) != 0)
 	{
 		DPERROR(("gettrackinfo 1 error!\n"));
 		return ERROR_DVD_OPTERFAILED;
@@ -1655,7 +1655,7 @@ int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
 			stTrack.freeblocks, stTrack.writedsize, stTrack.tracksize));
 	}
 
-	if (cdr_gettrackinfo(fd, 2, &stTrack) != 0)
+	if (CDR_GetTrackinfo(fd, 2, &stTrack) != 0)
 	{
 		DPERROR(("gettrackinfo 2 error!\n"));
 		return ERROR_DVD_OPTERFAILED;
@@ -1720,7 +1720,7 @@ int CCDRCmd::CDR_DiscExactType(int fd, int *type)
 		return ERROR_DVD_OPTERFAILED;
 	}
 	//tmp = from2Byte( &Profile[6] );
-	*type = FindDiscType(&Profile[7], &disclist, &j);
+	*type = FindDiscType((char*)(&Profile[7]), (unsigned char*)&disclist, &j);
 	return *type;
 }
 
@@ -1901,7 +1901,7 @@ int CCDRCmd::CDR_GetdevInfo(int fd, DVD_DEV_INFO_T *pstDevInfo)
 	pbuf = header + 13;   //13开始为profile数据区
 	for (i = 0; i < (datalen / 4); i++)
 	{
-		FindDiscType(pbuf, pstDevInfo->disclist, &j);
+		FindDiscType((char*)pbuf, pstDevInfo->disclist, &j);
 		pbuf += 4;
 	}
 
@@ -2158,7 +2158,7 @@ int CCDRCmd::CDR_DpdevProfile(int fd)
 	pbuf = buf + 13;   //13开始为profile数据区
 	for (i = 0; i < profilenum; i++)
 	{
-		FindDiscType(pbuf, disclist, &j);
+		FindDiscType((char*)pbuf, disclist, &j);
 		pbuf += 4;
 	}
 
@@ -2202,10 +2202,9 @@ int CCDRCmd::CDR_GetMaxSpeed(int fd, int *MaxReadSpeed, int *MaxWriteSpeed)
 
 	send_cmd(fd, &cgc, header, CGC_DATA_READ, WAIT_BLANK);
 
-
 	len = 2 + (((header[0] & 0xff) << 8) | (header[1] & 0xff));
 	offset = 8 + (((header[6] & 0xff) << 8) | (header[7] & 0xff));
-	buffer = calloc(len, sizeof(uint8_t));
+	buffer = (unsigned char*)calloc(len, sizeof(uint8_t));
 
 	//第二次读取当前设备写参数，到buffer中
 	memset(&cgc, 0, sizeof(cgc));

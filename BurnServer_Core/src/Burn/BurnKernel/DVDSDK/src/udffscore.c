@@ -264,7 +264,7 @@ static void DeleteFileDirNode(void *hMem, FILDIRNODE *Node)
 // 通过名称查找节点
 static FILDIRNODE *findnodebyname(FILEDIRTREE *FileDirTree, char *szName)
 {
-	return FindNodeByIndex(FileDirTree->FirstNode, -1, szName == NULL ? "" : szName, TRUE);
+	return FindNodeByIndex(FileDirTree->FirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
 }
 
 // 通过节点ID
@@ -324,7 +324,7 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 			loc++;
 		}
 		//pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
-		pUdfInfo.cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
+		pUdfInfo->cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
 	}
 	MEMFREE(pUdfInfo->m_hMem, desc->data->buffer);
 	desc->data->buffer = NULL;
@@ -964,8 +964,35 @@ FILDIRNODE* CUdfCmd::addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *P
 	return TmpNode;
 }
 
+// 通过名称查找节点
+FILDIRNODE* CUdfCmd::findnodebyname(FILEDIRTREE *FileDirTree, char *szName)
+{
+	return FindNodeByIndex(FileDirTree->FirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
+}
+
+// 通过节点ID
+FILDIRNODE* CUdfCmd::findnodebyid(FILEDIRTREE *FileDirTree, int nodeid)
+{
+	return FindNodeByIndex(FileDirTree->FirstNode, nodeid, "", FALSE);
+}
+
+// 判断目录下名称是否重复
+FILDIRNODE* CUdfCmd::GetNodeInDir(FILDIRNODE *pDirNode, char *szName)
+{
+	FILDIRNODE *Temp = pDirNode ? pDirNode->Child : NULL;
+	while (Temp)
+	{
+		if (strcmp(Temp->Name, szName) == 0)
+		{
+			return Temp;
+		}
+		Temp = Temp->Next;
+	}
+	return NULL;
+}
+
 // 获取目录数量
-int CUdfCmd::getdircount(FILEDIRTREE *FileDirTree)
+int CUdfCmd::GetDirCount(FILEDIRTREE *FileDirTree)
 {
 	int i; int DirCount = 0;
 	FILDIRNODE * TmpNode;
@@ -983,7 +1010,7 @@ int CUdfCmd::getdircount(FILEDIRTREE *FileDirTree)
 }
 
 // 获取文件数量
-int CUdfCmd::getfilecount(FILEDIRTREE *FileDirTree)
+int CUdfCmd::GetFileCount(FILEDIRTREE *FileDirTree)
 {
 	int i; int fileCount = 0;
 	FILDIRNODE * TmpNode;
@@ -1125,7 +1152,7 @@ int CUdfCmd::WriteFileTrackEmdpy(udfinfo_t *pUdfInfo, uint32_t emptydize)
 	return 0;
 }
 
-int CUdfCmd::udffstest(udfinfo_t *pUdfInfo)
+int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 {
 	DISC_VOLID_T disc_volid;
 	int i;
@@ -1146,7 +1173,7 @@ int CUdfCmd::udffstest(udfinfo_t *pUdfInfo)
 	strcpy(disc_volid.copyrightFileIdent, "aaaa");
 	strcpy(disc_volid.abstractFileIdent,  "aaaa");
 	
-	DirNode = pUdfInfo->udf_cmd->addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, NULL, "udf_test_dir", 0, NODETYPE_DIR);
+	DirNode = pUdfInfo->udfCmd.addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, NULL, "udf_test_dir", 0, NODETYPE_DIR);
 	
 	//初始化UDF光盘系统
 	LvDVDUdf_udf_init_disc(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc), pUdfInfo->m_CdRwDiskinfo->nDiskCapicity, &disc_volid);
@@ -1157,7 +1184,7 @@ int CUdfCmd::udffstest(udfinfo_t *pUdfInfo)
 	for(i=0; i< 200; i++)
 	{
 		sprintf(szFileName, "VDV测试文件%d.ts", i);
-		pUdfInfo->udf_cmd->addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, DirNode, szFileName, 54 * 1024 * 1024, NODETYPE_FILE);
+		pUdfInfo->udfCmd.addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, DirNode, szFileName, 54 * 1024 * 1024, NODETYPE_FILE);
 	}
 	
 	// close disc
@@ -1200,6 +1227,7 @@ int CUdfCmd::udffstest(udfinfo_t *pUdfInfo)
 	return 0;
 }
 
+#if 0
 static udfcmd_t udfcmd = {
 	.addnode = addnode,
 	.findnodebyname = findnodebyname,
@@ -1214,6 +1242,10 @@ static udfcmd_t udfcmd = {
 	.WriteFileTrackEmdpy = WriteFileTrackEmdpy,
 	.udffstest      = udffstest,
 };
+#endif
+#if 1
+static udfcmd_t udfcmd = {};
+#endif
 
 // 创建UDF
 udfinfo_t * DVDRec_UdfCreate(int fd, uint16_t DataMode)

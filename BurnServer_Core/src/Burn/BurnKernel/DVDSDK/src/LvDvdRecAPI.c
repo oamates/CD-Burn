@@ -1531,7 +1531,7 @@ int LvDVDRec_udffstest(void)
 	DP(("LvDVDRec_udffstest ...start1!\n"));
 	DVDRec_GetCdrcmd(NULL, &pUdf->cdr_cmd);
 	DP(("LvDVDRec_udffstest ...start2!\n"));
-	pUdf->udfCmd.udffstest(pUdf);
+	pUdf->udfCmd.UdfFsTest(pUdf);
 	DP(("LvDVDRec_udffstest ...start3!\n"));
 	DVDRec_UdfFree(pUdf);
 	DP(("LvDVDRec_udffstest ...end!\n"));
