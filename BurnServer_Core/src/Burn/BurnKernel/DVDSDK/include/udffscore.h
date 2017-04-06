@@ -161,6 +161,7 @@ typedef struct{
 	char abstractFileIdent[32];
 }DISC_VOLID_T;
 
+#ifdef __cplusplus
 class CUdfCmd
 {
 public:
@@ -204,6 +205,8 @@ public:
 	// UDF文件系统测试
 	int UdfFsTest(udfinfo_t *pUdfInfo);
 };
+#endif
+
 
 // UDF文件系统结构
 struct UDFINFO_T{
@@ -237,10 +240,12 @@ struct UDFINFO_T{
 	// mmc cmd
 	struct CDR_CMD_T *cdr_cmd;
 
-	//
+#ifdef __cplusplus
+	//class udfCmd
 	CUdfCmd	udfCmd;
 	//class CCdrcmd
 	CCDRCmd cdrCmd;
+#endif
 };
 
 struct UDF_CMD_T{

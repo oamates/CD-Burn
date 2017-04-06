@@ -853,6 +853,7 @@ static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo)
 /****************************************************************************************************/
 //Class CUdfCmd
 
+#ifdef __cplusplus
 // 添加目录或文件
 FILDIRNODE* CUdfCmd::addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
 {
@@ -1226,7 +1227,7 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	
 	return 0;
 }
-
+#endif
 #if 0
 static udfcmd_t udfcmd = {
 	.addnode = addnode,

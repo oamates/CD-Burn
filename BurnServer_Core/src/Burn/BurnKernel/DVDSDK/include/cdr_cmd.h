@@ -7,11 +7,12 @@
 
 int DVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd);
 
+#ifdef __cplusplus
 class CCDRCmd
 {
 public:
-	CCDRCmd();
-	~CCDRCmd();
+	CCDRCmd(){};
+	~CCDRCmd(){};
 public:
 	BOOL CDR_LockDoor(int fd);		// 锁定托盘
 	BOOL CDR_UnlockDoor(int fd);		// 解锁托盘
@@ -40,6 +41,6 @@ public:
 	int CDR_GetDiscUsedSize(int fd, int * usedsize);                                 // 获取光盘使用容量
 	int CDR_GetDoorState(int fd);                                                   //获取仓门状态
 };
-
+#endif
 
 #endif//__CDR_CMD_H__

@@ -1473,6 +1473,7 @@ int DVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd)
 	return 0;
 }
 
+#ifdef _cplusplus
 /*************************** class CDRCmd ***************************************/
 // 锁定托盘
 BOOL CCDRCmd::CDR_LockDoor(int fd)
@@ -1571,7 +1572,6 @@ BOOL CCDRCmd::CDR_HaveDisc(int fd)
 {
 	return testHaveDisc(fd);
 }
-
 
 // 获得轨道信息
 int CCDRCmd::CDR_GetTrackinfo(int fd, int trackid, CDR_TRACK_T *ptrack)
@@ -1935,7 +1935,6 @@ int CCDRCmd::CDR_ReadTrack(int fd, int start, uint8_t *pbuffer, int size)
 	}
 	return 0;
 }
-
 
 // 写轨道数据, size可以为任意大小
 int CCDRCmd::CDR_WriteTrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int size)
@@ -2309,3 +2308,5 @@ int CCDRCmd::CDR_GetDoorState(int fd)
 
 	return Ret;
 }
+
+#endif

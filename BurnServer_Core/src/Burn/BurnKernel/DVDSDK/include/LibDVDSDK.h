@@ -183,11 +183,12 @@ typedef struct{
 
 #include <stdint.h>
 
+#ifdef __cplusplus
 class DVDSDKInterface
 {
 public:
-	DVDSDKInterface();
-	~DVDSDKInterface();
+	DVDSDKInterface(){};
+	~DVDSDKInterface(){};
 public:
 	/*******************************************************************************
 	* Ãû³Æ  : DVDSDK_Load
@@ -571,6 +572,7 @@ public:
 	void DVDSDK_SetRecordStatus(DVDDRV_HANDLE hDVD, BOOL bRecordStatus);
 
 };
+#endif
 
 #ifdef __cplusplus
 }

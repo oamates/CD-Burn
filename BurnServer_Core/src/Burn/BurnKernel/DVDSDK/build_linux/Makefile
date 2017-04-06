@@ -6,7 +6,7 @@ else
  TARGETLIB := ../lib/release/libDVDSDK.a
 endif
 
-CC = g++
+CC = gcc
 AR = ar
 RM = rm -f
 

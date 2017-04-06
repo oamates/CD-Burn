@@ -33,6 +33,7 @@ typedef struct{
 	struct CDR_CMD_T *pCmd;  	// 光驱命令
 }HDVD_DEV_T;
 
+/*
 DVDSDKInterface::DVDSDKInterface()
 {
 }
@@ -40,7 +41,8 @@ DVDSDKInterface::DVDSDKInterface()
 DVDSDKInterface::~DVDSDKInterface()
 {
 }
-
+*/
+#ifdef __cplusplus
 /*******************************************************************************
 * 名称  : DVDSDK_Load
 * 描述  : 加载光驱,
@@ -202,7 +204,6 @@ int DVDSDKInterface::DVDSDK_LockDoor(DVDDRV_HANDLE hDVD, int bLocked)
 		bRet = HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
 	return bRet ? 0 : ERROR_DVD_OPTERFAILED;
 }
-
 
 /*******************************************************************************
 * 名称  : DVDSDK_GetDevInfo
@@ -1510,7 +1511,10 @@ void DVDSDKInterface::DVDSDK_SetRecordStatus(DVDDRV_HANDLE hDVD, BOOL bRecordSta
 	HANDLE_DEF;
     pDVD->bRecording = bRecordStatus;
 }
-#if 1
+
+#endif
+
+#if 0
 /*******************************************************************************
 * 名称  : LvDVDRec_udffstest
 * 描述  : UDF测试用
@@ -1537,7 +1541,5 @@ int LvDVDRec_udffstest(void)
 	DP(("LvDVDRec_udffstest ...end!\n"));
 	return 0;
 }
-
-
 #endif
 
