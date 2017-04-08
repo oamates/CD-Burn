@@ -1,6 +1,6 @@
 
-#include "mkudffs.h"
 #include "defaults.h"
+#include "mkudffs.h"
 
 /* 
 	VDS_SIZE, LVID_SIZE, STABLE_SIZE, SSPACE_SIZE, PSPACE_SIZE 
@@ -40,7 +40,7 @@ struct udf_sizing default_sizing[][UDF_ALLOC_TYPE_SIZE] =
 	}
 };
 */
-
+#if 0
 static struct primaryVolDesc default_pvd =
 {
 	descTag :
@@ -92,8 +92,64 @@ static struct primaryVolDesc default_pvd =
 	},
 	flags : constant_cpu_to_le16(0),//PVD_FLAGS_VSID_COMMON),
 };
+#endif
 
+class PrimaryVolDesc
+{
+public:
+	PrimaryVolDesc();
+	~PrimaryVolDesc();
+public:
+	primaryVolDesc default_pvd;
+};
 
+PrimaryVolDesc::PrimaryVolDesc()
+{
+	default_pvd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_PVD);
+	default_pvd.descTag.descVersion = constant_cpu_to_le16(2);
+	default_pvd.descTag.tagSerialNum = 0;
+	default_pvd.descTag.descCRC = constant_cpu_to_le16(sizeof(struct primaryVolDesc) - sizeof(tag));
+
+	default_pvd.volDescSeqNum = constant_cpu_to_le32(0);
+	default_pvd.primaryVolDescNum = constant_cpu_to_le32(0);
+	memset(default_pvd.volIdent, 0, sizeof(default_pvd.volIdent));
+	memcpy(default_pvd.volIdent, "\x08", sizeof(unsigned char));
+	strcpy((char*)(default_pvd.volIdent+1), "LinuxUDF");
+	default_pvd.volSeqNum = constant_cpu_to_le16(1);
+	default_pvd.maxVolSeqNum = constant_cpu_to_le16(1);
+	default_pvd.interchangeLvl = constant_cpu_to_le16(2);
+	default_pvd.maxInterchangeLvl = constant_cpu_to_le16(2);
+	default_pvd.charSetList = constant_cpu_to_le32(CS0);
+	default_pvd.maxCharSetList = constant_cpu_to_le32(CS0);
+	memset(default_pvd.volSetIdent, 0, sizeof(default_pvd.volSetIdent));
+	memcpy(default_pvd.volIdent, "\x08", sizeof(unsigned char));
+	strcpy((char*)(default_pvd.volIdent+1), "FFFFFFFFLinuxUDF");
+	default_pvd.descCharSet.charSetType = UDF_CHAR_SET_TYPE;
+	
+	memset(default_pvd.descCharSet.charSetInfo, 0, sizeof(default_pvd.descCharSet.charSetInfo));
+	memcpy(default_pvd.descCharSet.charSetInfo, UDF_CHAR_SET_INFO, strlen(UDF_CHAR_SET_INFO));
+	
+	default_pvd.explanatoryCharSet.charSetType = UDF_CHAR_SET_TYPE;
+	memset(default_pvd.explanatoryCharSet.charSetInfo, 0, sizeof(default_pvd.explanatoryCharSet.charSetInfo));
+	memcpy(default_pvd.explanatoryCharSet.charSetInfo, UDF_CHAR_SET_INFO, strlen(UDF_CHAR_SET_INFO));
+
+	memset(default_pvd.appIdent.ident, 0, sizeof(default_pvd.appIdent.ident));
+	strcpy((char*)(default_pvd.appIdent.ident), UDF_ID_APPLICATION);
+	memset(default_pvd.appIdent.identSuffix, 0, sizeof(default_pvd.appIdent.identSuffix));
+	
+	memset(default_pvd.impIdent.ident, 0, sizeof(default_pvd.impIdent.ident));
+	strcpy((char*)(default_pvd.impIdent.ident), UDF_ID_DEVELOPER);
+	memset(default_pvd.impIdent.identSuffix, 0, sizeof(default_pvd.impIdent.identSuffix));
+
+	default_pvd.flags = constant_cpu_to_le16(0);//PVD_FLAGS_VSID_COMMON),
+}
+
+PrimaryVolDesc::~PrimaryVolDesc()
+{}
+
+static PrimaryVolDesc default_pvd;
+
+#if 0
 static struct impUseVolDesc default_iuvd =
 {
 	descTag :
@@ -117,7 +173,36 @@ static struct impUseVolDesc default_iuvd =
 		},
 	},
 };
+#endif
 
+class ImpUseVolDesc
+{
+public:
+	ImpUseVolDesc();
+	~ImpUseVolDesc();
+public:
+	impUseVolDesc default_iuvd;
+};
+
+ImpUseVolDesc::ImpUseVolDesc()
+{
+	default_iuvd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_IUVD);
+	default_iuvd.descTag.descVersion = constant_cpu_to_le16(2);
+	default_iuvd.descTag.tagSerialNum = 0;
+	default_iuvd.descTag.descCRC = constant_cpu_to_le16(sizeof(struct impUseVolDesc) - sizeof(tag));
+	default_iuvd.volDescSeqNum = constant_cpu_to_le32(1);
+	memset(default_iuvd.impIdent.ident, 0, sizeof(default_iuvd.impIdent.ident));
+	strcpy((char*)(default_iuvd.impIdent.ident), UDF_ID_LV_INFO);
+	default_iuvd.impIdent.identSuffix[0] = 0x02;//0x50,
+	default_iuvd.impIdent.identSuffix[1] = 0x01;
+}
+
+ImpUseVolDesc::~ImpUseVolDesc()
+{}
+
+static ImpUseVolDesc default_iuvd;
+
+#if 0
 static struct partitionDesc default_pd =
 {
 	descTag :
@@ -146,7 +231,39 @@ static struct partitionDesc default_pd =
 		},
 	},
 };
+#endif
 
+class PartitionDesc
+{
+public:
+	PartitionDesc();
+	~PartitionDesc();
+public:
+	partitionDesc default_pd;
+};
+
+PartitionDesc::PartitionDesc()
+{
+	default_pd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_PD);
+	default_pd.descVersion = constant_cpu_to_le16(2);
+	default_pd.tagSerialNum = 0;
+	default_pd.descCRC = constant_cpu_to_le16(sizeof(struct partitionDesc) - sizeof(tag));
+	default_pd.volDescSeqNum = constant_cpu_to_le32(2);
+	default_pd.partitionFlags = constant_cpu_to_le16(PD_PARTITION_FLAGS_ALLOC);
+	memset(default_pd.partitionContents, 0, sizeof(default_pd.partitionContents));
+	strcpy((char*)default_pd.partitionContents.ident, PD_PARTITION_CONTENTS_NSR02);   //udf1.02, udf1.5
+	default_pd.accessType = constant_cpu_to_le32(PD_ACCESS_TYPE_READ_ONLY); //dvd-r
+	
+	memset(default_pd.impIdent.ident, 0, sizeof(default_pd.impIdent.ident));
+	strcpy((char*)(default_pd.impIdent.ident), UDF_ID_DEVELOPER);
+	memset(default_pd.impIdent.identSuffix, 0, sizeof(default_pd.impIdent.identSuffix));
+}
+
+PartitionDesc::~PartitionDesc(){};
+
+static PartitionDesc default_pd;
+
+#if 0
 static struct logicalVolDesc default_lvd =
 {
 	descTag :
@@ -185,6 +302,19 @@ static struct logicalVolDesc default_lvd =
 		},
 	}
 };
+#endif
+
+class LogicalVolDesc
+{
+public:
+	LogicalVolDesc();
+	~LogicalVolDesc();
+
+public:
+	logicalVolDesc default_lvd;
+};
+
+
 
 static struct unallocSpaceDesc default_usd =
 {
@@ -231,7 +361,7 @@ static struct impUseVolDescImpUse default_iuvdiu =
 		charSetType : UDF_CHAR_SET_TYPE,
 		charSetInfo : UDF_CHAR_SET_INFO
 	},
-	logicalVolIdent : "\x08" "xkd_UDF_1.5",
+	logicalVolIdent : "\x08  xkd_UDF_1.5",
 	LVInfo1 : "\x08" "Linux mkudffs " MKUDFFS_VERSION,
 	LVInfo2 : "\x08" "Linux UDF " UDFFS_VERSION " (" UDFFS_DATE ")",
 	LVInfo3 : "\x08" EMAIL_STRING,
@@ -509,3 +639,4 @@ LVUDF_DEFAULTSINFO_T LvUDF_Defaults = {
 	.default_fe      = &default_fe,
 	.default_efe     = &default_efe,
 };
+//}
