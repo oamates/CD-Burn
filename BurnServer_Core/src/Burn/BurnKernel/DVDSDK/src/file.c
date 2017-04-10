@@ -108,10 +108,10 @@ int DVDRec_Utf8ToUnicode(unsigned char * pSrc, unsigned char * pDst, int buflen,
 	pDst[0] = 0x10;
 	*slen = 1;
 	pUnicode = &pDst[1];
-	tmplen = strlen(pSrc);
+	tmplen = strlen((const char*)pSrc);
 	while(tmplen)
 	{
-		Ret = unicode(&tmpunicode, pSrc, tmplen);
+		Ret = unicode(&tmpunicode, (char*)pSrc, tmplen);
 		if(Ret > 0)
 		{
 			memcpy(pUnicode,((char *)&tmpunicode)+1,1);
@@ -176,7 +176,7 @@ tag DVDRecUdf_query_tag(struct udf_disc *disc, struct udf_extent *ext, struct ud
 	
 	while (data != NULL)
 	{
-		crc = DVDRecUdf_crc(data->buffer + offset, data->length - offset, crc); //长度176
+		crc = DVDRecUdf_crc((uint8_t*)(data->buffer + offset), data->length - offset, crc); //长度176
 		offset = 0;
 		data = data->next;
 	}
@@ -216,7 +216,7 @@ tag DVDRecUdf_udf_query_tag(struct udf_disc *disc, uint16_t Ident, uint16_t Seri
 	{
 		if ((clength = data->length) > length)
 			clength = length;
-		crc = DVDRecUdf_crc(((char *)data->buffer) + offset + jump, clength - offset, crc);
+		crc = DVDRecUdf_crc((uint8_t*)(((char *)data->buffer) + offset + jump), clength - offset, crc);
 		length -= clength;
 		offset = 0;
 		data = data->next;
@@ -491,7 +491,7 @@ int DVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent *p
 			//namel = LvDVDRecUdf_EncUnicodeStr((char *)name,(uint8_t *)tmpname,strlen((char *)name),strlen((char *)name)+2);
 		}
 		else
-			namel = strlen(name);
+			namel = strlen((const char*)name);
 		if((fiddesc->data->ilength + PAD((40+namel),4)) > fiddesc->data->length)
 		{
 			fiddesc->data->length = (((fiddesc->data->length/2048)+1)*2048);	
@@ -523,7 +523,7 @@ int DVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent *p
 	else
 	{
 		if(name)
-			memcpy((char *)fid->fileIdent,name,strlen(name));
+			memcpy((char *)fid->fileIdent,name,strlen((const char*)name));
         //DVDVideoCode((uint8_t *)fid->fileIdent,name,length_of_file_ident);
 	}
     printf("-----------------fid->fileIdent=%s---------------\n",fid->fileIdent);
@@ -594,7 +594,7 @@ struct udf_desc *DVDRecUdf_udf_create(void *hMem, struct udf_disc *disc, struct 
 	fe = (struct fileEntry *)desc->data->buffer;
 
 	//modify by yanming for filetime
-	memcpy(fe, LvUDF_Defaults.default_fe, sizeof(struct fileEntry));
+	memcpy(fe, (fileEntry*)(&LvUDF_Defaults.default_fe->default_fe), sizeof(struct fileEntry));
 	memcpy(&fe->accessTime, ts, sizeof(timestamp));
 	memcpy(&fe->modificationTime, ts, sizeof(timestamp));
 	memcpy(&fe->attrTime, ts, sizeof(timestamp));

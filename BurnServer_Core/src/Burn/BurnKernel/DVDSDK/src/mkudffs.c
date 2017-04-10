@@ -1025,7 +1025,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
 	disc->blocksize = 2048;
 	disc->packetSize = PACKET_BLOCK_16;
 	disc->blocksize_bits = 11;
-	disc->udf_rev = le16_to_cpu(LvUDF_Defaults.default_lvidiu->minUDFReadRev);  //确定udf版本，默认1.02
+	disc->udf_rev = le16_to_cpu(LvUDF_Defaults.default_lvidiu->default_lvidiu.minUDFReadRev);  //确定udf版本，默认1.02
 	disc->flags = FLAG_UTF8 | FLAG_CLOSED;
 	
 	//if (disc->udf_rev >= 0x0200)

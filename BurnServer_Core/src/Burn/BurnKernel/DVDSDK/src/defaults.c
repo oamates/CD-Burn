@@ -94,14 +94,14 @@ static struct primaryVolDesc default_pvd =
 };
 #endif
 
-class PrimaryVolDesc
-{
-public:
-	PrimaryVolDesc();
-	~PrimaryVolDesc();
-public:
-	primaryVolDesc default_pvd;
-};
+// class PrimaryVolDesc
+// {
+// public:
+// 	PrimaryVolDesc();
+// 	~PrimaryVolDesc();
+// public:
+// 	struct primaryVolDesc default_pvd;
+// };
 
 PrimaryVolDesc::PrimaryVolDesc()
 {
@@ -245,12 +245,13 @@ public:
 PartitionDesc::PartitionDesc()
 {
 	default_pd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_PD);
-	default_pd.descVersion = constant_cpu_to_le16(2);
-	default_pd.tagSerialNum = 0;
-	default_pd.descCRC = constant_cpu_to_le16(sizeof(struct partitionDesc) - sizeof(tag));
+	default_pd.descTag.descVersion = constant_cpu_to_le16(2);
+	default_pd.descTag.tagSerialNum = 0;
+	default_pd.descTag.descCRC = constant_cpu_to_le16(sizeof(struct partitionDesc) - sizeof(tag));
+	
 	default_pd.volDescSeqNum = constant_cpu_to_le32(2);
 	default_pd.partitionFlags = constant_cpu_to_le16(PD_PARTITION_FLAGS_ALLOC);
-	memset(default_pd.partitionContents, 0, sizeof(default_pd.partitionContents));
+	memset((void*)&default_pd.partitionContents, 0, sizeof(default_pd.partitionContents));
 	strcpy((char*)default_pd.partitionContents.ident, PD_PARTITION_CONTENTS_NSR02);   //udf1.02, udf1.5
 	default_pd.accessType = constant_cpu_to_le32(PD_ACCESS_TYPE_READ_ONLY); //dvd-r
 	
@@ -314,8 +315,42 @@ public:
 	logicalVolDesc default_lvd;
 };
 
+LogicalVolDesc::LogicalVolDesc()
+{
+	default_lvd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_LVD);
+	default_lvd.descTag.descVersion = constant_cpu_to_le16(2);
+	default_lvd.descTag.tagSerialNum = 0;
+	default_lvd.descTag.descCRC = constant_cpu_to_le16(sizeof(struct logicalVolDesc) - sizeof(tag));
+	default_lvd.volDescSeqNum = constant_cpu_to_le32(3);
+	default_lvd.descCharSet.charSetType = UDF_CHAR_SET_TYPE;
+	memset((void*)default_lvd.descCharSet.charSetInfo, 0, sizeof(default_lvd.descCharSet.charSetInfo));
+	strcpy((char*)default_lvd.descCharSet.charSetInfo , UDF_CHAR_SET_INFO);
 
+	memset(default_lvd.logicalVolIdent, 0, sizeof(default_lvd.logicalVolIdent));
+	default_lvd.logicalVolIdent[0] = '\x08';
+	strcpy((char*)(default_lvd.logicalVolIdent + 1), "UDF_1.5");
+	
+	default_lvd.logicalBlockSize = constant_cpu_to_le32(2048);
+	
+	
+	memset(default_lvd.domainIdent.ident, 0, sizeof(default_lvd.domainIdent.ident));
+	strcpy((char*)(default_lvd.domainIdent.ident), UDF_ID_COMPLIANT);
 
+	memset(default_lvd.domainIdent.identSuffix, 0, sizeof(default_lvd.domainIdent.identSuffix));
+	default_lvd.domainIdent.identSuffix[0] = 0x50;
+	default_lvd.domainIdent.identSuffix[1] = 0x01;
+	default_lvd.domainIdent.identSuffix[2] = 0x00;
+	memset((void*)default_lvd.impIdent.ident, 0, sizeof(default_lvd.impIdent.ident));
+	strcpy((char*)default_lvd.impIdent.ident, UDF_ID_DEVELOPER);
+	memset((void*)(default_lvd.impIdent.identSuffix), 0, sizeof(default_lvd.impIdent.identSuffix));
+}
+
+LogicalVolDesc::~LogicalVolDesc()
+{}
+
+static LogicalVolDesc default_lvd;
+
+#if 0
 static struct unallocSpaceDesc default_usd =
 {
 	descTag :
@@ -327,9 +362,31 @@ static struct unallocSpaceDesc default_usd =
 	},
 	volDescSeqNum : constant_cpu_to_le32(4),
 };
+#endif
+
+class UnallocSpaceDesc
+{
+public:
+	UnallocSpaceDesc();
+	~UnallocSpaceDesc(){};
+
+public:
+	unallocSpaceDesc default_usd;
+};
+
+UnallocSpaceDesc::UnallocSpaceDesc()
+{
+	default_usd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_USD);
+	default_usd.descTag.descVersion = constant_cpu_to_le16(TAG_IDENT_USD);
+	default_usd.descTag.tagSerialNum = 0;
+	default_usd.descTag.descCRC = constant_cpu_to_le16(sizeof(struct unallocSpaceDesc) - sizeof(tag));
+	default_usd.volDescSeqNum = constant_cpu_to_le32(4);
+}
+
+static UnallocSpaceDesc default_usd;
 
 
-
+#if 0
 static struct terminatingDesc default_td =
 {
 	descTag :
@@ -340,8 +397,28 @@ static struct terminatingDesc default_td =
 		descCRC : constant_cpu_to_le16(sizeof(struct terminatingDesc) - sizeof(tag)),
 	},
 };
+#endif
 
+class TerminatingDesc
+{
+public:
+	TerminatingDesc();
+	~TerminatingDesc(){};
+public:
+	terminatingDesc default_td;
+};
 
+TerminatingDesc::TerminatingDesc()
+{
+	default_td.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_TD);
+	default_td.descTag.descVersion = constant_cpu_to_le16(2);
+	default_td.descTag.tagSerialNum = 0;
+	default_td.descTag.descCRC = constant_cpu_to_le16(sizeof(struct terminatingDesc) - sizeof(tag));
+}
+
+static TerminatingDesc default_td;
+
+#if 0
 static struct volDescPtr default_vdp =
 {
 	descTag :
@@ -353,7 +430,30 @@ static struct volDescPtr default_vdp =
 	},
 	volDescSeqNum : constant_cpu_to_le32(3),
 };
+#endif 
 
+class VolDescPtr
+{
+public:
+	VolDescPtr();
+	~VolDescPtr(){};
+
+public:
+	volDescPtr default_vdp;
+};
+
+VolDescPtr::VolDescPtr()
+{
+	default_vdp.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_VDP);
+	default_vdp.descTag.descVersion = constant_cpu_to_le16(2);
+	default_vdp.descTag.tagSerialNum = 0;
+	default_vdp.descTag.descCRC = constant_cpu_to_le16(sizeof(struct volDescPtr) - sizeof(tag));
+	default_vdp.volDescSeqNum = constant_cpu_to_le32(3);
+}
+
+static VolDescPtr default_vdp;
+
+#if 0
 static struct impUseVolDescImpUse default_iuvdiu =
 {
 	LVICharset :
@@ -376,8 +476,57 @@ static struct impUseVolDescImpUse default_iuvdiu =
 		},
 	},
 };
-	
+#endif
 
+class ImpUseVolDescImpUse
+{
+public:
+	ImpUseVolDescImpUse();
+	~ImpUseVolDescImpUse(){};
+public:
+	impUseVolDescImpUse default_iuvdiu;
+};
+
+ImpUseVolDescImpUse::ImpUseVolDescImpUse()
+{
+	int nStrLen = 0;
+	default_iuvdiu.LVICharset.charSetType = UDF_CHAR_SET_TYPE;
+	memset((void*)default_iuvdiu.LVICharset.charSetInfo, 0, sizeof(default_iuvdiu.LVICharset.charSetInfo));
+	strcpy((char*)default_iuvdiu.LVICharset.charSetInfo, UDF_CHAR_SET_INFO);
+	
+	memset(default_iuvdiu.logicalVolIdent, 0, sizeof(default_iuvdiu.logicalVolIdent));
+	default_iuvdiu.logicalVolIdent[0] = '\x08';
+	strcpy((char*)(default_iuvdiu.logicalVolIdent+1), "UDF_1.5");
+	
+	memset((void*)default_iuvdiu.LVInfo1, 0, sizeof(default_iuvdiu.LVInfo1));
+	default_iuvdiu.LVInfo1[0] = '\x08';
+	strcpy((char*)(default_iuvdiu.LVInfo1 + 1), "Linux mkudffs ");
+	nStrLen = strlen("Linux mkudffs ");
+	strcpy((char*)(default_iuvdiu.LVInfo1 + 1 + nStrLen), MKUDFFS_VERSION);
+	
+	memset((void*)default_iuvdiu.LVInfo2, 0, sizeof(default_iuvdiu.LVInfo2));
+	default_iuvdiu.LVInfo2[0] = '\x08';
+	strcpy((char*)(default_iuvdiu.LVInfo2 + 1), "Linux UDF ");
+	nStrLen = strlen("Linux UDF ");
+	strcpy((char*)(default_iuvdiu.LVInfo2 + 1 + nStrLen), UDFFS_VERSION);
+	nStrLen += strlen(UDFFS_VERSION);
+	strcpy((char*)(default_iuvdiu.LVInfo2 + 1 + nStrLen), " (");
+	nStrLen += strlen(" (");
+	strcpy((char*)(default_iuvdiu.LVInfo2 + 1 + nStrLen), ")");
+
+	memset((void*)default_iuvdiu.LVInfo3, 0, sizeof(default_iuvdiu.LVInfo3));
+	default_iuvdiu.LVInfo3[0] = '\x08';
+	strcpy((char*)(default_iuvdiu.LVInfo3 + 1), EMAIL_STRING);
+	
+	memset((void*)default_iuvdiu.impIdent.ident, 0, sizeof(default_iuvdiu.impIdent.ident));
+	strcpy((char*)default_iuvdiu.impIdent.ident, UDF_ID_DEVELOPER);
+
+	memset((void*)default_iuvdiu.impIdent.identSuffix, 0, sizeof(default_iuvdiu.impIdent.identSuffix));
+}
+
+static ImpUseVolDescImpUse default_iuvdiu;
+
+#if 0
 static struct logicalVolIntegrityDesc default_lvid =
 {
 	descTag :
@@ -391,7 +540,32 @@ static struct logicalVolIntegrityDesc default_lvid =
 	lengthOfImpUse : constant_cpu_to_le32(sizeof(struct logicalVolIntegrityDescImpUse)),
 		
 };
+#endif 
 
+class LogicalVolIntegrityDesc
+{
+public:
+	LogicalVolIntegrityDesc();
+	~LogicalVolIntegrityDesc(){};
+public:
+	logicalVolIntegrityDesc default_lvid;
+};
+
+LogicalVolIntegrityDesc::LogicalVolIntegrityDesc()
+{
+	default_lvid.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_LVID);
+	default_lvid.descTag.descVersion = constant_cpu_to_le16(2);
+	default_lvid.descTag.tagSerialNum = 0;
+	default_lvid.descTag.descCRC = constant_cpu_to_le16(sizeof(struct logicalVolIntegrityDesc) - sizeof(tag));
+	
+	default_lvid.integrityType = constant_cpu_to_le32(LVID_INTEGRITY_TYPE_CLOSE);
+	default_lvid.lengthOfImpUse = constant_cpu_to_le32(sizeof(struct logicalVolIntegrityDescImpUse));
+}
+
+static LogicalVolIntegrityDesc default_lvid;
+
+
+#if 0
 //默认采用UDF-1.02高度兼容版本
 static struct logicalVolIntegrityDescImpUse default_lvidiu =
 {
@@ -413,7 +587,31 @@ static struct logicalVolIntegrityDescImpUse default_lvidiu =
 	minUDFWriteRev : constant_cpu_to_le16(0x0150),
 	maxUDFWriteRev : constant_cpu_to_le16(0x0150),
 };
+#endif
 
+// class LogicalVolIntegrityDescImpUse
+// {
+// public:
+// 	LogicalVolIntegrityDescImpUse();
+// 	~LogicalVolIntegrityDescImpUse(){};
+// public:
+// 	logicalVolIntegrityDescImpUse default_lvidiu;
+// };
+
+LogicalVolIntegrityDescImpUse::LogicalVolIntegrityDescImpUse()
+{
+	memset((void*)default_lvidiu.impIdent.ident, 0, sizeof(default_lvidiu.impIdent.ident));
+	strcpy((char*)default_lvidiu.impIdent.ident, UDF_ID_DEVELOPER);
+	memset((void*)default_lvidiu.impIdent.identSuffix, 0, sizeof(default_lvidiu.impIdent.identSuffix));
+	
+	default_lvidiu.minUDFReadRev = constant_cpu_to_le16(0x0150);
+	default_lvidiu.minUDFWriteRev = constant_cpu_to_le16(0x0150);
+	default_lvidiu.maxUDFWriteRev = constant_cpu_to_le16(0x0150);
+}
+
+static LogicalVolIntegrityDescImpUse default_lvidiu;
+
+#if 0
 //对DVD-R无用
 static struct sparingTable default_stable =
 {
@@ -440,7 +638,39 @@ static struct sparingTable default_stable =
 	reallocationTableLen : constant_cpu_to_le16(0),
 	sequenceNum : constant_cpu_to_le32(0)
 };
+#endif
 
+//对DVD-R无用
+class SparingTable
+{
+public:
+	SparingTable();
+	~SparingTable(){};
+
+public:
+	sparingTable default_stable;
+};
+
+SparingTable::SparingTable()
+{
+	default_stable.descTag.tagIdent = constant_cpu_to_le16(0);
+	default_stable.descTag.descVersion = constant_cpu_to_le16(2);
+	default_stable.descTag.tagSerialNum = 0;
+	default_stable.descTag.descCRC = constant_cpu_to_le16(sizeof(struct sparingTable) - sizeof(tag));
+
+	default_stable.sparingIdent.flags = 0;
+
+	memset((void*)default_stable.sparingIdent.ident, 0, sizeof(default_stable.sparingIdent.ident));
+	strcpy((char*)default_stable.sparingIdent.ident, UDF_ID_SPARING);
+	memset((void*)default_stable.sparingIdent.identSuffix, 0, sizeof(default_stable.sparingIdent));
+
+	default_stable.reallocationTableLen = constant_cpu_to_le16(0);
+	default_stable.sequenceNum = constant_cpu_to_le32(0);
+}
+
+static SparingTable default_stable;
+
+#if 0
 //对DVD-R无用
 static struct sparablePartitionMap default_sparmap =
 {
@@ -462,8 +692,32 @@ static struct sparablePartitionMap default_sparmap =
 	volSeqNum : constant_cpu_to_le16(1),
 	packetLength : constant_cpu_to_le16(32)
 };
+#endif
 
+class SparablePartitionMap
+{
+public:
+	SparablePartitionMap();
+	~SparablePartitionMap(){};
+public:
+	sparablePartitionMap default_sparmap;
+};
 
+SparablePartitionMap::SparablePartitionMap()
+{
+	default_sparmap.partitionMapType = 2;
+	default_sparmap.partitionMapLength = sizeof(struct sparablePartitionMap);
+	default_sparmap.partIdent.flags = 0;
+	memset((void*)default_sparmap.partIdent.ident, 0, sizeof(default_sparmap.partIdent.ident));
+	strcpy((char*)default_sparmap.partIdent.ident, UDF_ID_SPARABLE);
+	memset((void*)default_sparmap.partIdent.identSuffix, 0, sizeof(default_sparmap.partIdent.identSuffix));
+	default_sparmap.volSeqNum = constant_cpu_to_le16(1);
+	default_sparmap.packetLength = constant_cpu_to_le16(32);
+}
+
+static SparablePartitionMap default_sparmap;
+
+#if 0
 static struct virtualAllocationTable15 default_vat15 =
 {
 	vatIdent :
@@ -481,7 +735,36 @@ static struct virtualAllocationTable15 default_vat15 =
 	},
 	previousVATICBLoc : constant_cpu_to_le32(0xFFFFFFFF)
 };
+#endif
 
+class VirtualAllocationTable15
+{
+public:
+	VirtualAllocationTable15();
+	~VirtualAllocationTable15(){};
+public:
+	virtualAllocationTable15 default_vat15;
+};
+
+VirtualAllocationTable15::VirtualAllocationTable15()
+{
+	default_vat15.vatIdent.flags = 0;
+	memset((void*)default_vat15.vatIdent.ident, 0, sizeof(default_vat15.vatIdent.ident));
+	strcpy((char*)default_vat15.vatIdent.ident, UDF_ID_ALLOC);
+	
+	memset((void*)default_vat15.vatIdent.identSuffix, 0, sizeof(default_vat15.vatIdent.identSuffix));
+	default_vat15.vatIdent.identSuffix[0] = 0x50;
+	default_vat15.vatIdent.identSuffix[0] = 0x01;
+	default_vat15.vatIdent.identSuffix[0] = UDF_OS_CLASS_UNIX;
+	default_vat15.vatIdent.identSuffix[0] = UDF_OS_ID_LINUX;
+	default_vat15.vatIdent.identSuffix[0] = UDF_OS_CLASS_WIN9X;
+
+	default_vat15.previousVATICBLoc = constant_cpu_to_le32(0xFFFFFFFF);
+}
+
+static VirtualAllocationTable15 default_vat15;
+
+#if 0
 static struct virtualAllocationTable20 default_vat20 =
 {
 	lengthHeader : constant_cpu_to_le16(136),
@@ -492,7 +775,33 @@ static struct virtualAllocationTable20 default_vat20 =
 	minUDFWriteRev : constant_cpu_to_le16(0x0150),
 	maxUDFWriteRev : constant_cpu_to_le16(0x0150)
 };
+#endif
 
+class VirtualAllocationTable20
+{
+public:
+	VirtualAllocationTable20();
+	~VirtualAllocationTable20(){};
+public:
+	virtualAllocationTable20 default_vat20;
+};
+
+VirtualAllocationTable20::VirtualAllocationTable20()
+{
+	default_vat20.lengthHeader = constant_cpu_to_le16(136);
+	default_vat20.lengthImpUse = constant_cpu_to_le16(0);
+	memset((void*)default_vat20.logicalVolIdent, 0, sizeof(default_vat20.logicalVolIdent));
+	default_vat20.logicalVolIdent[0] = '\x08';
+	strcpy((char*)(default_vat20.logicalVolIdent + 1), "LinuxUDF");
+	default_vat20.previousVATICBLoc = constant_cpu_to_le32(0xFFFFFFFF);
+	default_vat20.minUDFReadRev = constant_cpu_to_le16(0x0150);
+	default_vat20.minUDFWriteRev = constant_cpu_to_le16(0x0150);
+	default_vat20.maxUDFWriteRev = constant_cpu_to_le16(0x0150);
+}
+
+static VirtualAllocationTable20 default_vat20;
+
+#if 0
 static struct virtualPartitionMap default_virtmap =
 {
 	partitionMapType : 2,
@@ -512,7 +821,32 @@ static struct virtualPartitionMap default_virtmap =
 	},
 	volSeqNum : constant_cpu_to_le16(1)
 };
+#endif
 
+class VirtualPartitionMap
+{
+public:
+	VirtualPartitionMap();
+	~VirtualPartitionMap(){};
+public:
+	virtualPartitionMap default_virtmap;
+};
+
+VirtualPartitionMap::VirtualPartitionMap()
+{
+	default_virtmap.partitionMapType = 2;
+	default_virtmap.partitionMapLength = sizeof(struct virtualPartitionMap);
+	default_virtmap.partIdent.flags = 0;
+	memset((void*)default_virtmap.partIdent.ident, 0, sizeof(default_virtmap.partIdent.ident));
+	strcpy((char*)default_virtmap.partIdent.ident, UDF_ID_VIRTUAL);
+	memset((void*)default_virtmap.partIdent.identSuffix, 0, sizeof(default_virtmap.partIdent.identSuffix));
+	default_virtmap.partIdent.identSuffix[0] = UDF_OS_ID_LINUX;	
+	default_virtmap.volSeqNum = constant_cpu_to_le16(1);
+}
+
+static VirtualPartitionMap default_virtmap;
+
+#if 0
 static struct fileSetDesc default_fsd =
 {
 	descTag :
@@ -551,7 +885,67 @@ static struct fileSetDesc default_fsd =
 		},
 	}
 };
+#endif
 
+class  FileSetDesc
+{
+public:
+	FileSetDesc();
+	~FileSetDesc(){};
+
+public:
+	fileSetDesc default_fsd;
+};
+
+FileSetDesc::FileSetDesc()
+{
+	default_fsd.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_FSD);
+	default_fsd.descTag.descVersion = constant_cpu_to_le16(2);
+	default_fsd.descTag.tagSerialNum = 0;
+	default_fsd.descTag.descCRC = constant_cpu_to_le16(sizeof(struct fileSetDesc) - sizeof(tag));
+
+	default_fsd.interchangeLvl = constant_cpu_to_le16(3);
+	default_fsd.maxInterchangeLvl = constant_cpu_to_le16(3);
+	default_fsd.charSetList = constant_cpu_to_le32(CS0);
+	default_fsd.maxCharSetList = constant_cpu_to_le32(CS0);
+
+	default_fsd.logicalVolIdentCharSet.charSetType = UDF_CHAR_SET_TYPE;
+	memset((void*)default_fsd.logicalVolIdentCharSet.charSetInfo, 0, sizeof(default_fsd.logicalVolIdentCharSet.charSetInfo));
+	strcpy((char*)default_fsd.logicalVolIdentCharSet.charSetInfo, UDF_CHAR_SET_INFO);
+
+	memset(default_fsd.logicalVolIdent, 0, sizeof(default_fsd.logicalVolIdent));
+	default_fsd.logicalVolIdent[0] = '\x08';
+	strcpy((char*)(default_fsd.logicalVolIdent + 1), "UDF_1.5");
+
+	default_fsd.fileSetCharSet.charSetType = UDF_CHAR_SET_TYPE;
+	memset((void*)default_fsd.fileSetCharSet.charSetInfo, 0, sizeof(default_fsd.fileSetCharSet.charSetInfo));
+	strcpy((char*)default_fsd.fileSetCharSet.charSetInfo, UDF_CHAR_SET_INFO);
+
+	memset((void*)default_fsd.fileSetIdent, 0, sizeof(default_fsd.fileSetIdent));
+	default_fsd.fileSetIdent[0] = '\x08';
+	strcpy((char*)(default_fsd.fileSetIdent + 1), "UDF_1.5");
+
+	memset((void*)default_fsd.copyrightFileIdent, 0, sizeof(default_fsd.copyrightFileIdent));
+	default_fsd.copyrightFileIdent[0] = '\x08';
+	strcpy((char*)(default_fsd.copyrightFileIdent + 1), "Copyright");
+
+	memset((void*)default_fsd.abstractFileIdent, 0, sizeof(default_fsd.abstractFileIdent));
+	default_fsd.abstractFileIdent[0] = '\x08';
+	strcpy((char*)(default_fsd.abstractFileIdent + 1), "Abstract");
+
+	memset((void*)default_fsd.domainIdent.ident, 0, sizeof(default_fsd.domainIdent.ident));
+	strcpy((char*)(default_fsd.domainIdent.ident), UDF_ID_COMPLIANT);
+
+	memset((void*)default_fsd.domainIdent.identSuffix, 0, sizeof(default_fsd.domainIdent.identSuffix));
+
+	default_fsd.domainIdent.identSuffix[0] = 0x50;
+	default_fsd.domainIdent.identSuffix[0] = 0x01;
+	default_fsd.domainIdent.identSuffix[0] = 0x00;
+}
+
+static FileSetDesc default_fsd;
+
+#if 0
 static struct fileEntry default_fe =
 {
 	descTag :
@@ -584,7 +978,35 @@ static struct fileEntry default_fe =
 		},
 	},
 };
+#endif
 
+FileEntry::FileEntry()
+{
+	default_fe.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_FE);
+	default_fe.descTag.descVersion = constant_cpu_to_le16(2);
+	default_fe.descTag.tagSerialNum = 0;
+	default_fe.descTag.descCRC = constant_cpu_to_le16(sizeof(struct fileEntry) - sizeof(tag));
+	
+	default_fe.icbTag.strategyType = constant_cpu_to_le16(4);
+	default_fe.icbTag.strategyParameter = constant_cpu_to_le16(0);
+	default_fe.icbTag.numEntries = constant_cpu_to_le16(1);
+	default_fe.icbTag.fileType = ICBTAG_FILE_TYPE_REGULAR;
+	default_fe.icbTag.flags = constant_cpu_to_le16(ICBTAG_FLAG_AD_LONG);
+
+	default_fe.permissions = constant_cpu_to_le32(FE_PERM_O_EXEC | FE_PERM_O_READ | FE_PERM_G_EXEC | FE_PERM_G_READ | FE_PERM_U_EXEC | FE_PERM_U_READ);
+	default_fe.fileLinkCount = constant_cpu_to_le16(0);
+	default_fe.informationLength = constant_cpu_to_le64(0);
+	default_fe.logicalBlocksRecorded = constant_cpu_to_le64(0);
+	
+	memset((void*)default_fe.impIdent.ident, 0, sizeof(default_fe.impIdent.ident));
+	strcpy((char*)default_fe.impIdent.ident, UDF_ID_DEVELOPER);
+	
+	memset((void*)default_fe.impIdent.identSuffix, 0, sizeof(default_fe.impIdent.identSuffix));
+}
+
+static FileEntry default_fe;
+
+#if 0
 static struct extendedFileEntry default_efe =
 {
 	descTag :
@@ -618,7 +1040,46 @@ static struct extendedFileEntry default_efe =
 		},
 	},
 };
+#endif
 
+class ExtendedFileEntry
+{
+public:
+	ExtendedFileEntry();
+	~ExtendedFileEntry(){};
+public:
+	extendedFileEntry default_efe;
+};
+
+ExtendedFileEntry::ExtendedFileEntry()
+{
+	default_efe.descTag.tagIdent = constant_cpu_to_le16(TAG_IDENT_EFE);
+	default_efe.descTag.descVersion = constant_cpu_to_le16(2);
+	default_efe.descTag.tagSerialNum = 0;
+	default_efe.descTag.descCRC = constant_cpu_to_le16(sizeof(struct extendedFileEntry) - sizeof(tag));
+
+	default_efe.icbTag.strategyType = constant_cpu_to_le16(4);
+	default_efe.icbTag.strategyParameter = constant_cpu_to_le16(0);
+	default_efe.icbTag.numEntries = constant_cpu_to_le16(1);
+	default_efe.icbTag.fileType = 0;
+	default_efe.icbTag.flags = constant_cpu_to_le16(ICBTAG_FLAG_AD_IN_ICB);
+
+	default_efe.permissions = constant_cpu_to_le32(FE_PERM_U_DELETE | FE_PERM_U_CHATTR | FE_PERM_U_READ | FE_PERM_U_WRITE | FE_PERM_U_EXEC | FE_PERM_G_READ | FE_PERM_G_EXEC | FE_PERM_O_READ | FE_PERM_O_EXEC);
+	default_efe.fileLinkCount = constant_cpu_to_le16(0);
+	default_efe.informationLength = constant_cpu_to_le64(0);
+	default_efe.objectSize = constant_cpu_to_le64(0);
+	default_efe.logicalBlocksRecorded = constant_cpu_to_le64(0);
+
+	memset((void*)default_efe.impIdent.ident, 0, sizeof(default_efe.impIdent.ident));
+	strcpy((char*)default_efe.impIdent.ident, UDF_ID_DEVELOPER);
+
+	memset((void*)default_efe.impIdent.identSuffix, 0, sizeof(default_efe.impIdent.identSuffix));
+	default_efe.impIdent.identSuffix[0] = UDF_OS_ID_LINUX;
+}
+
+static ExtendedFileEntry default_efe;
+
+#if 0
 LVUDF_DEFAULTSINFO_T LvUDF_Defaults = {
 	.default_pvd     = &default_pvd,
 	.default_lvd     = &default_lvd,
@@ -639,4 +1100,62 @@ LVUDF_DEFAULTSINFO_T LvUDF_Defaults = {
 	.default_fe      = &default_fe,
 	.default_efe     = &default_efe,
 };
-//}
+#endif
+
+LVUDF_DEFAULTSINFO::LVUDF_DEFAULTSINFO()
+{
+	default_pvd = NULL;
+	default_lvd = NULL;
+	default_vdp = NULL;
+	default_iuvdiu = NULL;
+	default_iuvd = NULL;
+	default_pd = NULL;
+	default_usd = NULL;
+	default_td = NULL;
+	default_lvid = NULL;
+	default_lvidiu = NULL;
+	default_stable = NULL;
+	default_sparmap = NULL;
+	default_vat15 = NULL;
+	default_vat20 = NULL;
+	default_virtmap = NULL;
+	default_fsd = NULL;
+	default_fe = NULL;
+	default_efe = NULL;
+}
+
+LVUDF_DEFAULTSINFO::LVUDF_DEFAULTSINFO(PrimaryVolDesc* pPVD,
+	LogicalVolDesc* pLVD, VolDescPtr* pVDP,
+	ImpUseVolDescImpUse* pIUVDIU, ImpUseVolDesc* pIUVD,
+	PartitionDesc* pPD, UnallocSpaceDesc* pUSD,
+	TerminatingDesc* pTD, LogicalVolIntegrityDesc* pLVID,
+	LogicalVolIntegrityDescImpUse* pLVIDIU, SparingTable* pST,
+	SparablePartitionMap* pSPM, VirtualAllocationTable15* pVAT15,
+	VirtualAllocationTable20* pVAT20, VirtualPartitionMap* pVPM,
+	FileSetDesc* pFSD, FileEntry* pFE, ExtendedFileEntry* pEFE)
+{
+	default_pvd = pPVD;
+	default_lvd = pLVD;
+	default_vdp = pVDP;
+	default_iuvdiu = pIUVDIU;
+	default_iuvd = pIUVD;
+	default_pd = pPD;
+	default_usd = pUSD;
+	default_td = pTD;
+	default_lvid = pLVID;
+	default_lvidiu = pLVIDIU;
+	default_stable = pST;
+	default_sparmap = pSPM;
+	default_vat15 = pVAT15;
+	default_vat20 = pVAT20;
+	default_virtmap = pVPM;
+	default_fsd = pFSD;
+	default_fe = pFE;
+	default_efe = pEFE;
+}
+
+LVUDF_DEFAULTSINFO LvUDF_Defaults(&default_pvd, &default_lvd, &default_vdp,
+	&default_iuvdiu, &default_iuvd, &default_pd, &default_usd, &default_td,
+	&default_lvid, &default_lvidiu, &default_stable, &default_sparmap, &default_vat15,
+	&default_vat20, &default_virtmap, &default_fsd, &default_fe, &default_efe
+	);

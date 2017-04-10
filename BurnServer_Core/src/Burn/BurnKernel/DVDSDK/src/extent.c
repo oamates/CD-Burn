@@ -119,7 +119,7 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 		else if (blocks < start_ext->blocks)
 		{
 			MEMMOCLINE;
-			new_ext = MEMMALLOC(hMem, sizeof(struct udf_extent));
+			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
 			new_ext->space_type = type;
 			new_ext->start = start;
@@ -155,7 +155,7 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 		if (start + blocks == start_ext->start + start_ext->blocks)
 		{
 			MEMMOCLINE;
-			new_ext = MEMMALLOC(hMem, sizeof(struct udf_extent));
+			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
 			new_ext->space_type = type;
 			new_ext->start = start;
@@ -176,7 +176,7 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 		else if (start + blocks < start_ext->start + start_ext->blocks)
 		{
 			MEMMOCLINE;
-			new_ext = MEMMALLOC(hMem, sizeof(struct udf_extent));
+			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
 			new_ext->space_type = type;
 			new_ext->start = start;
@@ -185,7 +185,7 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 			new_ext->prev = start_ext;
 			
 			MEMMOCLINE;
-			new_ext->next = MEMMALLOC(hMem, sizeof(struct udf_extent));
+			new_ext->next = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext->next, 0, sizeof(struct udf_extent));
 			new_ext->next->prev = new_ext;
 			new_ext->next->space_type = start_ext->space_type;
@@ -206,7 +206,7 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 		else /* start + blocks > start_ext->start + start_ext->blocks */
 		{
 			MEMMOCLINE;
-			new_ext = MEMMALLOC(hMem, sizeof(struct udf_extent));
+			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
 			new_ext->space_type = type;
 			new_ext->start = start;
@@ -265,7 +265,7 @@ struct udf_desc *DVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct ud
 	struct udf_desc *start_desc, *new_desc;
 
 	MEMMOCLINE;
-	new_desc = MEMMALLOC(hMem, sizeof(struct udf_desc));
+	new_desc = (udf_desc*)MEMMALLOC(hMem, sizeof(struct udf_desc));
 	memset(new_desc, 0, sizeof(struct udf_desc));
 	new_desc->ident = ident;
 	new_desc->offset = offset;
@@ -339,7 +339,7 @@ struct udf_data *DVDRecUdf_alloc_data(void *hMem, int length)
 	struct udf_data *data;
 
 	MEMMOCLINE;
-	data = MEMMALLOC(hMem, sizeof(struct udf_data));
+	data = (udf_data *)MEMMALLOC(hMem, sizeof(struct udf_data));
 	memset(data, 0, sizeof(struct udf_data));
 
 	if (length)
