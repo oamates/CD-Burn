@@ -412,7 +412,7 @@ typedef struct{
 	uint8_t		*pbuffer;		// 临时Buffer，用于轨道写入临时缓存(根据不同光驱有所不同: 32K, 64K)
 	int			 buffsize;		// Buffer已有大小
 	uint32_t     filldata;      //在刻录数据前做的填充(填充0数据)
-}CDR_TRACK_T;
+}stCDRTrack;
 
 struct CDR_CMD_T{
 	BOOL (*cdr_lockdoor)(int fd);		// 锁定托盘
@@ -428,13 +428,13 @@ struct CDR_CMD_T{
 	int  (*cdr_devcapablity)(int fd, int *capablity);									// 获得光驱能力
 	int  (*cdr_loadmedia)(int fd);														// 加载媒体
 	int  (*cdr_readtrack)(int fd, int start, uint8_t *pbuffer, int size);				// 读轨道数据
-	int  (*cdr_writetrack)(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int size);	// 写轨道数据, size可以为任意大小
-	int  (*cdr_flushtrack)(int fd, CDR_TRACK_T *ptrack);								// 刷新全部数据到轨道
+	int  (*cdr_writetrack)(int fd, stCDRTrack *ptrack, uint8_t *pbuffer, int size);	// 写轨道数据, size可以为任意大小
+	int  (*cdr_flushtrack)(int fd, stCDRTrack *ptrack);								// 刷新全部数据到轨道
 	int  (*cdr_pausewrite)(int fd);														// 暂停数据写入
 	int  (*cdr_resumewrite)(int fd);													// 恢复数据写入
-	int  (*cdr_gettrackinfo)(int fd, int trackid, CDR_TRACK_T *ptrack);					// 获得轨道信息
-	int  (*cdr_closetrack)(int fd, CDR_TRACK_T *ptrack);								// 关闭轨道
-	int  (*cdr_closesession)(int fd, CDR_TRACK_T *ptrack);								// 关闭session
+	int  (*cdr_gettrackinfo)(int fd, int trackid, stCDRTrack *ptrack);					// 获得轨道信息
+	int  (*cdr_closetrack)(int fd, stCDRTrack *ptrack);								// 关闭轨道
+	int  (*cdr_closesession)(int fd, stCDRTrack *ptrack);								// 关闭session
 	int  (*cdr_dpdevprofile)(int fd);													// 打印光驱profile
 	int  (*cdr_getdevinfo)(int fd, DVD_DEV_INFO_T * pDevInfo);	                    // 获取光驱厂商
 	int  (*cdr_getmaxspeed)(int fd,int *MaxReadSpeed,int *MaxWriteSpeed);               // 获取光盘最大速度 

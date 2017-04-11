@@ -40,68 +40,6 @@ struct udf_sizing default_sizing[][UDF_ALLOC_TYPE_SIZE] =
 	}
 };
 */
-#if 0
-static struct primaryVolDesc default_pvd =
-{
-	descTag :
-	{
-		tagIdent : constant_cpu_to_le16(TAG_IDENT_PVD),
-		descVersion : constant_cpu_to_le16(2),
-		tagSerialNum : 0,
-		descCRC : constant_cpu_to_le16(sizeof(struct primaryVolDesc) - sizeof(tag)),
-	},
-	volDescSeqNum : constant_cpu_to_le32(0),
-	primaryVolDescNum : constant_cpu_to_le32(0),
-	volIdent : "\x08" "LinuxUDF",
-	volSeqNum : constant_cpu_to_le16(1),
-	maxVolSeqNum : constant_cpu_to_le16(1),
-	interchangeLvl : constant_cpu_to_le16(2),
-	maxInterchangeLvl : constant_cpu_to_le16(2),
-	charSetList : constant_cpu_to_le32(CS0),
-	maxCharSetList : constant_cpu_to_le32(CS0),
-	volSetIdent : "\x08" "FFFFFFFFLinuxUDF",
-	descCharSet :
-	{
-		charSetType : UDF_CHAR_SET_TYPE,
-		charSetInfo : UDF_CHAR_SET_INFO,
-	},
-	explanatoryCharSet :
-	{
-		charSetType : UDF_CHAR_SET_TYPE,
-		charSetInfo : UDF_CHAR_SET_INFO,
-	},
-	appIdent :
-	{
-		ident : UDF_ID_APPLICATION,
-		identSuffix :
-		{
-			//UDF_OS_CLASS_UNIX,
-			//UDF_OS_ID_LINUX,
-			//UDF_OS_CLASS_WIN9X
-		},
-	},
-	impIdent :
-	{
-		ident : UDF_ID_DEVELOPER,
-		identSuffix :
-		{
-			//UDF_OS_CLASS_UNIX,
-			//UDF_OS_ID_LINUX,
-			//UDF_OS_CLASS_WIN9X
-		},
-	},
-	flags : constant_cpu_to_le16(0),//PVD_FLAGS_VSID_COMMON),
-};
-#endif
-
-// class PrimaryVolDesc
-// {
-// public:
-// 	PrimaryVolDesc();
-// 	~PrimaryVolDesc();
-// public:
-// 	struct primaryVolDesc default_pvd;
-// };
 
 PrimaryVolDesc::PrimaryVolDesc()
 {

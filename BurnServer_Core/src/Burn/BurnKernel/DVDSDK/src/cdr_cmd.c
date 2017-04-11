@@ -689,7 +689,7 @@ static BOOL cdr_havedisc(int fd)
 
 
 // 获得轨道信息
-static int cdr_gettrackinfo(int fd, int trackid, CDR_TRACK_T *ptrack)
+static int cdr_gettrackinfo(int fd, int trackid, stCDRTrack *ptrack)
 {
 	track_info_t trick;
 	
@@ -718,7 +718,7 @@ static int cdr_gettrackinfo(int fd, int trackid, CDR_TRACK_T *ptrack)
 static int cdr_formatdisc(int fd, int ReserveBlocks)
 {
 	disc_info_t stdisc_info;
-	CDR_TRACK_T stTrack;
+	stCDRTrack stTrack;
 	int firstTrack, lastTrack,TrickCount;
 	
 	// 判断是否有光盘
@@ -1063,7 +1063,7 @@ static int cdr_readtrack(int fd, int start, uint8_t *pbuffer, int size)
 
 
 // 写轨道数据, size可以为任意大小
-static int cdr_writetrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int size)
+static int cdr_writetrack(int fd, stCDRTrack *ptrack, uint8_t *pbuffer, int size)
 {
 	int copysize;
 	uint8_t * pStart = NULL;
@@ -1187,7 +1187,7 @@ static int cdr_writetrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int siz
 }
 
 // 刷新剩余数据到轨道
-static int cdr_flushtrack(int fd, CDR_TRACK_T *ptrack)
+static int cdr_flushtrack(int fd, stCDRTrack *ptrack)
 {
 	if(ptrack->buffsize > 0)
 	{
@@ -1225,7 +1225,7 @@ static int cdr_resumewrite(int fd)
 }
 
 // 关闭轨道
-static int cdr_closetrack(int fd, CDR_TRACK_T *ptrack)
+static int cdr_closetrack(int fd, stCDRTrack *ptrack)
 {
 	int i, iRet;
 	if( ptrack->bclosed )
@@ -1242,7 +1242,7 @@ static int cdr_closetrack(int fd, CDR_TRACK_T *ptrack)
 }
 
 // 关闭session
-static int cdr_closesession(int fd, CDR_TRACK_T *ptrack)
+static int cdr_closesession(int fd, stCDRTrack *ptrack)
 {
 	int i, iRet;
 	if( ptrack->bclosed ) 
@@ -1465,15 +1465,23 @@ static struct CDR_CMD_T cdr_dvd = {
 	.cdr_getdiscusedsize    = cdr_getdiscusedsize,
 	.cdr_getdoorstate       = cdr_getdoorstate,
 };
-#endif
 static struct CDR_CMD_T cdr_dvd = {};
+
 int DVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd)
 {
 	*pCmd = &cdr_dvd;
 	return 0;
 }
+#endif
 
-#ifdef _cplusplus
+static CCDRCmd cdr_dvd;
+
+int DVDRec_GetCdrcmd(char *pCdrName, CCDRCmd *pCmd)
+{
+	pCmd = &cdr_dvd;
+	return 0;
+}
+
 /*************************** class CDRCmd ***************************************/
 // 锁定托盘
 BOOL CCDRCmd::CDR_LockDoor(int fd)
@@ -1574,7 +1582,7 @@ BOOL CCDRCmd::CDR_HaveDisc(int fd)
 }
 
 // 获得轨道信息
-int CCDRCmd::CDR_GetTrackinfo(int fd, int trackid, CDR_TRACK_T *ptrack)
+int CCDRCmd::CDR_GetTrackinfo(int fd, int trackid, stCDRTrack *ptrack)
 {
 	track_info_t trick;
 
@@ -1603,7 +1611,7 @@ int CCDRCmd::CDR_GetTrackinfo(int fd, int trackid, CDR_TRACK_T *ptrack)
 int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
 {
 	disc_info_t stdisc_info;
-	CDR_TRACK_T stTrack;
+	stCDRTrack stTrack;
 	int firstTrack, lastTrack, TrickCount;
 
 	// 判断是否有光盘
@@ -1937,7 +1945,7 @@ int CCDRCmd::CDR_ReadTrack(int fd, int start, uint8_t *pbuffer, int size)
 }
 
 // 写轨道数据, size可以为任意大小
-int CCDRCmd::CDR_WriteTrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int size)
+int CCDRCmd::CDR_WriteTrack(int fd, stCDRTrack *ptrack, uint8_t *pbuffer, int size)
 {
 	int copysize;
 	uint8_t * pStart = NULL;
@@ -2061,7 +2069,7 @@ int CCDRCmd::CDR_WriteTrack(int fd, CDR_TRACK_T *ptrack, uint8_t *pbuffer, int s
 }
 
 // 刷新剩余数据到轨道
-int CCDRCmd::CDR_FlushTrack(int fd, CDR_TRACK_T *ptrack)
+int CCDRCmd::CDR_FlushTrack(int fd, stCDRTrack *ptrack)
 {
 	if (ptrack->buffsize > 0)
 	{
@@ -2099,7 +2107,7 @@ int CCDRCmd::CDR_ResumeWrite(int fd)
 }
 
 // 关闭轨道
-int CCDRCmd::CDR_CloseTrack(int fd, CDR_TRACK_T *ptrack)
+int CCDRCmd::CDR_CloseTrack(int fd, stCDRTrack *ptrack)
 {
 	int i, iRet;
 	if (ptrack->bclosed)
@@ -2116,7 +2124,7 @@ int CCDRCmd::CDR_CloseTrack(int fd, CDR_TRACK_T *ptrack)
 }
 
 // 关闭session
-int CCDRCmd::CDR_CloseSession(int fd, CDR_TRACK_T *ptrack)
+int CCDRCmd::CDR_CloseSession(int fd, stCDRTrack *ptrack)
 {
 	int i, iRet;
 	if (ptrack->bclosed)
@@ -2308,5 +2316,3 @@ int CCDRCmd::CDR_GetDoorState(int fd)
 
 	return Ret;
 }
-
-#endif

@@ -140,11 +140,11 @@ typedef struct{
 	
 	// udf系统盘区 (0   ~ 63扇区)
 	// VRS = 16, PVDS = 32( IUVD = 33, PD = 34, LVD = 35 ,USD = 36 , TD = 37 ), RVDS = 48( IUVD = 49, PD = 50, LVD = 51 ,USD = 52 , TD = 53)
-	CDR_TRACK_T udfsys;             
+	stCDRTrack udfsys;             
 	
 	// udf文件盘区 (288 ~ 351扇区)
 	// (为文件集和文件实体描述符),FSD=288,FE_ROOT=289,FID_ROOT=290,FE_VIDEO_TS=291,FID_VIDEO_TS=292,FE_VIDEO_VMGIFO=293,FE_VIDEO_VTSIFO=294
-	CDR_TRACK_T udffile;            
+	stCDRTrack udffile;            
 
 	struct udf_disc	udf_disc;
 }CDRWDISKINFO;
@@ -161,7 +161,6 @@ typedef struct{
 	char abstractFileIdent[32];
 }DISC_VOLID_T;
 
-#ifdef __cplusplus
 class CUdfCmd
 {
 public:
@@ -205,8 +204,6 @@ public:
 	// UDF文件系统测试
 	int UdfFsTest(udfinfo_t *pUdfInfo);
 };
-#endif
-
 
 // UDF文件系统结构
 struct UDFINFO_T{
@@ -235,17 +232,15 @@ struct UDFINFO_T{
 	FILEDIRTREE *m_FileDirTree;
 	
 	// UDF cmd
-	udfcmd_t *udf_cmd;
+	//udfcmd_t *udf_cmd;
 	
 	// mmc cmd
-	struct CDR_CMD_T *cdr_cmd;
+	//struct CDR_CMD_T *cdr_cmd;
 
-#ifdef __cplusplus
 	//class udfCmd
 	CUdfCmd	udfCmd;
 	//class CCdrcmd
 	CCDRCmd cdrCmd;
-#endif
 };
 
 struct UDF_CMD_T{

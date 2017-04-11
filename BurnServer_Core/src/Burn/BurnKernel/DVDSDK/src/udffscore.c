@@ -377,8 +377,9 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
     struct fileIdentDesc * fid;
     struct terminatingDesc	udf_td;     //TDS，描述符结束包
     CDRWDISKINFO *disc = pUdfInfo->m_CdRwDiskinfo;
-    struct CDR_CMD_T *cdr_cmd = pUdfInfo->cdr_cmd;
-    uint8_t *buffer = pUdfInfo->pPackBuff;
+    //struct CDR_CMD_T *cdr_cmd = pUdfInfo->cdr_cmd;
+	CCDRCmd	cdr_cmd = pUdfInfo->cdrCmd;
+	uint8_t *buffer = pUdfInfo->pPackBuff;
 
 
 #ifdef WRITE_FSD_FILE
@@ -403,7 +404,8 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
         if(disc->udfsys.writenext == 0)
             return 0;
         //填充fsd之前的空区
-        if( !cdr_cmd->cdr_gettrackinfo(pUdfInfo->fd, disc->udfsys.trackid, &disc->udfsys) )
+        //if( !cdr_cmd->cdr_gettrackinfo(pUdfInfo->fd, disc->udfsys.trackid, &disc->udfsys) )
+		if (!cdr_cmd.CDR_GetTrackinfo(pUdfInfo->fd, disc->udfsys.trackid, &disc->udfsys))
         {
 #ifdef WRITE_FSD_FILE
             if (pf != NULL)
@@ -416,7 +418,8 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
                 DP(("fwrite pUdfInfo->fd = %d pf == NULL    Line: %d\n",pUdfInfo->fd, __LINE__));
             }
 #endif
-            cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+            //cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+			cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
         }
     }
 
@@ -499,8 +502,9 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
                 DP(("fwrite pUdfInfo->fd = %d pf == NULL    Line: %d\n",pUdfInfo->fd, __LINE__));
             }
 #endif
-            cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
-            memset(buffer,0x00, PACKET16_SIZE);
+            //cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+			cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+			memset(buffer,0x00, PACKET16_SIZE);
         }
         else if (offset > PACKET_BLOCK_16)
         {
@@ -515,8 +519,9 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
                 DP(("fwrite pUdfInfo->fd = %d pf == NULL    Line: %d\n",pUdfInfo->fd, __LINE__));
             }
 #endif
-            cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
-            memset(buffer,0x00, PACKET16_SIZE);
+            //cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+			cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+			memset(buffer,0x00, PACKET16_SIZE);
             memcpy(buffer,(buffer+PACKET16_SIZE),(offset-PACKET_BLOCK_16)*CDROM_BLOCK);
             offset = offset-PACKET_BLOCK_16;
         }
@@ -533,7 +538,8 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
         DP(("fwrite pUdfInfo->fd = %d pf == NULL    Line: %d\n",pUdfInfo->fd, __LINE__));
     }
 #endif
-    cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+    //cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 
     // 填充空白数据到UDF_DATAFILE_ADDR(1024)位置
     memset(buffer, 0, PACKET16_SIZE);
@@ -550,7 +556,8 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
             DP(("fwrite pUdfInfo->fd = %d pf == NULL    Line: %d\n",pUdfInfo->fd, __LINE__));
         }
 #endif
-        if(cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE))
+        //if(cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE))
+		if (cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE))
         {
             DPERROR(("write track error, fd=%d writenext=%d\n", pUdfInfo->fd, disc->udfsys.writenext));
             //如果写错数据，则不再写
@@ -600,10 +607,12 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
         DP(("fwrite pUdfInfo->fd = %d pf == NULL    Line: %d\n",pUdfInfo->fd, __LINE__));
     }
 #endif
-    cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+    //cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 
     // Flush所有文件系统数据到文件系统轨道
-    cdr_cmd->cdr_flushtrack(pUdfInfo->fd, &disc->udfsys);
+   // cdr_cmd->cdr_flushtrack(pUdfInfo->fd, &disc->udfsys);
+	cdr_cmd.CDR_FlushTrack(pUdfInfo->fd, &disc->udfsys);
 
     DP(("WriteFSDToDisc is start= %d , writed %d blocks, next = %d !\n", FSDADDR, (disc->udfsys.writenext - FSDADDR), disc->udfsys.writenext));
 
@@ -625,7 +634,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
 	CDRWDISKINFO *disc = pUdfInfo->m_CdRwDiskinfo;
 	int i =0, length;
 	uint8_t *buffer = pUdfInfo->pPackBuff;
-	struct CDR_CMD_T *cdr_cmd = pUdfInfo->cdr_cmd;
+	//struct CDR_CMD_T *cdr_cmd = pUdfInfo->cdr_cmd;
+	CCDRCmd cdr_cmd = pUdfInfo->cdrCmd;
 #ifdef WRITE_MK_UDFFS
     FILE * pf;
     if (pUdfInfo->fd == 6)
@@ -656,7 +666,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 	DP(("1...disc->udfsys.buffsize:%d packet! \n",disc->udfsys.buffsize / PACKET16_SIZE ));
 	
 
@@ -677,7 +688,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 	DP(("2...disc->udfsys.buffsize:%d packet! \n",disc->udfsys.buffsize / PACKET16_SIZE ));
 
 
@@ -705,8 +717,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
-	
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 
 	//写入RVDS卷识别描述符
 	memset(buffer, 0, PACKET16_SIZE);
@@ -731,7 +743,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 	//写入LVID卷标描述符
 	memset(buffer, 0, PACKET16_SIZE);
     length =    sizeof(struct logicalVolIntegrityDesc) + 
@@ -752,7 +765,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 
 	//写入空闲区域,16扇区
 	for( i = 0; i < 11; i++)
@@ -771,7 +785,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
         }
 #endif
 
-		cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+		//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+		cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 	}
 
     //写入定位点指针描述符，256 + 16 = 272
@@ -790,7 +805,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 	
 	//写满288块，FSD从288开始写
 	memset(buffer, 0x00, PACKET16_SIZE);
@@ -807,7 +823,8 @@ static int MkUdffsBurnToDisc(udfinfo_t *pUdfInfo)
     }
 #endif
 
-	cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	//cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
+	cdr_cmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udfsys, buffer, PACKET16_SIZE);
 	DP((" MkUdffsBurnToDisc is ok!\n"));
 #ifdef WRITE_MK_UDFFS
     if (pf != NULL)
@@ -1035,8 +1052,9 @@ int CUdfCmd::InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
 	int iRet;
 	int TrickCount, SessionCount, DiskStatus;
 	uint64_t Capicity;
-	struct CDR_CMD_T *cdr_cmd = pUdfInfo->cdr_cmd;
-	
+	//struct CDR_CMD_T *cdr_cmd = pUdfInfo->cdr_cmd;
+	CCDRCmd cdr_cmd = pUdfInfo->cdrCmd;
+
 	/*memset(logicalVolIdent, 0, 128);
 	memset(volIdent, 0, 32);
 	memset(volSetIdent, 0, 128);
@@ -1048,7 +1066,8 @@ int CUdfCmd::InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
 	*/
 
 	
-	if( (iRet = cdr_cmd->cdr_getdiscinfo(pUdfInfo->fd, 
+	//if( (iRet = cdr_cmd->cdr_getdiscinfo(pUdfInfo->fd, 
+	if ((iRet = cdr_cmd.CDR_GetDiscInfo(pUdfInfo->fd,
 							&TrickCount, &SessionCount, &Capicity, &DiskStatus)) )
 	{
 		DPERROR(("cdr_getdiscinfo error\n"));
@@ -1057,8 +1076,11 @@ int CUdfCmd::InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
 
 	pUdfInfo->m_CdRwDiskinfo->nDiskCapicity = Capicity;
 
-	cdr_cmd->cdr_gettrackinfo(pUdfInfo->fd, 1, &pUdfInfo->m_CdRwDiskinfo->udfsys);
-	cdr_cmd->cdr_gettrackinfo(pUdfInfo->fd, 2, &pUdfInfo->m_CdRwDiskinfo->udffile);
+	//cdr_cmd->cdr_gettrackinfo(pUdfInfo->fd, 1, &pUdfInfo->m_CdRwDiskinfo->udfsys);
+	//cdr_cmd->cdr_gettrackinfo(pUdfInfo->fd, 2, &pUdfInfo->m_CdRwDiskinfo->udffile);
+
+	cdr_cmd.CDR_GetTrackinfo(pUdfInfo->fd, 1, &pUdfInfo->m_CdRwDiskinfo->udfsys);
+	cdr_cmd.CDR_GetTrackinfo(pUdfInfo->fd, 2, &pUdfInfo->m_CdRwDiskinfo->udffile);
 
 	DP(("pUdfInfo->m_CdRwDiskinfo->nDiskCapicity=%lld\n", pUdfInfo->m_CdRwDiskinfo->nDiskCapicity));
 	
@@ -1081,7 +1103,8 @@ int CUdfCmd::WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Dat
 		return ERROR_DVD_WRITEERROR;
 	}
 
-	if( ( iRet = pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, Data, length)) )
+	//if( ( iRet = pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, Data, length)) )
+	if ((iRet = pUdfInfo->cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, Data, length)))
 	{
 		DPERROR(("WriteStream error : %d,fd=%d\n", iRet,pUdfInfo->fd));
 		return iRet;
@@ -1097,7 +1120,8 @@ int CUdfCmd::WriteEmptyStream(udfinfo_t *pUdfInfo, uint8_t *Data, int length)
 {
 	int iRet;
 
-	if( ( iRet = pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, Data, length)) )
+	//if( ( iRet = pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, Data, length)) )
+	if ((iRet = pUdfInfo->cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, Data, length)))
 	{
 		DPERROR(("WriteEmptyStream error : %d\n", iRet));
 		return iRet;
@@ -1141,7 +1165,8 @@ int CUdfCmd::WriteFileTrackEmdpy(udfinfo_t *pUdfInfo, uint32_t emptydize)
 	memset(pUdfInfo->pPackBuff, 0, PACKET32_SIZE);
 	for(i=0; i< nums; i++)
 	{
-		if( ( iRet = pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, pUdfInfo->pPackBuff, PACKET32_SIZE)) )
+		//if( ( iRet = pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, pUdfInfo->pPackBuff, PACKET32_SIZE)) )
+		if ((iRet = pUdfInfo->cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &pUdfInfo->m_CdRwDiskinfo->udffile, pUdfInfo->pPackBuff, PACKET32_SIZE)))
 		{
 			DPERROR(("WriteStream error : %d\n", iRet));
 			break;
@@ -1243,10 +1268,10 @@ static udfcmd_t udfcmd = {
 	.WriteFileTrackEmdpy = WriteFileTrackEmdpy,
 	.udffstest      = udffstest,
 };
-#endif
-#if 1
 static udfcmd_t udfcmd = {};
 #endif
+
+static CUdfCmd udfcmd;
 
 // 创建UDF
 udfinfo_t * DVDRec_UdfCreate(int fd, uint16_t DataMode)
@@ -1259,8 +1284,8 @@ udfinfo_t * DVDRec_UdfCreate(int fd, uint16_t DataMode)
 		return NULL;
 	}
 	memset(udfinfo, 0, sizeof(udfinfo_t));
-	udfinfo->udf_cmd = &udfcmd;
-	
+	//udfinfo->udf_cmd = &udfcmd;
+	udfinfo->udfCmd = udfcmd;
 #if defined(USE_MEMADMIN)
 	udfinfo->m_pMemBuffer = malloc(MEM_BUFFER_SIZE);
 	if(!udfinfo->m_pMemBuffer)

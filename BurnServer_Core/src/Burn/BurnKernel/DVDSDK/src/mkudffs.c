@@ -736,7 +736,8 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 	num = i = 0;
 	Num_Fid = ChildNum = 0;
 
-	DirCount = pUdfInfo->udf_cmd->getdircount(pUdfInfo->m_FileDirTree);
+	//DirCount = pUdfInfo->udf_cmd->getdircount(pUdfInfo->m_FileDirTree);
+	DirCount = pUdfInfo->udfCmd.GetDirCount(pUdfInfo->m_FileDirTree);
 	//查找目录或文件并创建FE
 	do{
 		if(Dir->NodeType == NODETYPE_DIR)
@@ -1271,8 +1272,9 @@ int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *ps
 	FileDirTree = pUdfInfo->m_FileDirTree;
 
 	DP(("setup_root 1\n"));
-	DirCount = pUdfInfo->udf_cmd->getdircount(pUdfInfo->m_FileDirTree);
-	
+	//DirCount = pUdfInfo->udf_cmd->getdircount(pUdfInfo->m_FileDirTree);
+	DirCount = pUdfInfo->udfCmd.GetDirCount(pUdfInfo->m_FileDirTree);
+
 	if(pUdfInfo->m_DataMode == UDFDATAMODE_VIDEO)
 		offset = 2;
 	else

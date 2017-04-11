@@ -16,7 +16,7 @@
 
 #define HUDF_HANLE()  	pDVD->pUdf
 #define HDEV_FD()		pDVD->fd
-#define HCDR_CMD()		pDVD->pCmd
+#define HCDR_CMD()		pDVD->cmd//pDVD->pCmd
 
 #define HANDLE_DEF		HDVD_DEV_T *pDVD = (HDVD_DEV_T*)hDVD;
 
@@ -30,7 +30,8 @@ typedef struct{
 	BOOL bRecording;			// 刻录标志
 	DVD_DEV_INFO_T stDevInfo;	// 设备信息
 	udfinfo_t  *pUdf;			// UDF 文件系统
-	struct CDR_CMD_T *pCmd;  	// 光驱命令
+	//struct CDR_CMD_T *pCmd;  	// 光驱命令
+	CCDRCmd cmd;
 }HDVD_DEV_T;
 
 /*
@@ -42,7 +43,7 @@ DVDSDKInterface::~DVDSDKInterface()
 {
 }
 */
-#ifdef __cplusplus
+
 /*******************************************************************************
 * 名称  : DVDSDK_Load
 * 描述  : 加载光驱,
@@ -68,16 +69,19 @@ DVDDRV_HANDLE DVDSDKInterface::DVDSDK_Load(const char *szDevName)
 	memset(pDVD, 0, sizeof(HDVD_DEV_T));
 	pDVD->maskid = MASK_ID;
 	pDVD->fd = fd;
-	DVDRec_GetCdrcmd(NULL, &pDVD->pCmd);
+	//DVDRec_GetCdrcmd(NULL, &pDVD->pCmd);
+	DVDRec_GetCdrcmd(NULL, &pDVD->cmd);
 	pDVD->pUdf = DVDRec_UdfCreate(pDVD->fd, UDFDATAMODE_DATA);
 	if(!pDVD->pUdf)
 	{
 		DPERROR(("crate udf error\n"));
 		goto err_exit;
 	}
-	pDVD->pUdf->cdr_cmd = pDVD->pCmd;
-	pDVD->pCmd->cdr_unlockdoor(pDVD->fd);
-
+	//pDVD->pUdf->cdr_cmd = pDVD->pCmd;
+	//pDVD->pCmd->cdr_unlockdoor(pDVD->fd);
+	
+	pDVD->pUdf->cdrCmd = pDVD->cmd;
+	pDVD->cmd.CDR_UnlockDoor(pDVD->fd);
 	return pDVD;
 
 err_exit:
@@ -151,11 +155,13 @@ int	DVDSDKInterface::DVDSDK_Tray(DVDDRV_HANDLE hDVD, int bOpen)
 	if(bOpen)
 	{
 		DVD_INRECORD();
-		bRet = HCDR_CMD()->cdr_opentray(HDEV_FD());
+		//bRet = HCDR_CMD()->cdr_opentray(HDEV_FD());
+		bRet = HCDR_CMD().CDR_OpenTray(HDEV_FD());
 	}
 	else
 	{
-		bRet = HCDR_CMD()->cdr_closetray(HDEV_FD());
+		//bRet = HCDR_CMD()->cdr_closetray(HDEV_FD());
+		bRet = HCDR_CMD().CDR_CloseTray(HDEV_FD());
 	}
 	return bRet ? 0 : ERROR_DVD_OPTERFAILED;
 }
@@ -176,7 +182,8 @@ int	DVDSDKInterface::DVDSDK_GetTrayState(DVDDRV_HANDLE hDVD)
 	HANDLE_DEF;
 	VALID_HANDLE();
 
-	iRet = HCDR_CMD()->cdr_getdoorstate(HDEV_FD());
+	//iRet = HCDR_CMD()->cdr_getdoorstate(HDEV_FD());
+	iRet = HCDR_CMD().CDR_GetDoorState(HDEV_FD());
 	return iRet;
 }
 
@@ -199,9 +206,11 @@ int DVDSDKInterface::DVDSDK_LockDoor(DVDDRV_HANDLE hDVD, int bLocked)
 	DVD_ISBUSY();
 
 	if(bLocked)
-		bRet = HCDR_CMD()->cdr_lockdoor(HDEV_FD());
+		//bRet = HCDR_CMD()->cdr_lockdoor(HDEV_FD());
+		bRet = HCDR_CMD().CDR_LockDoor(HDEV_FD());
 	else
-		bRet = HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		//bRet = HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		bRet = HCDR_CMD().CDR_UnlockDoor(HDEV_FD());
 	return bRet ? 0 : ERROR_DVD_OPTERFAILED;
 }
 
@@ -221,7 +230,8 @@ int DVDSDKInterface::DVDSDK_GetDevInfo(DVDDRV_HANDLE hDVD, DVD_DEV_INFO_T *pDevI
 	VALID_HANDLE();
 
 	memset(&pDVD->stDevInfo, 0, sizeof(DVD_DEV_INFO_T));
-	HCDR_CMD()->cdr_getdevinfo(HDEV_FD(), &pDVD->stDevInfo);
+	//HCDR_CMD()->cdr_getdevinfo(HDEV_FD(), &pDVD->stDevInfo);
+	HCDR_CMD().CDR_GetdevInfo(HDEV_FD(), &pDVD->stDevInfo);
 	memcpy(pDevInfo, &pDVD->stDevInfo, sizeof(DVD_DEV_INFO_T));
 	return 0;
 }
@@ -253,13 +263,14 @@ int DVDSDKInterface::DVDSDK_GetDiscInfo(DVDDRV_HANDLE hDVD, DVD_DISC_INFO_T *pDi
 	Speed 			= 0;
 
 	//获得光盘总容量 单位M
-	HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(),&TrickCount,&SessionCount,&Capicity,&DiskStatus);
+	//HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(),&TrickCount,&SessionCount,&Capicity,&DiskStatus);
+	HCDR_CMD().CDR_GetDiscInfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus);
 	DP(("Capicity=%lld\n",Capicity));        //光驱区数(2048)
 	pDiscInfo->discsize = (Capicity/512);    //除以512及为M单位容量
 
 	//获取光盘使用容量 单位M
-	HCDR_CMD()->cdr_getdiscusedsize(HDEV_FD(),(int*)&pDiscInfo->usedsize);
-
+	//HCDR_CMD()->cdr_getdiscusedsize(HDEV_FD(),(int*)&pDiscInfo->usedsize);
+	HCDR_CMD().CDR_GetDiscUsedSize(HDEV_FD(), (int*)&pDiscInfo->usedsize);
 	//剩余容量
 	pDiscInfo->freesize = pDiscInfo->discsize - pDiscInfo->usedsize;
     if ( pDiscInfo->freesize < 0 )
@@ -268,10 +279,12 @@ int DVDSDKInterface::DVDSDK_GetDiscInfo(DVDDRV_HANDLE hDVD, DVD_DISC_INFO_T *pDi
     }
 
 	//光盘类型
-	HCDR_CMD()->cdr_discexacttype(HDEV_FD(), &pDiscInfo->ntype);
+	//HCDR_CMD()->cdr_discexacttype(HDEV_FD(), &pDiscInfo->ntype);
+	HCDR_CMD().CDR_DiscExactType(HDEV_FD(), &pDiscInfo->ntype);
 
 	//最大速度
-	HCDR_CMD()->cdr_getmaxspeed(HDEV_FD(), &Speed, &pDiscInfo->maxpeed);
+	//HCDR_CMD()->cdr_getmaxspeed(HDEV_FD(), &Speed, &pDiscInfo->maxpeed);
+	HCDR_CMD().CDR_GetMaxSpeed(HDEV_FD(), &Speed, &pDiscInfo->maxpeed);
 
 	//打印数据
 	DP(("ntype=%d,maxpeed=%d,discsize=%d,usedsize=%d,freesize=%d\n",pDiscInfo->ntype,
@@ -292,7 +305,8 @@ int DVDSDKInterface::DVDSDK_HaveDisc(DVDDRV_HANDLE hDVD)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
-	return HCDR_CMD()->cdr_havedisc(HDEV_FD());
+	//return HCDR_CMD()->cdr_havedisc(HDEV_FD());
+	return HCDR_CMD().CDR_HaveDisc(HDEV_FD());
 }
 
 /*******************************************************************************
@@ -312,7 +326,8 @@ int DVDSDKInterface::DVDSDK_GetMediaExactType(DVDDRV_HANDLE hDVD)
 	VALID_HANDLE();
 
 	iExactT = 0;
-	HCDR_CMD()->cdr_discexacttype(HDEV_FD(), &iExactT);
+	//HCDR_CMD()->cdr_discexacttype(HDEV_FD(), &iExactT);
+	HCDR_CMD().CDR_DiscExactType(HDEV_FD(), &iExactT);
 
 	return iExactT;
 }
@@ -334,7 +349,8 @@ int DVDSDKInterface::DVDSDK_GetMediaBasicType(DVDDRV_HANDLE hDVD)
 	VALID_HANDLE();
 
 	iBasicT = -1;
-	Ret = HCDR_CMD()->cdr_discbasictype(HDEV_FD(),&iBasicT);
+	//Ret = HCDR_CMD()->cdr_discbasictype(HDEV_FD(),&iBasicT);
+	Ret = HCDR_CMD().CDR_DiscBasicType(HDEV_FD(), &iBasicT);
 	if(( Ret > CD_DISC )||( Ret < B_DVD_DISC ))
 		return Ret;
 	return iBasicT;
@@ -392,7 +408,8 @@ int DVDSDKInterface::DVDSDK_SetWriteSpeed(DVDDRV_HANDLE hDVD, int speed, int dis
 */
 	MaxWriteSpeed = 12;
 	//设定速度
-	return HCDR_CMD()->cdr_setspeed(HDEV_FD(), MaxReadSpeed, MaxWriteSpeed, disctype);
+	//return HCDR_CMD()->cdr_setspeed(HDEV_FD(), MaxReadSpeed, MaxWriteSpeed, disctype);
+	return HCDR_CMD().CDR_SetSpeed(HDEV_FD(), MaxReadSpeed, MaxWriteSpeed, disctype);
 
 	//return 0;
 }
@@ -435,8 +452,10 @@ int DVDSDKInterface::DVDSDK_SetCopySpeed(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HD
 	DstMaxReadSpeed = DstMaxWriteSpeed = 2;   //默认为2倍速
 
 	//获取支持的最大速度
-	pDVDSrc->pCmd->cdr_getmaxspeed(pDVDSrc->fd, &SrcMaxReadSpeed, &SrcMaxWriteSpeed);
-	pDVDDst->pCmd->cdr_getmaxspeed(pDVDDst->fd, &DstMaxReadSpeed, &DstMaxWriteSpeed);
+	//pDVDSrc->pCmd->cdr_getmaxspeed(pDVDSrc->fd, &SrcMaxReadSpeed, &SrcMaxWriteSpeed);
+	//pDVDDst->pCmd->cdr_getmaxspeed(pDVDDst->fd, &DstMaxReadSpeed, &DstMaxWriteSpeed);
+	pDVDSrc->cmd.CDR_GetMaxSpeed(pDVDSrc->fd, &SrcMaxReadSpeed, &SrcMaxWriteSpeed);
+	pDVDDst->cmd.CDR_GetMaxSpeed(pDVDDst->fd, &DstMaxReadSpeed, &DstMaxWriteSpeed);
 
 	if( srctype == dsttype )
 	{
@@ -484,8 +503,10 @@ int DVDSDKInterface::DVDSDK_SetCopySpeed(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HD
 	DstMaxWriteSpeed = (DstMaxWriteSpeed/DstTypeS);
 
 	//设定速度
-	pDVDSrc->pCmd->cdr_setspeed(pDVDSrc->fd, SrcMaxReadSpeed, SrcMaxWriteSpeed, srctype);
-	pDVDDst->pCmd->cdr_setspeed(pDVDDst->fd, DstMaxReadSpeed, DstMaxWriteSpeed, dsttype);
+	//pDVDSrc->pCmd->cdr_setspeed(pDVDSrc->fd, SrcMaxReadSpeed, SrcMaxWriteSpeed, srctype);
+	//pDVDDst->pCmd->cdr_setspeed(pDVDDst->fd, DstMaxReadSpeed, DstMaxWriteSpeed, dsttype);
+	pDVDSrc->cmd.CDR_SetSpeed(pDVDSrc->fd, SrcMaxReadSpeed, SrcMaxWriteSpeed, srctype);
+	pDVDDst->cmd.CDR_SetSpeed(pDVDDst->fd, DstMaxReadSpeed, DstMaxWriteSpeed, dsttype);
 
 	return 0;
 }
@@ -571,7 +592,8 @@ int DVDSDKInterface::DVDSDK_LoadDisc(DVDDRV_HANDLE hDVD)
 	set_core_dump(1, 256*1024*1024);
 #endif
 
-	iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
+	//iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
+	iRet = HCDR_CMD().CDR_LoadMedia(HDEV_FD());
 
 	return iRet;
 }
@@ -594,11 +616,13 @@ int DVDSDKInterface::DVDSDK_DiscCanWrite(DVDDRV_HANDLE hDVD)
 	HANDLE_DEF;
 	VALID_HANDLE();
 	// 光驱正忙返回
-	iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
+	//iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
+	iRet = HCDR_CMD().CDR_LoadMedia(HDEV_FD());
 	if(iRet)
 		return iRet;
 
-	if( (iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	//if( (iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	if ((iRet = HCDR_CMD().CDR_GetDiscInfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus)))
 	{
 		DPERROR(("get disc info error:%d\n", iRet));
 		return iRet;
@@ -646,14 +670,16 @@ int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 	strcpy(disc_volid.copyrightFileIdent, "avs_DVD_1.0");
 	strcpy(disc_volid.abstractFileIdent,  "avs_DVD_1.0");
 
-	iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
+	//iRet = HCDR_CMD()->cdr_loadmedia(HDEV_FD());
+	iRet = HCDR_CMD().CDR_LoadMedia(HDEV_FD());
 	if(iRet)
 	{
 		// 没有光盘
 		return ERROR_DVD_NODISC;
 	}
 
-	if( (iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	//if( (iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	if ((iRet = HCDR_CMD().CDR_GetDiscInfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus)))
 	{
 		DPERROR(("get disc info error:%d\n", iRet));
 		return iRet;
@@ -679,11 +705,13 @@ int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 	if( TrickCount == 1 )
 	{
 		DP(("start to format disc[%d]\n", pDVD->fd));
-		iRet = HCDR_CMD()->cdr_formatdisc(HDEV_FD(), UDF_FS_LENGTH);
+		//iRet = HCDR_CMD()->cdr_formatdisc(HDEV_FD(), UDF_FS_LENGTH);
+		iRet = HCDR_CMD().CDR_FormatDisc(HDEV_FD(), UDF_FS_LENGTH);
 		if(iRet)
 		{
 			DPERROR(("format disc error:%d\n", iRet));
-			HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+			//HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+			HCDR_CMD().CDR_UnlockDoor(HDEV_FD());
 			return ERROR_DVD_FORMATFAILED;
 		}
 	}
@@ -694,18 +722,21 @@ int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 	if(iRet)
 	{
 		DPERROR(("init udf fs error:%d\n", iRet));
-		HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		//HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		HCDR_CMD().CDR_UnlockDoor(HDEV_FD());
 		return ERROR_DVD_FORMATFAILED;
 	}
 
 	//DP(("trackID1=%d\n", HUDF_HANLE()->m_CdRwDiskinfo->udfsys.trackid));
 	//DP(("trackID2=%d\n", HUDF_HANLE()->m_CdRwDiskinfo->udffile.trackid));
 
-	HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
-			HUDF_HANLE()->m_CdRwDiskinfo->udfsys.trackid,  &(HUDF_HANLE()->m_CdRwDiskinfo->udfsys));
+	//HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
+	HCDR_CMD().CDR_GetTrackinfo(HDEV_FD(),
+		HUDF_HANLE()->m_CdRwDiskinfo->udfsys.trackid,  &(HUDF_HANLE()->m_CdRwDiskinfo->udfsys));
 
-	HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
-			HUDF_HANLE()->m_CdRwDiskinfo->udffile.trackid, &(HUDF_HANLE()->m_CdRwDiskinfo->udffile));
+	//HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
+	HCDR_CMD().CDR_GetTrackinfo(HDEV_FD(), 
+		HUDF_HANLE()->m_CdRwDiskinfo->udffile.trackid, &(HUDF_HANLE()->m_CdRwDiskinfo->udffile));
 
 	pDVD->bRecording = TRUE;
 
@@ -968,7 +999,8 @@ int DVDSDKInterface::DVDSDK_CloseFile(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile)
 	VALID_HANDLE();
 
 	// Flush所有数据到文件轨道
-	HCDR_CMD()->cdr_flushtrack(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
+	//HCDR_CMD()->cdr_flushtrack(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
+	HCDR_CMD().CDR_FlushTrack(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
 
 	return 0;
 }
@@ -1048,7 +1080,8 @@ int DVDSDKInterface::DVDSDK_CloseDisc(DVDDRV_HANDLE hDVD)
 	{
 		DPERROR(("close disc error:%d\n", iRet));
 		DVDRec_UdfTreeFree(HUDF_HANLE());
-		HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		//HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		HCDR_CMD().CDR_UnlockDoor(HDEV_FD());
 		return iRet;
 	}
     else
@@ -1056,13 +1089,15 @@ int DVDSDKInterface::DVDSDK_CloseDisc(DVDDRV_HANDLE hDVD)
         DP(("udf_cmd->CloseDisc success! fd = %d \r\n", HDEV_FD()));
     }
 
-	iRet = HCDR_CMD()->cdr_closetrack(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
+	//iRet = HCDR_CMD()->cdr_closetrack(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
+	iRet = HCDR_CMD().CDR_CloseTrack(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
 	if(iRet)
 	{
 		DPERROR(("close file track error:%d, fd=%d\n", iRet,HDEV_FD()));
 	}
 
-	iRet = HCDR_CMD()->cdr_closesession(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
+	//iRet = HCDR_CMD()->cdr_closesession(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
+	iRet = HCDR_CMD().CDR_CloseSession(HDEV_FD(), &HUDF_HANLE()->m_CdRwDiskinfo->udffile);
 	if(iRet)
 	{
 		DPERROR(("close file session error:%d, fd=%d\n", iRet,HDEV_FD()));
@@ -1070,7 +1105,8 @@ int DVDSDKInterface::DVDSDK_CloseDisc(DVDDRV_HANDLE hDVD)
 
 	// 释放UDF目录树
 	DVDRec_UdfTreeFree(HUDF_HANLE());
-	HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+	//HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+	HCDR_CMD().CDR_UnlockDoor(HDEV_FD());
 
 	return 0;
 }
@@ -1091,7 +1127,7 @@ int DVDSDKInterface::DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDs
 	int i = 0;
     //unsigned char TempUUID[8];
 	uint64_t Capicity;
-	CDR_TRACK_T TrackInfo;
+	stCDRTrack TrackInfo;
 	//char Buffer[32];
 	//char TempStr[3];
 	int TrickCount, SessionCount, DiskStatus;
@@ -1109,7 +1145,7 @@ int DVDSDKInterface::DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDs
 		return ERROR_DVD_BUSY;
 
 	memset(buf,0,PACKET32_SIZE);
-	memset(&TrackInfo,0,sizeof(CDR_TRACK_T));
+	memset(&TrackInfo,0,sizeof(stCDRTrack));
 
 	//判断光盘类型是否相同
 	idisc1 = DVDSDK_GetMediaBasicType(pDVDSrc);
@@ -1132,7 +1168,8 @@ int DVDSDKInterface::DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDs
 	//	return ERROR_DVD_DISCDIFFTYPE;
 
     //判断原盘是否为空盘
-	if( (iRet = pDVDDst->pCmd->cdr_getdiscinfo(pDVDSrc->fd, &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	//if( (iRet = pDVDDst->pCmd->cdr_getdiscinfo(pDVDSrc->fd, &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	if ((iRet = pDVDDst->cmd.CDR_GetDiscInfo(pDVDSrc->fd, &TrickCount, &SessionCount, &Capicity, &DiskStatus)))
 	{
 		DPERROR(("get disc info error:%d\n", iRet));
 		return iRet;
@@ -1146,7 +1183,8 @@ int DVDSDKInterface::DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDs
 	}
 
 	//判断目标盘是否为空盘
-	if( (iRet = pDVDDst->pCmd->cdr_getdiscinfo(pDVDDst->fd, &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	//if( (iRet = pDVDDst->pCmd->cdr_getdiscinfo(pDVDDst->fd, &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	if ((iRet = pDVDDst->cmd.CDR_GetDiscInfo(pDVDDst->fd, &TrickCount, &SessionCount, &Capicity, &DiskStatus)))
 	{
 		DPERROR(("get disc info error:%d\n", iRet));
 		return iRet;
@@ -1188,37 +1226,44 @@ int DVDSDKInterface::DVDSDK_CopyDisc(DVDDRV_HANDLE HDVDSrc, DVDDRV_HANDLE HDVDDs
 
 	//获取第二光盘的轨道信息
 	i = 0;
-	pDVDDst->pCmd->cdr_gettrackinfo(pDVDDst->fd, 1, &TrackInfo);
+	//pDVDDst->pCmd->cdr_gettrackinfo(pDVDDst->fd, 1, &TrackInfo);
+	pDVDDst->cmd.CDR_GetTrackinfo(pDVDDst->fd, 1, &TrackInfo);
 	TrackInfo.pbuffer = (uint8_t*)malloc(PACKET32_SIZE * 4);
 	//TrackInfo.pbuffer = (uint8_t*)malloc(PACKET32_SIZE);
 	TrackInfo.buffsize = 0;
-	while(!pDVDSrc->pCmd->cdr_readtrack(pDVDSrc->fd, i, buf, PACKET32_SIZE))
+	//while(!pDVDSrc->pCmd->cdr_readtrack(pDVDSrc->fd, i, buf, PACKET32_SIZE))
+	while (!pDVDSrc->cmd.CDR_ReadTrack(pDVDSrc->fd, i, buf, PACKET32_SIZE))
 	{
 		if( UDF_UUID_ADDR == i )
 		{
 			memset( buf, 0, PACKET32_SIZE);
 			//memcpy( buf, Buffer, 32);
 		}
-		pDVDDst->pCmd->cdr_writetrack(pDVDDst->fd, &TrackInfo, buf, PACKET32_SIZE);
+		//pDVDDst->pCmd->cdr_writetrack(pDVDDst->fd, &TrackInfo, buf, PACKET32_SIZE);
+		pDVDDst->cmd.CDR_WriteTrack(pDVDDst->fd, &TrackInfo, buf, PACKET32_SIZE);
 		memset(buf, 0, PACKET32_SIZE);
 		i += PACKET_BLOCK_32;
 	}
 	//当读轨道出错时 说明数据读完 会跳出循环 封轨道扇区
 	DP(("data is over!\n"));
-	iRet = pDVDDst->pCmd->cdr_closetrack(pDVDDst->fd, &TrackInfo);
+	//iRet = pDVDDst->pCmd->cdr_closetrack(pDVDDst->fd, &TrackInfo);
+	iRet = pDVDDst->cmd.CDR_CloseTrack(pDVDDst->fd, &TrackInfo);
 	if(iRet)
 	{
 		DPERROR(("close file track error:%d\n", iRet));
 	}
 
-	iRet = pDVDDst->pCmd->cdr_closesession(pDVDDst->fd, &TrackInfo);
+	//iRet = pDVDDst->pCmd->cdr_closesession(pDVDDst->fd, &TrackInfo);
+	iRet = pDVDDst->cmd.CDR_CloseSession(pDVDDst->fd, &TrackInfo);
 	if(iRet)
 	{
 		DPERROR(("close file session error:%d\n", iRet));
 	}
 
-	pDVDSrc->pCmd->cdr_unlockdoor(pDVDSrc->fd);
-	pDVDDst->pCmd->cdr_unlockdoor(pDVDDst->fd);
+	//pDVDSrc->pCmd->cdr_unlockdoor(pDVDSrc->fd);
+	//pDVDDst->pCmd->cdr_unlockdoor(pDVDDst->fd);
+	pDVDSrc->cmd.CDR_UnlockDoor(pDVDSrc->fd);
+	pDVDDst->cmd.CDR_UnlockDoor(pDVDDst->fd);
 
 	free(TrackInfo.pbuffer);
 	return 0;
@@ -1248,14 +1293,15 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	DISC_VOLID_T disc_volid;
 	DVDSDK_DIR  pDir;
 	DVDSDK_FILE pNode;
-	CDR_TRACK_T stTrack;
+	stCDRTrack stTrack;
 
 	HANDLE_DEF;
 	VALID_HANDLE();
 	DVD_INRECORD();
 
 	//先判断目标盘是否为空盘
-	if( (iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	//if( (iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus) ) )
+	if ((iRet = HCDR_CMD().CDR_GetDiscInfo(HDEV_FD(), &TrickCount, &SessionCount, &Capicity, &DiskStatus)))
 	{
 		DPERROR(("get disc info error:%d\n", iRet));
 		return iRet;
@@ -1276,7 +1322,8 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	}
 
 	//判断轨道1是否已被写入数据
-	HUDF_HANLE()->cdr_cmd->cdr_gettrackinfo(HDEV_FD(), 1, &stTrack);
+	//HUDF_HANLE()->cdr_cmd->cdr_gettrackinfo(HDEV_FD(), 1, &stTrack);
+	HUDF_HANLE()->cdrCmd.CDR_GetTrackinfo(HDEV_FD(), 1, &stTrack);
 	DP(("1stTrack.freeblocks=%d\n",stTrack.freeblocks));
 	if( 1024 != stTrack.freeblocks )
 	{
@@ -1285,7 +1332,8 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	}
 
 	//判断轨道2是否封闭
-	HUDF_HANLE()->cdr_cmd->cdr_gettrackinfo(HDEV_FD(), 2, &stTrack);
+	//HUDF_HANLE()->cdr_cmd->cdr_gettrackinfo(HDEV_FD(), 2, &stTrack);
+	HUDF_HANLE()->cdrCmd.CDR_GetTrackinfo(HDEV_FD(), 2, &stTrack);
 	DP(("2stTrack.freeblocks=%d,stTrack.writedsize=%d\n",stTrack.freeblocks,stTrack.writedsize));
 	if(( 0 == stTrack.freeblocks )||( 0 == stTrack.writedsize )||( 0 == stTrack.writenext ))
 	{
@@ -1326,7 +1374,8 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	if(iRet)
 	{
 		DPERROR(("init udf fs error:%d\n", iRet));
-		HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		//HCDR_CMD()->cdr_unlockdoor(HDEV_FD());
+		HCDR_CMD().CDR_UnlockDoor(HDEV_FD());
 		return ERROR_DVD_FORMATFAILED;
 	}
 
@@ -1334,10 +1383,12 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	DP(("trackID2=%d\n", HUDF_HANLE()->m_CdRwDiskinfo->udffile.trackid));
 
 	//获取轨道参数
-	HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
+	//HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
+	HCDR_CMD().CDR_GetTrackinfo(HDEV_FD(),
 			HUDF_HANLE()->m_CdRwDiskinfo->udfsys.trackid, &(HUDF_HANLE()->m_CdRwDiskinfo->udfsys));
 
-	HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
+	//HCDR_CMD()->cdr_gettrackinfo(HDEV_FD(),
+	HCDR_CMD().CDR_GetTrackinfo(HDEV_FD(),
 			HUDF_HANLE()->m_CdRwDiskinfo->udffile.trackid, &(HUDF_HANLE()->m_CdRwDiskinfo->udffile));
 
 	//创建目录和文件
@@ -1384,7 +1435,8 @@ int DVDSDKInterface::DVDSDK_GetReserveData(DVDDRV_HANDLE hDVD, unsigned char **p
 	VALID_HANDLE();
 	DVD_INRECORD();
 
-	HCDR_CMD()->cdr_readtrack(HDEV_FD(),UDF_UUID_ADDR,
+	//HCDR_CMD()->cdr_readtrack(HDEV_FD(),UDF_UUID_ADDR,
+	HCDR_CMD().CDR_ReadTrack(HDEV_FD(), UDF_UUID_ADDR,
 		     (uint8_t*)(HUDF_HANLE()->m_CdRwDiskinfo->ExtenData),PACKET16_SIZE);
 
 	*pBuffer = (unsigned char*)HUDF_HANLE()->m_CdRwDiskinfo->ExtenData;
@@ -1440,7 +1492,8 @@ int DVDSDKInterface::DVDSDK_GetTotalWriteSize(DVDDRV_HANDLE hDVD, unsigned long 
 	{
 		int TrickCount, SessionCount, DiskStatus;
 		uint64_t uTotalSize;
-		iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &uTotalSize, &DiskStatus);
+		//iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &uTotalSize, &DiskStatus);
+		iRet = HCDR_CMD().CDR_GetDiscInfo(HDEV_FD(), &TrickCount, &SessionCount, &uTotalSize, &DiskStatus);
 		*pTotalSize = (uTotalSize<<11);
 	}
 	return iRet;
@@ -1472,7 +1525,8 @@ int DVDSDKInterface::DVDSDK_GetFreeWriteSize(DVDDRV_HANDLE hDVD, unsigned long l
 	{
 		int TrickCount, SessionCount, DiskStatus;
 		uint64_t uTotalSize;
-		iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &uTotalSize, &DiskStatus);
+		//iRet = HCDR_CMD()->cdr_getdiscinfo(HDEV_FD(), &TrickCount, &SessionCount, &uTotalSize, &DiskStatus);
+		iRet = HCDR_CMD().CDR_GetDiscInfo(HDEV_FD(), &TrickCount, &SessionCount, &uTotalSize, &DiskStatus);
 		*pFreeSize = (uTotalSize<<11);
 	}
 	return iRet;
@@ -1491,7 +1545,8 @@ int DVDSDKInterface::DVDSDK_PrintProfile(DVDDRV_HANDLE hDVD)
 {
 	HANDLE_DEF;
 	VALID_HANDLE();
-	HCDR_CMD()->cdr_dpdevprofile(HDEV_FD());
+	//HCDR_CMD()->cdr_dpdevprofile(HDEV_FD());
+	HCDR_CMD().CDR_DpdevProfile(HDEV_FD());
 
 	return 0;
 }
@@ -1512,9 +1567,6 @@ void DVDSDKInterface::DVDSDK_SetRecordStatus(DVDDRV_HANDLE hDVD, BOOL bRecordSta
     pDVD->bRecording = bRecordStatus;
 }
 
-#endif
-
-#if 0
 /*******************************************************************************
 * 名称  : LvDVDRec_udffstest
 * 描述  : UDF测试用
@@ -1533,7 +1585,8 @@ int LvDVDRec_udffstest(void)
 		return -1;
 	}
 	DP(("LvDVDRec_udffstest ...start1!\n"));
-	DVDRec_GetCdrcmd(NULL, &pUdf->cdr_cmd);
+	//DVDRec_GetCdrcmd(NULL, &pUdf->cdr_cmd);
+	DVDRec_GetCdrcmd(NULL, &pUdf->cdrCmd);
 	DP(("LvDVDRec_udffstest ...start2!\n"));
 	pUdf->udfCmd.UdfFsTest(pUdf);
 	DP(("LvDVDRec_udffstest ...start3!\n"));
@@ -1541,5 +1594,4 @@ int LvDVDRec_udffstest(void)
 	DP(("LvDVDRec_udffstest ...end!\n"));
 	return 0;
 }
-#endif
 
