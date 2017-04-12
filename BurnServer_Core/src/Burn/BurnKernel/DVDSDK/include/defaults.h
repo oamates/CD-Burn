@@ -3,39 +3,16 @@
 #define __DEFAULTS_H__
 #include "osta_udf.h"
 
-typedef struct siconv_table	siconvt_t;
-struct siconv_table {
-	char		*sic_name;		/* SICONV charset name	*/
+typedef struct stSiconvTable siconvt;
+struct stSiconvTable {
+	char		*sic_name;				/* SICONV charset name	*/
 	unsigned int	*sic_cs2uni;		/* Charset -> Unicode	*/
 	unsigned char	**sic_uni2cs;		/* Unicode -> Charset	*/
-	char *		sic_cd2uni;		/* iconv Charset -> Unicode */
-	char *		sic_uni2cd;		/* iconv Unicode -> Charset */
-	siconvt_t	*sic_alt;		/* alternate iconv tab	*/
-	siconvt_t	*sic_next;		/* Next table		*/
+	char *		sic_cd2uni;				/* iconv Charset -> Unicode */
+	char *		sic_uni2cd;				/* iconv Unicode -> Charset */
+	siconvt	*sic_alt;					/* alternate iconv tab	*/
+	siconvt	*sic_next;					/* Next table		*/
 };
-
-#if 0
-typedef struct{
-	struct primaryVolDesc      			 *default_pvd;
-	struct logicalVolDesc      			 *default_lvd;
-	struct volDescPtr          			 *default_vdp;
-	struct impUseVolDescImpUse 			 *default_iuvdiu;
-	struct impUseVolDesc       			 *default_iuvd;
-	struct partitionDesc       			 *default_pd;
-	struct unallocSpaceDesc    			 *default_usd;
-	struct terminatingDesc            	 *default_td;
-	struct logicalVolIntegrityDesc       *default_lvid;
-	struct logicalVolIntegrityDescImpUse *default_lvidiu;
-	struct sparingTable 			  	 *default_stable;
-	struct sparablePartitionMap 		 *default_sparmap;
-	struct virtualAllocationTable15 	 *default_vat15;
-	struct virtualAllocationTable20 	 *default_vat20;
-	struct virtualPartitionMap 			 *default_virtmap;
-	struct fileSetDesc 					 *default_fsd;
-	struct fileEntry 					 *default_fe;
-	struct extendedFileEntry 			 *default_efe;
-}LVUDF_DEFAULTSINFO_T;
-#endif
 
 class PrimaryVolDesc
 {
@@ -104,11 +81,11 @@ class ExtendedFileEntry;
 	ExtendedFileEntry 			 *default_efe;
 }LVUDF_DEFAULTSINFO_T;*/
 
-class LVUDF_DEFAULTSINFO
+class UDF_DefaultInfo
 {
 public:
-	LVUDF_DEFAULTSINFO();
-	LVUDF_DEFAULTSINFO(PrimaryVolDesc* pPVD,
+	UDF_DefaultInfo();
+	UDF_DefaultInfo(PrimaryVolDesc* pPVD,
 		LogicalVolDesc* pLVD, VolDescPtr* pVDP,
 		ImpUseVolDescImpUse* pIUVDIU, ImpUseVolDesc* pIUVD,
 		PartitionDesc* pPD, UnallocSpaceDesc* pUSD,
@@ -117,7 +94,7 @@ public:
 		SparablePartitionMap* pSPM, VirtualAllocationTable15* pVAT15,
 		VirtualAllocationTable20* pVAT20, VirtualPartitionMap* pVPM,
 		FileSetDesc* pFSD, FileEntry* pFE, ExtendedFileEntry* pEFE);
-	~LVUDF_DEFAULTSINFO(){};
+	~UDF_DefaultInfo(){};
 public:
 	PrimaryVolDesc      			 *default_pvd;
 	LogicalVolDesc      			 *default_lvd;
@@ -139,6 +116,6 @@ public:
 	ExtendedFileEntry 			 *default_efe;
 };
 
-extern LVUDF_DEFAULTSINFO LvUDF_Defaults;
+extern UDF_DefaultInfo UDF_Defaults;
 
 #endif//__DEFAULTS_H__

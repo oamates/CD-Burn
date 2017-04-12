@@ -870,9 +870,8 @@ static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo)
 /****************************************************************************************************/
 //Class CUdfCmd
 
-#ifdef __cplusplus
 // 添加目录或文件
-FILDIRNODE* CUdfCmd::addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
+FILDIRNODE* CUdfCmd::AddNode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
 {
 	//获取时间
 	timestamp	ts;
@@ -983,13 +982,13 @@ FILDIRNODE* CUdfCmd::addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *P
 }
 
 // 通过名称查找节点
-FILDIRNODE* CUdfCmd::findnodebyname(FILEDIRTREE *FileDirTree, char *szName)
+FILDIRNODE* CUdfCmd::FindNodeByName(FILEDIRTREE *FileDirTree, char *szName)
 {
 	return FindNodeByIndex(FileDirTree->FirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
 }
 
 // 通过节点ID
-FILDIRNODE* CUdfCmd::findnodebyid(FILEDIRTREE *FileDirTree, int nodeid)
+FILDIRNODE* CUdfCmd::FindNodeByID(FILEDIRTREE *FileDirTree, int nodeid)
 {
 	return FindNodeByIndex(FileDirTree->FirstNode, nodeid, "", FALSE);
 }
@@ -1018,7 +1017,7 @@ int CUdfCmd::GetDirCount(FILEDIRTREE *FileDirTree)
 		return 0;
 	for(i=0;i<FileDirTree->NodeCount;i++)
 	{	
-		TmpNode = findnodebyid(FileDirTree, i);
+		TmpNode = FindNodeByID(FileDirTree, i);
 		if( TmpNode )
 		{
 			DirCount += TmpNode->NodeType == NODETYPE_DIR ? 1 : 0;
@@ -1036,7 +1035,7 @@ int CUdfCmd::GetFileCount(FILEDIRTREE *FileDirTree)
 		return 0;
 	for(i=0;i<FileDirTree->NodeCount;i++)
 	{	
-		TmpNode = findnodebyid(FileDirTree, i);
+		TmpNode = FindNodeByID(FileDirTree, i);
 		if( TmpNode )
 		{
 			fileCount += TmpNode->NodeType == NODETYPE_FILE ? 1 : 0;
@@ -1199,7 +1198,7 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	strcpy(disc_volid.copyrightFileIdent, "aaaa");
 	strcpy(disc_volid.abstractFileIdent,  "aaaa");
 	
-	DirNode = pUdfInfo->udfCmd.addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, NULL, "udf_test_dir", 0, NODETYPE_DIR);
+	DirNode = pUdfInfo->udfCmd.AddNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, NULL, "udf_test_dir", 0, NODETYPE_DIR);
 	
 	//初始化UDF光盘系统
 	LvDVDUdf_udf_init_disc(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc), pUdfInfo->m_CdRwDiskinfo->nDiskCapicity, &disc_volid);
@@ -1210,7 +1209,7 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	for(i=0; i< 200; i++)
 	{
 		sprintf(szFileName, "VDV测试文件%d.ts", i);
-		pUdfInfo->udfCmd.addnode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, DirNode, szFileName, 54 * 1024 * 1024, NODETYPE_FILE);
+		pUdfInfo->udfCmd.AddNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, DirNode, szFileName, 54 * 1024 * 1024, NODETYPE_FILE);
 	}
 	
 	// close disc
@@ -1252,24 +1251,7 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	
 	return 0;
 }
-#endif
-#if 0
-static udfcmd_t udfcmd = {
-	.addnode = addnode,
-	.findnodebyname = findnodebyname,
-	.findnodebyid   = findnodebyid,
-	.GetNodeInDir   = GetNodeInDir,
-	.getdircount    = getdircount,
-	.getfilecount   = getfilecount,
-	.InitUdfFs      = InitUdfFs,
-	.WriteStream    = WriteStream,
-	.WriteEmptyStream = WriteEmptyStream,
-	.CloseDisc      = CloseDisc,
-	.WriteFileTrackEmdpy = WriteFileTrackEmdpy,
-	.udffstest      = udffstest,
-};
-static udfcmd_t udfcmd = {};
-#endif
+
 
 static CUdfCmd udfcmd;
 

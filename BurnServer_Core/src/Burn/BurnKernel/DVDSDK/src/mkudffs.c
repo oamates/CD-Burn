@@ -1026,7 +1026,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
 	disc->blocksize = 2048;
 	disc->packetSize = PACKET_BLOCK_16;
 	disc->blocksize_bits = 11;
-	disc->udf_rev = le16_to_cpu(LvUDF_Defaults.default_lvidiu->default_lvidiu.minUDFReadRev);  //确定udf版本，默认1.02
+	disc->udf_rev = le16_to_cpu(UDF_Defaults.default_lvidiu->default_lvidiu.minUDFReadRev);  //确定udf版本，默认1.02
 	disc->flags = FLAG_UTF8 | FLAG_CLOSED;
 	
 	//if (disc->udf_rev >= 0x0200)
@@ -1053,7 +1053,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
 	//分配,初始化主卷标描述符PVD---0
 	MEMMOCLINE;
 	disc->udf_pvd[0] = (primaryVolDesc*)MEMMALLOC(hMem, sizeof(struct primaryVolDesc));
-	memcpy((void *)disc->udf_pvd[0], LvUDF_Defaults.default_pvd, sizeof(struct primaryVolDesc));
+	memcpy((void *)disc->udf_pvd[0], UDF_Defaults.default_pvd, sizeof(struct primaryVolDesc));
 	memcpy((void *)&disc->udf_pvd[0]->recordingDateAndTime, &ts, sizeof(timestamp));
 	sprintf((char *)&disc->udf_pvd[0]->volSetIdent[1], "%08lx%s",
 	        mktime(tm), &disc->udf_pvd[0]->volSetIdent[9]);
@@ -1066,8 +1066,8 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配初始化实施使用描述符LUVD---1
 	MEMMOCLINE;
 	disc->udf_iuvd[0] = (impUseVolDesc *)MEMMALLOC(hMem, sizeof(struct impUseVolDesc) + sizeof(struct impUseVolDescImpUse));
-	memcpy(disc->udf_iuvd[0], LvUDF_Defaults.default_iuvd, sizeof(struct impUseVolDesc));
-	memcpy(query_iuvdiu(disc), LvUDF_Defaults.default_iuvdiu, sizeof(struct impUseVolDescImpUse));
+	memcpy(disc->udf_iuvd[0], UDF_Defaults.default_iuvd, sizeof(struct impUseVolDesc));
+	memcpy(query_iuvdiu(disc), UDF_Defaults.default_iuvdiu, sizeof(struct impUseVolDescImpUse));
 	//modify by yanming for utf-8
 	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->logicalVolIdent, unicodename, buflen, &slen);
 	memcpy(query_iuvdiu(disc)->logicalVolIdent,unicodename,128);
@@ -1089,7 +1089,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配，初始化逻辑卷标描述LVD---2
 	MEMMOCLINE;
 	disc->udf_lvd[0] = (logicalVolDesc *)MEMMALLOC(hMem, sizeof(struct logicalVolDesc));
-	memcpy(disc->udf_lvd[0], LvUDF_Defaults.default_lvd, sizeof(struct logicalVolDesc));
+	memcpy(disc->udf_lvd[0], UDF_Defaults.default_lvd, sizeof(struct logicalVolDesc));
 	//disc->udf_lvd[0]->logicalVolIdent[127] = strlen(disc->udf_lvd[0]->logicalVolIdent);
 	//modify by yanming for utf-8
 	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->logicalVolIdent, unicodename, buflen, &slen);
@@ -1101,24 +1101,24 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配初始化分区描述PD---3
 	MEMMOCLINE;
 	disc->udf_pd[0] = (struct partitionDesc *)MEMMALLOC(hMem, sizeof(struct partitionDesc));
-	memcpy(disc->udf_pd[0], LvUDF_Defaults.default_pd, sizeof(struct partitionDesc));
+	memcpy(disc->udf_pd[0], UDF_Defaults.default_pd, sizeof(struct partitionDesc));
 
     //分配初始化空白空间描述USD---4
 	MEMMOCLINE;
 	disc->udf_usd[0] = (struct unallocSpaceDesc *)MEMMALLOC(hMem, sizeof(struct unallocSpaceDesc));
-	memcpy(disc->udf_usd[0], LvUDF_Defaults.default_usd, sizeof(struct unallocSpaceDesc));
+	memcpy(disc->udf_usd[0], UDF_Defaults.default_usd, sizeof(struct unallocSpaceDesc));
 
     //分配初始化结束描述符TD
 	MEMMOCLINE;
 	disc->udf_td[0] = (struct terminatingDesc *)MEMMALLOC(hMem, sizeof(struct terminatingDesc));
-	memcpy(disc->udf_td[0], LvUDF_Defaults.default_td, sizeof(struct terminatingDesc));
+	memcpy(disc->udf_td[0], UDF_Defaults.default_td, sizeof(struct terminatingDesc));
 
     //分配初始化逻辑卷标完整性描述LVID
 	MEMMOCLINE;
 	disc->udf_lvid = (struct logicalVolIntegrityDesc *)MEMMALLOC(hMem, sizeof(struct logicalVolIntegrityDesc) + sizeof(struct logicalVolIntegrityDescImpUse));
-	memcpy(disc->udf_lvid, LvUDF_Defaults.default_lvid, sizeof(struct logicalVolIntegrityDesc));
+	memcpy(disc->udf_lvid, UDF_Defaults.default_lvid, sizeof(struct logicalVolIntegrityDesc));
 	memcpy(&disc->udf_lvid->recordingDateAndTime, &ts, sizeof(timestamp));
-	memcpy(query_lvidiu(disc), LvUDF_Defaults.default_lvidiu, sizeof(struct logicalVolIntegrityDescImpUse));
+	memcpy(query_lvidiu(disc), UDF_Defaults.default_lvidiu, sizeof(struct logicalVolIntegrityDescImpUse));
 
 	//disc->udf_stable[0] = MEMMALLOC(hMem, sizeof(struct sparingTable));
 	//memcpy(disc->udf_stable[0], &default_stable, sizeof(struct sparingTable));
@@ -1129,7 +1129,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配初始化文件集描述符FSD
 	MEMMOCLINE;
 	disc->udf_fsd = (struct fileSetDesc *)MEMMALLOC(hMem, sizeof(struct fileSetDesc));
-	memcpy(disc->udf_fsd, LvUDF_Defaults.default_fsd, sizeof(struct fileSetDesc));
+	memcpy(disc->udf_fsd, UDF_Defaults.default_fsd, sizeof(struct fileSetDesc));
 	memcpy(&disc->udf_fsd->recordingDateAndTime, &ts, sizeof(timestamp));
 	//modify by yanming for utf-8
 	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->logicalVolIdent, unicodename, buflen, &slen);

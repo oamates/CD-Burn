@@ -8,7 +8,7 @@ static int mallc_nums = 0;
 
 static int mallc_ptr[1024 * 1024];
 
-static int resetptr(int src, int dst)
+static int ResetPtr(int src, int dst)
 {
 	int i;
 	for(i=0; i<mallc_nums; i++)
@@ -35,7 +35,7 @@ void *memrealloc(void *memblock, size_t size)
 {
 	void *pPtr = realloc(memblock, size);
 	LvNetDP_Printf("realloc buffer : 0x%08x - 0x%08x, size:%d\n", (int)memblock, (int)pPtr, size);
-	if(!resetptr((int)memblock, (int)pPtr))
+	if(!ResetPtr((int)memblock, (int)pPtr))
 		mallc_ptr[mallc_nums++] = (int)pPtr;
 	return pPtr;
 }

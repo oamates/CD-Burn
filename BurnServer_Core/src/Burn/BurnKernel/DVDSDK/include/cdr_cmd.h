@@ -5,8 +5,6 @@
 #include "LibDVDSDK.h"
 #include "drvcomm.h"
 
-//int DVDRec_GetCdrcmd(char *pCdrName, struct CDR_CMD_T **pCmd);
-
 class CCDRCmd;
 
 int DVDRec_GetCdrcmd(char *pCdrName, CCDRCmd* pCmd);
@@ -28,44 +26,44 @@ public:
 	// 判断是否有光盘
 	BOOL CDR_HaveDisc(int nFd);		
 	// 格式化光盘
-	int CDR_FormatDisc(int nFd, int ReserveBlocks);									
+	int CDR_FormatDisc(int nFd, int nReserveBlocks);									
 	// 获得光驱Buffer能力
-	int CDR_Buffcap(int nFd, uint32_t *buffersize, uint32_t *bufferfree);			
+	int CDR_Buffcap(int nFd, uint32_t *pBuffersize, uint32_t *pBufferfree);			
 	// 获得光盘基本类型
-	int CDR_DiscBasicType(int nFd, int *type);
+	int CDR_DiscBasicType(int nFd, int *pType);
 	// 获得光盘精确类型
-	int CDR_DiscExactType(int nFd, int *type);										
-	int CDR_GetDiscInfo(int nFd, int *TrickCount, int *SessionCount, uint64_t *Capicity, int *DiskStatus);
+	int CDR_DiscExactType(int nFd, int *pType);										
+	int CDR_GetDiscInfo(int nFd, int *pTrickCount, int *pSessionCount, uint64_t *pCapicity, int *pDiskStatus);
 	// 获得光驱能力
-	int CDR_DevcapAblity(int nFd, int *capablity);
+	int CDR_DevcapAblity(int nFd, int *pCapablity);
 	// 加载媒体
 	int CDR_LoadMedia(int nFd);
 	// 读轨道数据
-	int CDR_ReadTrack(int nFd, int start, uint8_t *pbuffer, int size);
+	int CDR_ReadTrack(int nFd, int nStart, uint8_t *pBuffer, int nSize);
 	// 写轨道数据, size可以为任意大小
-	int CDR_WriteTrack(int nFd, stCDRTrack *ptrack, uint8_t *pbuffer, int size);
+	int CDR_WriteTrack(int nFd, stCDRTrack *pTrack, uint8_t *pBuffer, int nSize);
 	// 刷新全部数据到轨道
-	int CDR_FlushTrack(int nFd, stCDRTrack *ptrack);
+	int CDR_FlushTrack(int nFd, stCDRTrack *pTrack);
 	// 暂停数据写入
 	int CDR_PauseWrite(int nFd);
 	// 恢复数据写入
 	int CDR_ResumeWrite(int nFd);
 	// 获得轨道信息
-	int CDR_GetTrackinfo(int nFd, int trackid, stCDRTrack *ptrack);
+	int CDR_GetTrackinfo(int nFd, int pTrackid, stCDRTrack *pTrack);
 	// 关闭轨道
-	int CDR_CloseTrack(int nFd, stCDRTrack *ptrack);
+	int CDR_CloseTrack(int nFd, stCDRTrack *pTrack);
 	// 关闭session
-	int CDR_CloseSession(int nFd, stCDRTrack *ptrack);
+	int CDR_CloseSession(int nFd, stCDRTrack *pTrack);
 	// 打印光驱profile
 	int CDR_DpdevProfile(int nFd);
 	// 获取光驱厂商
 	int CDR_GetdevInfo(int nFd, DVD_DEV_INFO_T * pDevInfo);
 	// 获取光盘最大速度 
-	int CDR_GetMaxSpeed(int nFd, int *MaxReadSpeed, int *MaxWriteSpeed);
+	int CDR_GetMaxSpeed(int nFd, int *pMaxReadSpeed, int *pMaxWriteSpeed);
 	// 设定最大速度 
-	int CDR_SetSpeed(int nFd, int ReadSpeed, int WriteSpeed, int DiscType);
+	int CDR_SetSpeed(int nFd, int nReadSpeed, int nWriteSpeed, int nDiscType);
 	// 获取光盘使用容量
-	int CDR_GetDiscUsedSize(int nFd, int * usedsize);
+	int CDR_GetDiscUsedSize(int nFd, int *pUsedsize);
 	//获取仓门状态
 	int CDR_GetDoorState(int nFd);
 };

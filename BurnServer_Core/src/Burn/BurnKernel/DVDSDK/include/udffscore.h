@@ -169,13 +169,13 @@ public:
 
 public:
 	// 添加目录或文件
-	FILDIRNODE* addnode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType);
+	FILDIRNODE* AddNode(void *hMem, FILEDIRTREE *pFileDirTree, FILDIRNODE *pParent, char *szName, uint64_t filesize, int NodeType);
 
 	// 通过名称查找节点
-	FILDIRNODE* findnodebyname(FILEDIRTREE *FileDirTree, char *szName);
+	FILDIRNODE* FindNodeByName(FILEDIRTREE *FileDirTree, char *szName);
 
 	// 通过节点ID
-	FILDIRNODE* findnodebyid(FILEDIRTREE *FileDirTree, int nodeid);
+	FILDIRNODE* FindNodeByID(FILEDIRTREE *FileDirTree, int nodeid);
 
 	// 判断目录下名称是否重复
 	FILDIRNODE* GetNodeInDir(FILDIRNODE *pDirNode, char *szName);
@@ -231,54 +231,11 @@ struct UDFINFO_T{
 	//文件目录树
 	FILEDIRTREE *m_FileDirTree;
 	
-	// UDF cmd
-	//udfcmd_t *udf_cmd;
 	
-	// mmc cmd
-	//struct CDR_CMD_T *cdr_cmd;
-
 	//class udfCmd
 	CUdfCmd	udfCmd;
 	//class CCdrcmd
 	CCDRCmd cdrCmd;
-};
-
-struct UDF_CMD_T{
-	// 添加目录或文件
-	FILDIRNODE *(*addnode)(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType);
-
-	// 通过名称查找节点
-	FILDIRNODE *(*findnodebyname)(FILEDIRTREE *FileDirTree, char *szName);
-
-	// 通过节点ID
-	FILDIRNODE *(*findnodebyid)(FILEDIRTREE *FileDirTree, int nodeid);
-
-	// 判断目录下名称是否重复
-	FILDIRNODE *(*GetNodeInDir)(FILDIRNODE *pDirNode,  char *szName);
-
-	// 获取目录数量
-	int (*getdircount)(FILEDIRTREE *FileDirTree);
-
-	// 获取文件数量
-	int (*getfilecount)(FILEDIRTREE *FileDirTree);
-
-	// 初始化文件系统,初始化卷标和UDF文件系统描述符
-	int (*InitUdfFs)(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol);
-
-	// 写流数据到光盘文件, length可以为任意大小
-	int (*WriteStream)(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data, int length);
-
-	// 填充空数据到光盘最后, length可以为任意大小
-	int (*WriteEmptyStream)(udfinfo_t *pUdfInfo, uint8_t *Data, int length);
-
-	// 封盘光盘
-	int (*CloseDisc)(udfinfo_t *pUdfInfo);
-
-	// 在文件轨道写入空数据，需在格式化之后调用, 防止流刻录开始时写轨道的停滞，造成视频丢帧
-	int (*WriteFileTrackEmdpy)(udfinfo_t *pUdfInfo, uint32_t emptydize);
-
-	// UDF文件系统测试
-	int (*udffstest)(udfinfo_t *pUdfInfo);
 };
 
 // 创建UDF

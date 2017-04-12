@@ -594,7 +594,7 @@ struct udf_desc *DVDRecUdf_udf_create(void *hMem, struct udf_disc *disc, struct 
 	fe = (struct fileEntry *)desc->data->buffer;
 
 	//modify by yanming for filetime
-	memcpy(fe, (fileEntry*)(&LvUDF_Defaults.default_fe->default_fe), sizeof(struct fileEntry));
+	memcpy(fe, (fileEntry*)(&UDF_Defaults.default_fe->default_fe), sizeof(struct fileEntry));
 	memcpy(&fe->accessTime, ts, sizeof(timestamp));
 	memcpy(&fe->modificationTime, ts, sizeof(timestamp));
 	memcpy(&fe->attrTime, ts, sizeof(timestamp));

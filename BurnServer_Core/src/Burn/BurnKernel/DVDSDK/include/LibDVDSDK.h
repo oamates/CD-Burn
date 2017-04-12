@@ -183,7 +183,6 @@ typedef struct{
 
 #include <stdint.h>
 
-#ifdef __cplusplus
 class DVDSDKInterface
 {
 public:
@@ -572,7 +571,6 @@ public:
 	void DVDSDK_SetRecordStatus(DVDDRV_HANDLE hDVD, BOOL bRecordStatus);
 
 };
-#endif
 
 #ifdef __cplusplus
 }

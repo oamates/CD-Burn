@@ -1040,7 +1040,7 @@ LVUDF_DEFAULTSINFO_T LvUDF_Defaults = {
 };
 #endif
 
-LVUDF_DEFAULTSINFO::LVUDF_DEFAULTSINFO()
+UDF_DefaultInfo::UDF_DefaultInfo()
 {
 	default_pvd = NULL;
 	default_lvd = NULL;
@@ -1062,7 +1062,7 @@ LVUDF_DEFAULTSINFO::LVUDF_DEFAULTSINFO()
 	default_efe = NULL;
 }
 
-LVUDF_DEFAULTSINFO::LVUDF_DEFAULTSINFO(PrimaryVolDesc* pPVD,
+UDF_DefaultInfo::UDF_DefaultInfo(PrimaryVolDesc* pPVD,
 	LogicalVolDesc* pLVD, VolDescPtr* pVDP,
 	ImpUseVolDescImpUse* pIUVDIU, ImpUseVolDesc* pIUVD,
 	PartitionDesc* pPD, UnallocSpaceDesc* pUSD,
@@ -1092,7 +1092,7 @@ LVUDF_DEFAULTSINFO::LVUDF_DEFAULTSINFO(PrimaryVolDesc* pPVD,
 	default_efe = pEFE;
 }
 
-LVUDF_DEFAULTSINFO LvUDF_Defaults(&default_pvd, &default_lvd, &default_vdp,
+UDF_DefaultInfo UDF_Defaults(&default_pvd, &default_lvd, &default_vdp,
 	&default_iuvdiu, &default_iuvd, &default_pd, &default_usd, &default_td,
 	&default_lvid, &default_lvidiu, &default_stable, &default_sparmap, &default_vat15,
 	&default_vat20, &default_virtmap, &default_fsd, &default_fe, &default_efe

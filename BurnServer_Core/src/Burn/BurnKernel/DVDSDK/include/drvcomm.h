@@ -414,33 +414,4 @@ typedef struct{
 	uint32_t     filldata;      //在刻录数据前做的填充(填充0数据)
 }stCDRTrack;
 
-struct CDR_CMD_T{
-	BOOL (*cdr_lockdoor)(int fd);		// 锁定托盘
-	BOOL (*cdr_unlockdoor)(int fd);		// 解锁托盘
-	BOOL (*cdr_opentray)(int fd);		// 打开托盘
-	BOOL (*cdr_closetray)(int fd);		// 关闭托盘
-	BOOL (*cdr_havedisc)(int fd);		// 判断是否有光盘
-	int	 (*cdr_formatdisc)(int fd, int ReserveBlocks);									// 格式化光盘
-	int  (*cdr_buffcap)(int fd, uint32_t *buffsize, uint32_t *bufffree);				// 获得光驱Buffer能力
-	int  (*cdr_discbasictype)(int fd, int *type);										// 获得光盘基本类型
-	int  (*cdr_discexacttype)(int fd, int *type);										// 获得光盘精确类型
-	int  (*cdr_getdiscinfo)(int fd, int *TrickCount, int *SessionCount, uint64_t *Capicity,	int *DiskStatus);
-	int  (*cdr_devcapablity)(int fd, int *capablity);									// 获得光驱能力
-	int  (*cdr_loadmedia)(int fd);														// 加载媒体
-	int  (*cdr_readtrack)(int fd, int start, uint8_t *pbuffer, int size);				// 读轨道数据
-	int  (*cdr_writetrack)(int fd, stCDRTrack *ptrack, uint8_t *pbuffer, int size);	// 写轨道数据, size可以为任意大小
-	int  (*cdr_flushtrack)(int fd, stCDRTrack *ptrack);								// 刷新全部数据到轨道
-	int  (*cdr_pausewrite)(int fd);														// 暂停数据写入
-	int  (*cdr_resumewrite)(int fd);													// 恢复数据写入
-	int  (*cdr_gettrackinfo)(int fd, int trackid, stCDRTrack *ptrack);					// 获得轨道信息
-	int  (*cdr_closetrack)(int fd, stCDRTrack *ptrack);								// 关闭轨道
-	int  (*cdr_closesession)(int fd, stCDRTrack *ptrack);								// 关闭session
-	int  (*cdr_dpdevprofile)(int fd);													// 打印光驱profile
-	int  (*cdr_getdevinfo)(int fd, DVD_DEV_INFO_T * pDevInfo);	                    // 获取光驱厂商
-	int  (*cdr_getmaxspeed)(int fd,int *MaxReadSpeed,int *MaxWriteSpeed);               // 获取光盘最大速度 
-	int  (*cdr_setspeed)(int fd,int ReadSpeed,int WriteSpeed,int DiscType);             // 设定最大速度 
-	int  (*cdr_getdiscusedsize)(int fd,int * usedsize);                                 // 获取光盘使用容量
-	int  (*cdr_getdoorstate)(int fd);                                                   //获取仓门状态
-};
-
 #endif//__DRVCOMM_H__
