@@ -36,7 +36,7 @@ struct udf_desc;
 struct udf_data;
 
 //udf光盘空间类型
-enum udf_space_type
+enum euUDF_SPACE_TYPE
 {
 	RESERVED	= 0x0001,	/* Reserved Space */
 	VRS			= 0x0002,	/* Volume Recognition Sequence */
@@ -54,7 +54,7 @@ enum udf_space_type
 };
 
 //udf对齐
-struct udf_sizing
+struct eu_UDF_SIZING
 {
 	uint32_t	align;
 	uint32_t	numSize;
@@ -63,7 +63,7 @@ struct udf_sizing
 };
 
 //udf分配类型
-enum udf_alloc_type
+enum eu_UDF_ALLOC_TYPE
 {
 	VDS_SIZE,           //卷标描述序列
 	LVID_SIZE,          //逻辑卷标完整性描述
@@ -82,22 +82,22 @@ typedef enum
 	DVDVIDEO_VOB 	= 3, //视频数据
 	DVDVIDEO_DATA   = 4,  //纯数据文件
 	DVDVIDEO_LAST
-}UdfDVDFileType;
+}euUdfDVDFileType;
 
 
 typedef struct DVDfileInfo
 {
 	char * fileName[256];           //文件名
-	UdfDVDFileType 	FileType;       //是否IFO配置文件，不是则为VOB文件
-	struct udf_extent * ext;        //盘区
-	struct udf_desc * Parentdesc;   //父目录描述符
-	struct udf_desc * desc;         //描述符
-	struct fileEntry * fe;    		//文件描述符指针	
-	uint64_t fileSize;        		//文件大小
-	uint64_t start;                 //起始扇区，相对PD而言
-	uint8_t *Data;                  //文件数据	
-	struct DVDfileInfo * next;      //下一个
-    struct DVDfileInfo * prev;      //前一个
+	euUdfDVDFileType 	euFileType;       //是否IFO配置文件，不是则为VOB文件
+	struct udf_extent * pExt;        //盘区
+	struct udf_desc * pParentdesc;   //父目录描述符
+	struct udf_desc * pDesc;         //描述符
+	struct fileEntry * pFe;    		//文件描述符指针	
+	uint64_t nFileSize;        		//文件大小
+	uint64_t nStart;                 //起始扇区，相对PD而言
+	uint8_t *pData;                  //文件数据	
+	struct DVDfileInfo * pNext;      //下一个
+    struct DVDfileInfo * pPrev;      //前一个
 }DVDfileInfo_t ;
 
 //udf盘面
@@ -110,7 +110,7 @@ struct udf_disc
 	uint8_t				blocksize_bits;       //块字节位数，11
 	uint32_t			flags;                //标记
 
-	struct udf_sizing	sizing[UDF_ALLOC_TYPE_SIZE]; 
+	struct eu_UDF_SIZING	sizing[UDF_ALLOC_TYPE_SIZE]; 
 
 	struct volStructDesc			*udf_vrs[3];    //VRS
 	struct anchorVolDescPtr			*udf_anchor[3]; //AVDP
@@ -123,21 +123,21 @@ struct udf_disc
 	struct logicalVolIntegrityDesc	*udf_lvid;      //LVID  逻辑卷标完整性描述包
 	struct fileSetDesc				*udf_fsd;       //FSD,文件集描述包
 
-	struct udf_extent				*head;
-	struct udf_extent				*tail;
+	struct udf_extent				*pHead;
+	struct udf_extent				*pTail;
 };
 
 //udf盘区
 struct udf_extent
 {
-	enum udf_space_type		space_type;
-	uint32_t				start;
-	uint32_t				blocks;
-	struct udf_desc			*head;
-	struct udf_desc			*tail;
+	enum euUDF_SPACE_TYPE		euSpaceType;
+	uint32_t				nStart;
+	uint32_t				nBlocks;
+	struct udf_desc			*pHead;
+	struct udf_desc			*pTail;
 
-	struct udf_extent		*next;
-	struct udf_extent		*prev;
+	struct udf_extent		*pNext;
+	struct udf_extent		*pPrev;
 };
 
 //udf描述符
@@ -146,10 +146,10 @@ struct udf_desc
 	uint16_t			ident;
 	uint32_t			offset;            //链表中的位置
 	uint64_t			length;
-	struct udf_data		*data;
+	struct udf_data		*pData;
 
-	struct udf_desc		*next;
-	struct udf_desc		*prev;
+	struct udf_desc		*pNext;
+	struct udf_desc		*pPrev;
 };
 
 //udf数据
@@ -158,21 +158,21 @@ struct udf_data
 	uint64_t			length;
 	uint32_t            ilength;
 	int				    bMalloc;	// 自己分配
-	void				*buffer;
-	struct udf_data		*next;
-	struct udf_data		*prev;
+	void				*pBuffer;
+	struct udf_data		*pNext;
+	struct udf_data		*pPrev;
 };
 
 /* crc.c */
 uint16_t DVDRecUdf_crc(uint8_t *, uint32_t, uint16_t);
 
 /* extent.c */
-struct udf_extent *DVDRecUdf_next_extent(struct udf_extent *, enum udf_space_type);
+struct udf_extent *DVDRecUdf_next_extent(struct udf_extent *, enum euUDF_SPACE_TYPE);
 //uint32_t next_extent_size(struct udf_extent *, enum udf_space_type, uint32_t, uint32_t);
 //struct udf_extent *prev_extent(struct udf_extent *, enum udf_space_type);
 //uint32_t prev_extent_size(struct udf_extent *, enum udf_space_type, uint32_t, uint32_t);
 //struct udf_extent *find_extent(struct udf_disc *, uint32_t);
-struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *, enum udf_space_type, uint32_t,uint32_t);
+struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *, enum euUDF_SPACE_TYPE, uint32_t, uint32_t);
 struct udf_desc *DVDRecUdf_next_desc(struct udf_desc *, uint16_t);
 struct udf_desc *DVDRecUdf_find_desc(struct udf_extent *, uint32_t);
 struct udf_desc *DVDRecUdf_set_desc(void *hMem, struct udf_disc *, struct udf_extent *, uint16_t, uint32_t, uint32_t, struct udf_data *);

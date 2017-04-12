@@ -628,9 +628,9 @@ int	DVDSDKInterface::DVDSDK_FormatDisc(DVDDRV_HANDLE hDVD, char *szDiscName)
 	strcpy(disc_volid.logicalVolIdent, szDiscName);
 	strcpy(disc_volid.volIdent,        szDiscName);
 	strcpy(disc_volid.volSetIdent,     szDiscName);
-	strcpy(disc_volid.LVInfoTitle, 	      "avs_DVD_1.0");
-	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
-	strcpy(disc_volid.LVInfoEmail,        "avs_work");
+	strcpy(disc_volid.infoTitle, 	      "avs_DVD_1.0");
+	strcpy(disc_volid.infoDataTime,     "2017-4-17");
+	strcpy(disc_volid.infoEmail,        "avs_work");
 	strcpy(disc_volid.fileSetIdent,       "avs_DVD_1.0");
 	strcpy(disc_volid.copyrightFileIdent, "avs_DVD_1.0");
 	strcpy(disc_volid.abstractFileIdent,  "avs_DVD_1.0");
@@ -716,8 +716,8 @@ int DVDSDKInterface::DVDSDK_SetFileLoca(DVDDRV_HANDLE hDVD, DVDSDK_FILE FileNode
 	HANDLE_DEF;
 	VALID_HANDLE();
 
-	((FILDIRNODE *)(FileNode))->FileLoca = HUDF_HANLE()->m_CdRwDiskinfo->udffile.writenext - UDF_SYS_LEN;
-    DP(("+++++++++[DVDSDK_SetFileLoca] File name = %s,File  location = %ld++++++++++\n",((FILDIRNODE *)(FileNode))->Name,((FILDIRNODE *)(FileNode))->FileLoca));
+	((FILEDIRNODE *)(FileNode))->nFileLoca = HUDF_HANLE()->m_CdRwDiskinfo->udffile.writenext - UDF_SYS_LEN;
+    DP(("+++++++++[DVDSDK_SetFileLoca] File name = %s,File  location = %ld++++++++++\n",((FILEDIRNODE *)(FileNode))->cName,((FILEDIRNODE *)(FileNode))->nFileLoca));
 
 	return 0;
 }
@@ -820,8 +820,8 @@ static int DVDSDK_Analysisdirectory(char * szDirName, int len, char ** szDirRema
 *******************************************************************************/
 DVDSDK_DIR DVDSDKInterface::DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName)
 {
-	FILDIRNODE *DirNode;
-	FILDIRNODE *tmpNode;
+	FILEDIRNODE *DirNode;
+	FILEDIRNODE *tmpNode;
 	int iRet;
 	char *szDirRemain;
 	char szAnalysisName[128];
@@ -858,7 +858,7 @@ DVDSDK_DIR DVDSDKInterface::DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName
 		}
 		MEMMOCLINE;
 		DirNode = HUDF_HANLE()->udfCmd.AddNode(HUDF_HANLE()->m_hMem, HUDF_HANLE()->m_FileDirTree,
-						(FILDIRNODE*)DirNode, szAnalysisName, 0, NODETYPE_DIR);
+						(FILEDIRNODE*)DirNode, szAnalysisName, 0, NODETYPE_DIR);
 	}
 	return DirNode;
 }
@@ -876,8 +876,8 @@ DVDSDK_DIR DVDSDKInterface::DVDSDK_CreateDir(DVDDRV_HANDLE hDVD, char *szDirName
 *******************************************************************************/
 DVDSDK_FILE DVDSDKInterface::DVDSDK_CreateFile(DVDDRV_HANDLE hDVD, DVDSDK_DIR pDir, char *szFileName, uint64_t filesize)
 {
-	FILDIRNODE *DirNode;
-	FILDIRNODE *pParent;
+	FILEDIRNODE *DirNode;
+	FILEDIRNODE *pParent;
 
 	HDVD_DEV_T *pDVD = (HDVD_DEV_T*)hDVD;
 	if( !pDVD || pDVD->maskid != MASK_ID) return NULL;
@@ -886,7 +886,7 @@ DVDSDK_FILE DVDSDKInterface::DVDSDK_CreateFile(DVDDRV_HANDLE hDVD, DVDSDK_DIR pD
 		return NULL;
 
 	if(pDir)
-		pParent = (FILDIRNODE*)pDir;
+		pParent = (FILEDIRNODE*)pDir;
 	else
 		pParent = HUDF_HANLE()->udfCmd.FindNodeByID(HUDF_HANLE()->m_FileDirTree, 0);
 
@@ -931,7 +931,7 @@ int	DVDSDKInterface::DVDSDK_WriteData(DVDDRV_HANDLE hDVD, DVDSDK_FILE pFile, uns
 	// 设定文件位置
 	//HUDF_HANLE(nDevNo)->m_CurrentFileLocation = HUDF_HANLE(nDevNo)->m_CdRwDiskinfo->udffile.writestart - UDF_SYS_LEN;
 
-	iRet = HUDF_HANLE()->udfCmd.WriteStream(HUDF_HANLE(), static_cast<FILDIRNODE*>(pFile), pBuffer, size);
+	iRet = HUDF_HANLE()->udfCmd.WriteStream(HUDF_HANLE(), static_cast<FILEDIRNODE*>(pFile), pBuffer, size);
 	if(iRet)
 	{
 		DPERROR(("WriteStream error:%d,fd=%d\n", iRet,HDEV_FD()));
@@ -1291,9 +1291,9 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 // 	strcpy(disc_volid.fileSetIdent,       "avs_DVD_1.0");
 // 	strcpy(disc_volid.copyrightFileIdent, "avs_DVD_1.0");
 // 	strcpy(disc_volid.abstractFileIdent,  "avs_DVD_1.0");
-	strcpy(disc_volid.LVInfoTitle, 	      "DVDRECORD");
-	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
-	strcpy(disc_volid.LVInfoEmail,        "DVDRECORD");
+	strcpy(disc_volid.infoTitle, 	      "DVDRECORD");
+	strcpy(disc_volid.infoDataTime,     "2017-4-17");
+	strcpy(disc_volid.infoEmail,        "DVDRECORD");
 	strcpy(disc_volid.fileSetIdent,       "DVDRECORD");
 	strcpy(disc_volid.copyrightFileIdent, "DVDRECORD");
 	strcpy(disc_volid.abstractFileIdent,  "DVDRECORD");
@@ -1343,9 +1343,9 @@ int DVDSDKInterface::DVDSDK_ResumeDisc(DVDDRV_HANDLE hDVD, char *DiscName, char 
 	nEmptySize = FillSize ? FillSize : (1024 * 1024 * 64);
 	nEmptySize &= ~(PACKET32_SIZE - 1);	// 64K对其
 
-	((FILDIRNODE *)(pNode))->FileLoca = HUDF_HANLE()->m_CdRwDiskinfo->udffile.writestart
+	((FILEDIRNODE *)(pNode))->nFileLoca = HUDF_HANLE()->m_CdRwDiskinfo->udffile.writestart
 		                                        - UDF_SYS_LEN + (nEmptySize/CDROM_BLOCK);
-	((FILDIRNODE *)(pNode))->FileSize = (HUDF_HANLE()->m_CdRwDiskinfo->udffile.writedsize - 1040 - PACKET_BLOCK_32)*CDROM_BLOCK
+	((FILEDIRNODE *)(pNode))->nFileSize = (HUDF_HANLE()->m_CdRwDiskinfo->udffile.writedsize - 1040 - PACKET_BLOCK_32)*CDROM_BLOCK
 		               					 - nEmptySize;           //1040第二轨道起始
 	((HDVD_DEV_T*)hDVD)->bRecording = TRUE;
 	//写入文件系统 关闭轨道扇区

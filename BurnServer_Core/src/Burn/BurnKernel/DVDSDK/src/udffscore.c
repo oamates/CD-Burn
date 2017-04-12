@@ -191,50 +191,50 @@ static int isBadReadPtr(void *ptr, int length)
     }
     return ret;
 }
-static FILDIRNODE* FindLastBrothers(FILDIRNODE * Parent)
+static FILEDIRNODE* FindLastBrothers(FILEDIRNODE * Parent)
 {
-	FILDIRNODE * temp;
+	FILEDIRNODE * temp;
 	
-	temp = Parent->Child;
+	temp = Parent->pChild;
 	while(temp)
 	{
-		if(temp->Next == NULL)
+		if(temp->pNext == NULL)
 			return temp;
-		temp = temp->Next;
+		temp = temp->pNext;
 	}
 	return NULL;
 }
 
 //通过ID查找节点
-static FILDIRNODE * FindNodeByIndex(FILDIRNODE *Node, int NodeID, char *Name, int isByName)
+static FILEDIRNODE * FindNodeByIndex(FILEDIRNODE *Node, int NodeID, char *Name, int isByName)
 {
 	if( !Node ) return NULL;
 	
 
-	if( Node->NodeID == NodeID && !isByName ) return Node;
-	if( !strcmp(Node->Name,Name) && isByName ) return Node;	
+	if( Node->nNodeID == NodeID && !isByName ) return Node;
+	if( !strcmp(Node->cName,Name) && isByName ) return Node;	
 	
-	FILDIRNODE * TempNode = NULL;
-	if( Node->Child )
+	FILEDIRNODE * TempNode = NULL;
+	if( Node->pChild )
 	{
-		TempNode = FindNodeByIndex(Node->Child,NodeID,Name,isByName);
+		TempNode = FindNodeByIndex(Node->pChild,NodeID,Name,isByName);
 	}
 	else
 	{
-		FILDIRNODE * Temp = Node;
+		FILEDIRNODE * Temp = Node;
 		while(Temp)
 		{
-			if(   (Temp->NodeID == NodeID && !isByName) || (!strcmp(Temp->Name,Name) && isByName) )
+			if(   (Temp->nNodeID == NodeID && !isByName) || (!strcmp(Temp->cName,Name) && isByName) )
 			{
 				TempNode = Temp;
 				break;
 			}			
-			if(Temp->Next == NULL)
+			if(Temp->pNext == NULL)
 			{
-				Temp = FindNodeByIndex(Temp->Child,NodeID,Name,isByName);
+				Temp = FindNodeByIndex(Temp->pChild,NodeID,Name,isByName);
 				return Temp;
 			}
-			Temp = Temp->Next;
+			Temp = Temp->pNext;
 		}
 	}
 	
@@ -242,48 +242,48 @@ static FILDIRNODE * FindNodeByIndex(FILDIRNODE *Node, int NodeID, char *Name, in
 }
 
 //删除文件目录节点
-static void DeleteFileDirNode(void *hMem, FILDIRNODE *Node)
+static void DeleteFileDirNode(void *hMem, FILEDIRNODE *Node)
 {
-	FILDIRNODE *TmpNode;
+	FILEDIRNODE *TmpNode;
 	
 	if( !Node ) return;
 	
 	//递归删除子节点
-	if( Node->Child )
-		DeleteFileDirNode(hMem, Node->Child);
+	if( Node->pChild )
+		DeleteFileDirNode(hMem, Node->pChild);
 
 	//递归删除兄弟节点
 	while( Node )
 	{
-		TmpNode = Node->Next;
+		TmpNode = Node->pNext;
 		MEMFREE(hMem, Node);
 		Node = TmpNode;
 	}
 }
 
 // 通过名称查找节点
-static FILDIRNODE *findnodebyname(FILEDIRTREE *FileDirTree, char *szName)
+static FILEDIRNODE *findnodebyname(FILEDIRTREE *FileDirTree, char *szName)
 {
-	return FindNodeByIndex(FileDirTree->FirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
+	return FindNodeByIndex(FileDirTree->pFirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
 }
 
 // 通过节点ID
-static FILDIRNODE *findnodebyid(FILEDIRTREE *FileDirTree, int nodeid)
+static FILEDIRNODE *findnodebyid(FILEDIRTREE *FileDirTree, int nodeid)
 {
-	return FindNodeByIndex(FileDirTree->FirstNode, nodeid, "", FALSE);
+	return FindNodeByIndex(FileDirTree->pFirstNode, nodeid, "", FALSE);
 }
 
 // 在目录下根据名称获得节点
-static FILDIRNODE *GetNodeInDir(FILDIRNODE *pDirNode,  char *szName)
+static FILEDIRNODE *GetNodeInDir(FILEDIRNODE *pDirNode,  char *szName)
 {
-	FILDIRNODE *Temp = pDirNode ? pDirNode->Child : NULL;
+	FILEDIRNODE *Temp = pDirNode ? pDirNode->pChild : NULL;
 	while(Temp)
 	{
-		if( strcmp(Temp->Name, szName) == 0 )
+		if( strcmp(Temp->cName, szName) == 0 )
 		{
 			return Temp;
 		}
-		Temp = Temp->Next;
+		Temp = Temp->pNext;
 	}
 	return NULL;
 }
@@ -302,12 +302,12 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 	int i, j, loc = disc->udffile.writenext;
 	struct anchorVolDescPtr * avdp;
 	
-	ext = DVDRecUdf_next_extent(disc->udf_disc.head, RESERVED);
+	ext = DVDRecUdf_next_extent(disc->udf_disc.pHead, RESERVED);
 	
 	// 设定第一个VRS结构描述，在16+1 位置
 	desc = DVDRecUdf_set_desc(pUdfInfo->m_hMem, &disc->udf_disc, ext, TAG_IDENT_AVDP, loc, sizeof(struct anchorVolDescPtr), NULL);
 
-	avdp = (struct anchorVolDescPtr *)desc->data->buffer;
+	avdp = (struct anchorVolDescPtr *)desc->pData->pBuffer;
 
 	memcpy(avdp, disc->udf_disc.udf_anchor[0], sizeof(struct anchorVolDescPtr));
 	
@@ -326,8 +326,8 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 		//pUdfInfo->cdr_cmd->cdr_writetrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
 		pUdfInfo->cdrCmd.CDR_WriteTrack(pUdfInfo->fd, &disc->udffile, buffer, PACKET32_SIZE);
 	}
-	MEMFREE(pUdfInfo->m_hMem, desc->data->buffer);
-	desc->data->buffer = NULL;
+	MEMFREE(pUdfInfo->m_hMem, desc->pData->pBuffer);
+	desc->pData->pBuffer = NULL;
 #else
 	struct udf_extent * ext;
 	struct udf_desc *desc;
@@ -342,7 +342,7 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 	//设定第一个VRS结构描述，在16+1 位置
 	desc = DVDRecUdf_set_desc(&disc->udf_disc, ext, TAG_IDENT_AVDP, loc, sizeof(struct anchorVolDescPtr), NULL);
 
-	avdp = (struct anchorVolDescPtr *)desc->data->buffer;
+	avdp = (struct anchorVolDescPtr *)desc->pData->pBuffer;
 
 	memcpy(avdp,disc->udf_disc.udf_anchor[0],sizeof(struct anchorVolDescPtr));
 	//在轨道最后N-512扇区全部写入AVDP，结束封盘
@@ -358,7 +358,7 @@ static int WriteCloseAVDP(udfinfo_t *pUdfInfo)
 		}
 		UdfCP->m_DVDCP->WriteDataToTrick(disc->fd,&disc->udffile,buffer,PACKET_BLOCK_16);
 	}
-	MEMFREE(pUdfInfo->m_hMem, desc->data->buffer);
+	MEMFREE(pUdfInfo->m_hMem, desc->pData->pBuffer);
 	//MEMFREE(pUdfInfo->m_hMem, desc->data);
 	//MEMFREE(pUdfInfo->m_hMem, desc);
 #endif
@@ -448,38 +448,38 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
 
 #if 1
     //读取根目录,ROOT_FE,ROOT_FID
-    pspace = DVDRecUdf_next_extent(disc->udf_disc.head, FSD);
-    desc   = DVDRecUdf_next_desc(pspace->head, TAG_IDENT_FE);
-    fe = (struct fileEntry *)desc->data->buffer;
+	pspace = DVDRecUdf_next_extent(disc->udf_disc.pHead, FSD);
+    desc   = DVDRecUdf_next_desc(pspace->pHead, TAG_IDENT_FE);
+    fe = (struct fileEntry *)desc->pData->pBuffer;
     memcpy(&buffer[offset * CDROM_BLOCK],fe,CDROM_BLOCK);
     offset++;
 
     desc = DVDRecUdf_next_desc(desc, TAG_IDENT_FID);
-    fid  = (struct fileIdentDesc *)desc->data->buffer;
+    fid  = (struct fileIdentDesc *)desc->pData->pBuffer;
     //memcpy(&buffer[offset * CDROM_BLOCK], fid, CDROM_BLOCK);   	//modify by yanming 10.12.23 for more files or dirs
-    memcpy(&buffer[offset * CDROM_BLOCK], fid, desc->data->length);
-    offset += (desc->data->length/CDROM_BLOCK);
+    memcpy(&buffer[offset * CDROM_BLOCK], fid, desc->pData->length);
+    offset += (desc->pData->length/CDROM_BLOCK);
     //offset++;
 
     //读取其它fe
-    desc = desc->next;
+    desc = desc->pNext;
     while(desc)
     {
-        fe = (struct fileEntry *)desc->data->buffer;
+        fe = (struct fileEntry *)desc->pData->pBuffer;
 
-        if(desc->data->length > CDROM_BLOCK)
+        if(desc->pData->length > CDROM_BLOCK)
         {
-            memcpy(&buffer[offset * CDROM_BLOCK], fe, desc->data->length);
-            offset += (desc->data->length/CDROM_BLOCK);
+            memcpy(&buffer[offset * CDROM_BLOCK], fe, desc->pData->length);
+            offset += (desc->pData->length/CDROM_BLOCK);
         }
         else
         {
-            fprintf(stderr,"[WriteFSDToDisc desc data length is %d]\n",desc->data->length);
+            fprintf(stderr,"[WriteFSDToDisc desc data length is %d]\n",desc->pData->length);
             int mem_access_check = isBadReadPtr(fe,CDROM_BLOCK);
             if ( 0 != mem_access_check )
             {
-                fprintf(stderr,"MMMMMMMMMM the address is not readable MMMMMMMMMM [addr %p] [data length %d] [retval %d]\n",fe,desc->data->length,mem_access_check);
-                memcpy(&buffer[offset * CDROM_BLOCK],fe,desc->data->length);
+                fprintf(stderr,"MMMMMMMMMM the address is not readable MMMMMMMMMM [addr %p] [data length %d] [retval %d]\n",fe,desc->pData->length,mem_access_check);
+                memcpy(&buffer[offset * CDROM_BLOCK],fe,desc->pData->length);
             }
             else
             {
@@ -525,7 +525,7 @@ static int WriteFSDToDisc(udfinfo_t *pUdfInfo, int FSDADDR, int DataMode)
             memcpy(buffer,(buffer+PACKET16_SIZE),(offset-PACKET_BLOCK_16)*CDROM_BLOCK);
             offset = offset-PACKET_BLOCK_16;
         }
-        desc = desc->next;
+        desc = desc->pNext;
     }
 #ifdef WRITE_FSD_FILE
     if (pf != NULL)
@@ -847,15 +847,15 @@ static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo)
 	DP(("UDF Fs To DVD Disc 1,fd=%d\n",pUdfInfo->fd));
 	//更新插入各个文件描述符，并更新对应文件长度和起始地址
 	//建立fsd及目录、文件
-	pspace = DVDRecUdf_next_extent(disc->udf_disc.head, FSD);
+	pspace = DVDRecUdf_next_extent(disc->udf_disc.pHead, FSD);
 	
 	DP(("UDF Fs To DVD Disc 2,fd=%d\n",pUdfInfo->fd));
 	// 建立FSD
-	LvDVDUdf_setup_fileset(pUdfInfo->m_hMem, &disc->udf_disc, pspace, DataMode);
+	DVDUdf_Setup_Fileset(pUdfInfo->m_hMem, &disc->udf_disc, pspace, DataMode);
 	
 	DP(("UDF Fs To DVD Disc 3,fd=%d\n",pUdfInfo->fd));
 	// 建立根文件系统
-	ret = LvDVDUdf_setup_root(pUdfInfo->m_hMem, &disc->udf_disc, pspace, pUdfInfo);
+	ret = DVDUdf_Setup_Root(pUdfInfo->m_hMem, &disc->udf_disc, pspace, pUdfInfo);
 	if(ret == -1)
 		return -1;
 	DP(("UDF Fs To DVD Disc 4,fd=%d\n",pUdfInfo->fd));
@@ -871,7 +871,7 @@ static int WriteUDFFsToDVDDisk(udfinfo_t *pUdfInfo)
 //Class CUdfCmd
 
 // 添加目录或文件
-FILDIRNODE* CUdfCmd::AddNode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
+FILEDIRNODE* CUdfCmd::AddNode(void *hMem, FILEDIRTREE *FileDirTree, FILEDIRNODE *Parent, char *szName, uint64_t filesize, int NodeType)
 {
 	//获取时间
 	timestamp	ts;
@@ -879,33 +879,33 @@ FILDIRNODE* CUdfCmd::AddNode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *P
 	struct tm 	*tm;
 	int		altzone;
 
-	FILDIRNODE *LastBrothers = NULL;
-	FILDIRNODE *TmpNode = NULL;
+	FILEDIRNODE *LastBrothers = NULL;
+	FILEDIRNODE *TmpNode = NULL;
 	if(!szName || strlen(szName) >= 255)
 	{
 		DPERROR(("node name must < 255\n"));
 		return NULL;
 	}
-	TmpNode = Parent ? Parent : FileDirTree->FirstNode;
+	TmpNode = Parent ? Parent : FileDirTree->pFirstNode;
 	if(TmpNode && GetNodeInDir(TmpNode, szName))
 	{
 		DPERROR(("node name : %s in tree\n", szName));
 		return NULL;
 	}
-	if(!FileDirTree->FirstNode && NodeType == NODETYPE_FILE)
+	if(!FileDirTree->pFirstNode && NodeType == NODETYPE_FILE)
 	{
 		DPERROR(("must create boot dir first\n"));
 		return NULL;
 	}
 	MEMMOCLINE;
-	TmpNode = (FILDIRNODE *)MEMMALLOC(hMem, sizeof(FILDIRNODE));
+	TmpNode = (FILEDIRNODE *)MEMMALLOC(hMem, sizeof(FILEDIRNODE));
 	if( TmpNode == NULL)
 	{
 		DPERROR(("MEMMALLOC buffer failed!\n"));
 		return NULL;
 	}
 
-	memset(TmpNode, 0, sizeof(FILDIRNODE));
+	memset(TmpNode, 0, sizeof(FILEDIRNODE));
 
     //开始计算本地时区
 	gettimeofday(&tv, NULL);
@@ -926,26 +926,26 @@ FILDIRNODE* CUdfCmd::AddNode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *P
 	TmpNode->ts.hundredsOfMicroseconds = (tv.tv_usec - TmpNode->ts.centiseconds * 10000) / 100;
 	TmpNode->ts.microseconds = tv.tv_usec - TmpNode->ts.centiseconds * 10000 - TmpNode->ts.hundredsOfMicroseconds * 100;
 
-	TmpNode->Child = NULL;
-	TmpNode->FileSize = filesize;
+	TmpNode->pChild = NULL;
+	TmpNode->nFileSize = filesize;
 	
-	strcpy(TmpNode->Name, szName);
+	strcpy(TmpNode->cName, szName);
 
-	TmpNode->NodeID   = FileDirTree->NodeCount;
-	TmpNode->NodeType = NodeType;
-	TmpNode->Parent   = Parent;
+	TmpNode->nNodeID   = FileDirTree->nNodeCount;
+	TmpNode->nNodeType = NodeType;
+	TmpNode->pParent   = Parent;
 	if(Parent)
 	{
-		if(Parent->Child == NULL)
-			Parent->Child = TmpNode;
+		if(Parent->pChild == NULL)
+			Parent->pChild = TmpNode;
 		else
 		{
 			//找到最后一个兄弟
 			LastBrothers = FindLastBrothers(Parent);
 			if(LastBrothers != NULL)
 			{
-				LastBrothers->Next = TmpNode;
-				TmpNode->Prior = LastBrothers;	
+				LastBrothers->pNext = TmpNode;
+				TmpNode->pPrior = LastBrothers;	
 				//LastBrothers = TmpNode;
 				//LastBrothers->Next = NULL;
 				//LastBrothers->Next = TmpNode;
@@ -962,48 +962,48 @@ FILDIRNODE* CUdfCmd::AddNode(void *hMem, FILEDIRTREE *FileDirTree, FILDIRNODE *P
 	if( Parent == NULL )
 	{
 		//一级根节点
-		if( !FileDirTree->FirstNode )
+		if( !FileDirTree->pFirstNode )
 		{
-			FileDirTree->FirstNode = TmpNode;
-			FileDirTree->LastNode  = TmpNode;
+			FileDirTree->pFirstNode = TmpNode;
+			FileDirTree->pLastNode  = TmpNode;
 		}
 		else
 		{
-			FileDirTree->LastNode->Next = TmpNode;
-			TmpNode->Prior = FileDirTree->LastNode;			
-			FileDirTree->LastNode = TmpNode;
-			FileDirTree->LastNode->Next = NULL;
+			FileDirTree->pLastNode->pNext = TmpNode;
+			TmpNode->pPrior = FileDirTree->pLastNode;			
+			FileDirTree->pLastNode = TmpNode;
+			FileDirTree->pLastNode->pNext = NULL;
 		}
 	}	
 	//if(NODETYPE_FILE == NodeType)
 	//	FileDirTree->TotalFileSize += Size;
-	FileDirTree->NodeCount++;
+	FileDirTree->nNodeCount++;
 	return TmpNode;
 }
 
 // 通过名称查找节点
-FILDIRNODE* CUdfCmd::FindNodeByName(FILEDIRTREE *FileDirTree, char *szName)
+FILEDIRNODE* CUdfCmd::FindNodeByName(FILEDIRTREE *FileDirTree, char *szName)
 {
-	return FindNodeByIndex(FileDirTree->FirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
+	return FindNodeByIndex(FileDirTree->pFirstNode, -1, (char*)(szName == NULL ? "" : szName), TRUE);
 }
 
 // 通过节点ID
-FILDIRNODE* CUdfCmd::FindNodeByID(FILEDIRTREE *FileDirTree, int nodeid)
+FILEDIRNODE* CUdfCmd::FindNodeByID(FILEDIRTREE *FileDirTree, int nodeid)
 {
-	return FindNodeByIndex(FileDirTree->FirstNode, nodeid, "", FALSE);
+	return FindNodeByIndex(FileDirTree->pFirstNode, nodeid, "", FALSE);
 }
 
 // 判断目录下名称是否重复
-FILDIRNODE* CUdfCmd::GetNodeInDir(FILDIRNODE *pDirNode, char *szName)
+FILEDIRNODE* CUdfCmd::GetNodeInDir(FILEDIRNODE *pDirNode, char *szName)
 {
-	FILDIRNODE *Temp = pDirNode ? pDirNode->Child : NULL;
+	FILEDIRNODE *Temp = pDirNode ? pDirNode->pChild : NULL;
 	while (Temp)
 	{
-		if (strcmp(Temp->Name, szName) == 0)
+		if (strcmp(Temp->cName, szName) == 0)
 		{
 			return Temp;
 		}
-		Temp = Temp->Next;
+		Temp = Temp->pNext;
 	}
 	return NULL;
 }
@@ -1012,15 +1012,15 @@ FILDIRNODE* CUdfCmd::GetNodeInDir(FILDIRNODE *pDirNode, char *szName)
 int CUdfCmd::GetDirCount(FILEDIRTREE *FileDirTree)
 {
 	int i; int DirCount = 0;
-	FILDIRNODE * TmpNode;
+	FILEDIRNODE * TmpNode;
 	if( !FileDirTree ) 
 		return 0;
-	for(i=0;i<FileDirTree->NodeCount;i++)
+	for(i=0;i<FileDirTree->nNodeCount;i++)
 	{	
 		TmpNode = FindNodeByID(FileDirTree, i);
 		if( TmpNode )
 		{
-			DirCount += TmpNode->NodeType == NODETYPE_DIR ? 1 : 0;
+			DirCount += TmpNode->nNodeType == NODETYPE_DIR ? 1 : 0;
 		}
 	}
 	return DirCount;
@@ -1030,15 +1030,15 @@ int CUdfCmd::GetDirCount(FILEDIRTREE *FileDirTree)
 int CUdfCmd::GetFileCount(FILEDIRTREE *FileDirTree)
 {
 	int i; int fileCount = 0;
-	FILDIRNODE * TmpNode;
+	FILEDIRNODE * TmpNode;
 	if( !FileDirTree ) 
 		return 0;
-	for(i=0;i<FileDirTree->NodeCount;i++)
+	for(i=0;i<FileDirTree->nNodeCount;i++)
 	{	
 		TmpNode = FindNodeByID(FileDirTree, i);
 		if( TmpNode )
 		{
-			fileCount += TmpNode->NodeType == NODETYPE_FILE ? 1 : 0;
+			fileCount += TmpNode->nNodeType == NODETYPE_FILE ? 1 : 0;
 		}
 	}
 	return fileCount;
@@ -1084,16 +1084,16 @@ int CUdfCmd::InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol)
 	DP(("pUdfInfo->m_CdRwDiskinfo->nDiskCapicity=%lld\n", pUdfInfo->m_CdRwDiskinfo->nDiskCapicity));
 	
 	//初始化UDF光盘系统
-	LvDVDUdf_udf_init_disc(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc), pUdfInfo->m_CdRwDiskinfo->nDiskCapicity, pDiscVol);
+	DVDUdf_UDF_Init_Disc(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc), pUdfInfo->m_CdRwDiskinfo->nDiskCapicity, pDiscVol);
 	
 	//划分盘区
-	LvDVDUdf_split_space(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc));
+	DVDUdf_Split_Space(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc));
 	
 	return 0;
 }
 
 // 写流数据到光盘文件, length可以为任意大小
-int CUdfCmd::WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data, int length)
+int CUdfCmd::WriteStream(udfinfo_t *pUdfInfo, FILEDIRNODE *FileNode, uint8_t *Data, int length)
 {
 	int iRet;
 	if( !FileNode )
@@ -1109,7 +1109,7 @@ int CUdfCmd::WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Dat
 		return iRet;
 	}
 	
-	FileNode->FileSize += length;
+	FileNode->nFileSize += length;
 	
 	return 0;
 }
@@ -1137,13 +1137,13 @@ int CUdfCmd::CloseDisc(udfinfo_t *pUdfInfo)
 	uint16_t DataMode = pUdfInfo->m_DataMode;
 
 	// 填充vrs文件
-	LvDVDUdf_setup_vrs(pUdfInfo->m_hMem, &disc->udf_disc);
+	DVDUdf_Setup_VRS(pUdfInfo->m_hMem, &disc->udf_disc);
 
 	// 设定定位点
-	LvDVDUdf_setup_anchor(pUdfInfo->m_hMem, &disc->udf_disc, DataMode);
+	DVDUdf_Setup_Anchor(pUdfInfo->m_hMem, &disc->udf_disc, DataMode);
 
 	//设定卷标描述
-	LvDVDUdf_setup_vds(pUdfInfo->m_hMem, &disc->udf_disc, DataMode, pUdfInfo);
+	DVDUdf_Setup_VDS(pUdfInfo->m_hMem, &disc->udf_disc, DataMode, pUdfInfo);
 
 	//如果需要封闭光盘，需要先判断当前剩余容量，如果大于512，可立即写入AVDP，然后关闭扇区
 	WriteCloseAVDP(pUdfInfo);
@@ -1185,15 +1185,15 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	CDRWDISKINFO *disc = pUdfInfo->m_CdRwDiskinfo;
 	uint16_t DataMode = pUdfInfo->m_DataMode;
 	pUdfInfo->m_CdRwDiskinfo->nDiskCapicity = 1024 * 1024 * 4;
-	FILDIRNODE *DirNode;
+	FILEDIRNODE *DirNode;
 
 	memset(&disc_volid, 0, sizeof(DISC_VOLID_T));
 	strcpy(disc_volid.logicalVolIdent, "aaaa");
 	strcpy(disc_volid.volIdent,        "aaaa");
 	strcpy(disc_volid.volSetIdent,     "aaaa");
-	strcpy(disc_volid.LVInfoTitle, 	      "aaaa");
-	strcpy(disc_volid.LVInfoDataTime,     "2017-4-17");
-	strcpy(disc_volid.LVInfoEmail,        "aaaa@126.com");
+	strcpy(disc_volid.infoTitle, 	      "aaaa");
+	strcpy(disc_volid.infoDataTime,     "2017-4-17");
+	strcpy(disc_volid.infoEmail,        "aaaa@126.com");
 	strcpy(disc_volid.fileSetIdent,       "aaaa");
 	strcpy(disc_volid.copyrightFileIdent, "aaaa");
 	strcpy(disc_volid.abstractFileIdent,  "aaaa");
@@ -1201,10 +1201,10 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	DirNode = pUdfInfo->udfCmd.AddNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree, NULL, "udf_test_dir", 0, NODETYPE_DIR);
 	
 	//初始化UDF光盘系统
-	LvDVDUdf_udf_init_disc(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc), pUdfInfo->m_CdRwDiskinfo->nDiskCapicity, &disc_volid);
+	DVDUdf_UDF_Init_Disc(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc), pUdfInfo->m_CdRwDiskinfo->nDiskCapicity, &disc_volid);
 	
 	//划分盘区
-	LvDVDUdf_split_space(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc));
+	DVDUdf_Split_Space(pUdfInfo->m_hMem, &(pUdfInfo->m_CdRwDiskinfo->udf_disc));
 	
 	for(i=0; i< 200; i++)
 	{
@@ -1214,15 +1214,15 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 	
 	// close disc
 	// 填充vrs文件
-	LvDVDUdf_setup_vrs(pUdfInfo->m_hMem, &disc->udf_disc);
+	DVDUdf_Setup_VRS(pUdfInfo->m_hMem, &disc->udf_disc);
 	DP(("LvDVDUdf_setup_vrs \n"));
 
 	// 设定定位点
-	LvDVDUdf_setup_anchor(pUdfInfo->m_hMem, &disc->udf_disc, DataMode);
+	DVDUdf_Setup_Anchor(pUdfInfo->m_hMem, &disc->udf_disc, DataMode);
 	DP(("LvDVDUdf_setup_anchor \n"));
 
 	//设定卷标描述
-	LvDVDUdf_setup_vds(pUdfInfo->m_hMem, &disc->udf_disc, DataMode, pUdfInfo);
+	DVDUdf_Setup_VDS(pUdfInfo->m_hMem, &disc->udf_disc, DataMode, pUdfInfo);
 	DP(("LvDVDUdf_setup_vds \n"));
 	
 	//写入文件系统
@@ -1230,15 +1230,15 @@ int CUdfCmd::UdfFsTest(udfinfo_t *pUdfInfo)
 
 	//更新插入各个文件描述符，并更新对应文件长度和起始地址
 	//建立fsd及目录、文件
-	pspace = DVDRecUdf_next_extent(disc->udf_disc.head, FSD);
+	pspace = DVDRecUdf_next_extent(disc->udf_disc.pHead, FSD);
 	DP(("LvDVDRecUdf_next_extent \n"));
 	
 	// 建立FSD
-	LvDVDUdf_setup_fileset(pUdfInfo->m_hMem, &disc->udf_disc, pspace, DataMode);
+	DVDUdf_Setup_Fileset(pUdfInfo->m_hMem, &disc->udf_disc, pspace, DataMode);
 	DP(("LvDVDUdf_setup_fileset \n"));
 	
 	// 建立根文件系统
-	LvDVDUdf_setup_root(pUdfInfo->m_hMem, &disc->udf_disc, pspace, pUdfInfo);
+	DVDUdf_Setup_Root(pUdfInfo->m_hMem, &disc->udf_disc, pspace, pUdfInfo);
 	DP(("LvDVDUdf_setup_root \n"));
 
 	MkUdffsBurnToDisc(pUdfInfo);
@@ -1327,10 +1327,10 @@ udfinfo_t * DVDRec_UdfCreate(int fd, uint16_t DataMode)
 	}
 	memset(udfinfo->m_FileDirTree, 0, sizeof(FILEDIRTREE));
 	
-	udfinfo->m_FileDirTree->NodeCount = 0;
-	udfinfo->m_FileDirTree->TotalFileSize = 0;
-	udfinfo->m_FileDirTree->FirstNode = NULL;
-	udfinfo->m_FileDirTree->LastNode  = NULL;
+	udfinfo->m_FileDirTree->nNodeCount = 0;
+	udfinfo->m_FileDirTree->nTotalFileSize = 0;
+	udfinfo->m_FileDirTree->pFirstNode = NULL;
+	udfinfo->m_FileDirTree->pLastNode  = NULL;
 	
 	udfinfo->m_DataMode   = DataMode;
 	udfinfo->fd			  = fd;
@@ -1348,7 +1348,7 @@ int DVDRec_UdfFree(udfinfo_t *pUdfInfo)
 			//printf("LvDVDRec_UdfFree 3 :%d\n", (int)pUdfInfo->m_CdRwDiskinfo);
 			if(pUdfInfo->m_hMem)
 			{
-				LvDVDUdf_freeUdfdisc(pUdfInfo->m_hMem, &pUdfInfo->m_CdRwDiskinfo->udf_disc);
+				DVDUdf_FreeUDF_Disc(pUdfInfo->m_hMem, &pUdfInfo->m_CdRwDiskinfo->udf_disc);
 			}
 
 			if(pUdfInfo->m_CdRwDiskinfo->udfsys.pbuffer)
@@ -1367,7 +1367,7 @@ int DVDRec_UdfFree(udfinfo_t *pUdfInfo)
 		if(pUdfInfo->m_FileDirTree)
 		{
 			//printf("LvDVDRec_UdfFree 4\n");
-			DeleteFileDirNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree->FirstNode);
+			DeleteFileDirNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree->pFirstNode);
 			MEMFREE(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree);
 			//printf("LvDVDRec_UdfFree 5\n");
 		}
@@ -1398,12 +1398,12 @@ int DVDRec_UdfTreeFree(udfinfo_t *pUdfInfo)
 			pUdfInfo->m_CdRwDiskinfo->udffile.buffsize = 0;
 			pUdfInfo->m_CdRwDiskinfo->udfsys.bclosed   = FALSE;
 			pUdfInfo->m_CdRwDiskinfo->udffile.bclosed  = FALSE;
-			LvDVDUdf_freeUdfdisc(pUdfInfo->m_hMem, &pUdfInfo->m_CdRwDiskinfo->udf_disc);
+			DVDUdf_FreeUDF_Disc(pUdfInfo->m_hMem, &pUdfInfo->m_CdRwDiskinfo->udf_disc);
 			memset(&pUdfInfo->m_CdRwDiskinfo->udf_disc, 0, sizeof(struct udf_disc));
 		}
 		if(pUdfInfo->m_FileDirTree)
 		{
-			DeleteFileDirNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree->FirstNode);
+			DeleteFileDirNode(pUdfInfo->m_hMem, pUdfInfo->m_FileDirTree->pFirstNode);
 			memset(pUdfInfo->m_FileDirTree, 0, sizeof(FILEDIRTREE));
 		}
 		//pUdfInfo->m_CurrentFileLocation = 0;

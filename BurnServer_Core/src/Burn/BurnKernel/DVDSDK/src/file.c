@@ -172,19 +172,19 @@ tag DVDRecUdf_query_tag(struct udf_disc *disc, struct udf_extent *ext, struct ud
 	ret.reserved = 0;
 	ret.tagSerialNum = cpu_to_le16(SerialNum);
 	ret.descCRCLength = cpu_to_le16(desc->length - sizeof(tag));
-    data = desc->data;
+    data = desc->pData;
 	
 	while (data != NULL)
 	{
-		crc = DVDRecUdf_crc((uint8_t*)(data->buffer + offset), data->length - offset, crc); //长度176
+		crc = DVDRecUdf_crc((uint8_t*)(data->pBuffer + offset), data->length - offset, crc); //长度176
 		offset = 0;
-		data = data->next;
+		data = data->pNext;
 	}
 	ret.descCRC = cpu_to_le16(crc);
-	if (ext->space_type & FSD)
+	if (ext->euSpaceType & FSD)
 		ret.tagLocation = cpu_to_le32(desc->offset);  //相对于分区PD的偏移位置
 	else
-		ret.tagLocation = cpu_to_le32(ext->start + desc->offset); //相对于其它tag的非PD的物理位置
+		ret.tagLocation = cpu_to_le32(ext->nStart + desc->offset); //相对于其它tag的非PD的物理位置
 	for (i=0; i<16; i++)
 		if (i != 4)
 			ret.tagChecksum += (uint8_t)(((char *)&ret)[i]);
@@ -216,10 +216,10 @@ tag DVDRecUdf_udf_query_tag(struct udf_disc *disc, uint16_t Ident, uint16_t Seri
 	{
 		if ((clength = data->length) > length)
 			clength = length;
-		crc = DVDRecUdf_crc((uint8_t*)(((char *)data->buffer) + offset + jump), clength - offset, crc);
+		crc = DVDRecUdf_crc((uint8_t*)(((char *)data->pBuffer) + offset + jump), clength - offset, crc);
 		length -= clength;
 		offset = 0;
-		data = data->next;
+		data = data->pNext;
 	}
 
 	ret.descCRC = cpu_to_le16(crc);
@@ -482,7 +482,7 @@ int DVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent *p
 		fiddesc = finddesc;
 	}
 
-	SecNum = (fiddesc->data->length/2048); 
+	SecNum = (fiddesc->pData->length/2048); 
 	if(name)
 	{
 		if(DataMode == UDFDATAMODE_DATA)
@@ -492,22 +492,22 @@ int DVDRecUdf_insert_fid(void *hMem, struct udf_disc *disc, struct udf_extent *p
 		}
 		else
 			namel = strlen((const char*)name);
-		if((fiddesc->data->ilength + PAD((40+namel),4)) > fiddesc->data->length)
+		if((fiddesc->pData->ilength + PAD((40+namel),4)) > fiddesc->pData->length)
 		{
-			fiddesc->data->length = (((fiddesc->data->length/2048)+1)*2048);	
-			ret = DVDRecUdf_realloc(hMem,fiddesc,fiddesc->data->length);
+			fiddesc->pData->length = (((fiddesc->pData->length/2048)+1)*2048);	
+			ret = DVDRecUdf_realloc(hMem,fiddesc,fiddesc->pData->length);
 			if(!ret)
 				return -1;
-			SecNum = (fiddesc->data->length/2048); 
+			SecNum = (fiddesc->pData->length/2048); 
 		}
 	}
 
-	fid = (struct fileIdentDesc *)((char *)fiddesc->data->buffer + fiddesc->data->ilength);
+	fid = (struct fileIdentDesc *)((char *)fiddesc->pData->pBuffer + fiddesc->pData->ilength);
 	
 	tagLocation = cpu_to_le32(offset);
 
-	fe = (struct fileEntry *)desc->data->buffer;
-	data = fiddesc->data;
+	fe = (struct fileEntry *)desc->pData->pBuffer;
+	data = fiddesc->pData;
 	//fe->fileLinkCount = cpu_to_le16(le16_to_cpu(fe->fileLinkCount) + 1);
 	//uniqueID = le64_to_cpu(fe->uniqueID);
 
@@ -591,10 +591,10 @@ struct udf_desc *DVDRecUdf_udf_create(void *hMem, struct udf_disc *disc, struct 
 	int feLength = sizeof(struct fileEntry);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, pspace, TAG_IDENT_FE, offset, feLength+fileblock, NULL);
-	fe = (struct fileEntry *)desc->data->buffer;
+	fe = (struct fileEntry *)desc->pData->pBuffer;
 
 	//modify by yanming for filetime
-	memcpy(fe, (fileEntry*)(&UDF_Defaults.default_fe->default_fe), sizeof(struct fileEntry));
+	memcpy(fe, (fileEntry*)(&UDF_Defaults.pDefault_fe->default_fe), sizeof(struct fileEntry));
 	memcpy(&fe->accessTime, ts, sizeof(timestamp));
 	memcpy(&fe->modificationTime, ts, sizeof(timestamp));
 	memcpy(&fe->attrTime, ts, sizeof(timestamp));
@@ -656,7 +656,7 @@ struct udf_desc *DVDRecUdf_udf_create(void *hMem, struct udf_disc *disc, struct 
 
 	fe->checkpoint = cpu_to_le32(1);
 
-    offset = LvDVDUdf_insert_desc(hMem, desc);
+    offset = DVDUdf_Insert_Desc(hMem, desc);
 
 	if(DataMode == UDFDATAMODE_DATA)
 		fe->impIdent.identSuffix[0] = 5;

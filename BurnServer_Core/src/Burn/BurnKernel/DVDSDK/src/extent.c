@@ -13,11 +13,11 @@
 #include "debug.h"
 
 //下一个盘区的指针  找到fsd
-struct udf_extent *DVDRecUdf_next_extent(struct udf_extent *start_ext, enum udf_space_type type)
+struct udf_extent *DVDRecUdf_next_extent(struct udf_extent *start_ext, enum euUDF_SPACE_TYPE type)
 {
-	while (start_ext != NULL && !(start_ext->space_type & type))
+	while (start_ext != NULL && !(start_ext->euSpaceType & type))
 	{
-		start_ext = start_ext->next;
+		start_ext = start_ext->pNext;
 		//usleep(2000);
 	}
 
@@ -91,50 +91,50 @@ static struct udf_extent *find_extent(struct udf_disc *disc, uint32_t start)
 {
 	struct udf_extent *start_ext;
 
-	start_ext = disc->head;
+	start_ext = disc->pHead;
 
-	while (start_ext->next != NULL)
+	while (start_ext->pNext != NULL)
 	{
-		if (start_ext->start + start_ext->blocks > start)
+		if (start_ext->nStart + start_ext->nBlocks > start)
 			break;
-		start_ext = start_ext->next;
+		start_ext = start_ext->pNext;
 	}
 	return start_ext;
 }
 
 //设定盘区，用链表记录每个盘区的起始逻辑块和占用空间
-struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum udf_space_type type, uint32_t start, uint32_t blocks)
+struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum euUDF_SPACE_TYPE type, uint32_t start, uint32_t blocks)
 {
 	struct udf_extent *start_ext, *new_ext;
 
 	start_ext = find_extent(disc, start);
-	if (start == start_ext->start)
+	if (start == start_ext->nStart)
 	{
-		if (blocks == start_ext->blocks)              //block == 16
+		if (blocks == start_ext->nBlocks)              //block == 16
 		{
-			start_ext->space_type = type;
+			start_ext->euSpaceType = type;
 
 			return start_ext;
 		}//         16               2297888
-		else if (blocks < start_ext->blocks)
+		else if (blocks < start_ext->nBlocks)
 		{
 			MEMMOCLINE;
 			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
-			new_ext->space_type = type;
-			new_ext->start = start;
-			new_ext->blocks = blocks;
-			new_ext->head = new_ext->tail = NULL;
-			new_ext->prev = start_ext->prev;
-			if (new_ext->prev)
-				new_ext->prev->next = new_ext;
-			new_ext->next = start_ext;
-			if (disc->head == start_ext)
-				disc->head = new_ext;
+			new_ext->euSpaceType = type;
+			new_ext->nStart = start;
+			new_ext->nBlocks = blocks;
+			new_ext->pHead = new_ext->pTail = NULL;
+			new_ext->pPrev = start_ext->pPrev;
+			if (new_ext->pPrev)
+				new_ext->pPrev->pNext = new_ext;
+			new_ext->pNext = start_ext;
+			if (disc->pHead == start_ext)
+				disc->pHead = new_ext;
 
-			start_ext->start += blocks;
-			start_ext->blocks -= blocks;
-			start_ext->prev = new_ext;
+			start_ext->nStart += blocks;
+			start_ext->nBlocks -= blocks;
+			start_ext->pPrev = new_ext;
 
 			return new_ext;
 		}
@@ -145,61 +145,61 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 			// 
 			//exit(1);
 			
-			start_ext->space_type = type;
+			start_ext->euSpaceType = type;
 
 			return start_ext;
 		}
 	}
 	else /* start > start_ext->start */
 	{
-		if (start + blocks == start_ext->start + start_ext->blocks)
+		if (start + blocks == start_ext->nStart + start_ext->nBlocks)
 		{
 			MEMMOCLINE;
 			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
-			new_ext->space_type = type;
-			new_ext->start = start;
-			new_ext->blocks = blocks;
-			new_ext->head = new_ext->tail = NULL;
-			new_ext->prev = start_ext;
-			new_ext->next = start_ext->next;
-			if (new_ext->next)
-				new_ext->next->prev = new_ext;
-			if (disc->tail == start_ext)
-				disc->tail = new_ext;
+			new_ext->euSpaceType = type;
+			new_ext->nStart = start;
+			new_ext->nBlocks = blocks;
+			new_ext->pHead = new_ext->pTail = NULL;
+			new_ext->pPrev = start_ext;
+			new_ext->pNext = start_ext->pNext;
+			if (new_ext->pNext)
+				new_ext->pNext->pPrev = new_ext;
+			if (disc->pTail == start_ext)
+				disc->pTail = new_ext;
 
-			start_ext->blocks -= blocks;
-			start_ext->next = new_ext;
+			start_ext->nBlocks -= blocks;
+			start_ext->pNext = new_ext;
 
 			return new_ext;
 		}
-		else if (start + blocks < start_ext->start + start_ext->blocks)
+		else if (start + blocks < start_ext->nStart + start_ext->nBlocks)
 		{
 			MEMMOCLINE;
 			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
-			new_ext->space_type = type;
-			new_ext->start = start;
-			new_ext->blocks = blocks;
-			new_ext->head = new_ext->tail = NULL;
-			new_ext->prev = start_ext;
+			new_ext->euSpaceType = type;
+			new_ext->nStart = start;
+			new_ext->nBlocks = blocks;
+			new_ext->pHead = new_ext->pTail = NULL;
+			new_ext->pPrev = start_ext;
 			
 			MEMMOCLINE;
-			new_ext->next = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
-			memset(new_ext->next, 0, sizeof(struct udf_extent));
-			new_ext->next->prev = new_ext;
-			new_ext->next->space_type = start_ext->space_type;
-			new_ext->next->start = start + blocks;
-			new_ext->next->blocks = start_ext->blocks - blocks - start + start_ext->start;
-			new_ext->next->head = new_ext->next->tail = NULL;
-			new_ext->next->next = start_ext->next;
-			if (new_ext->next->next)
-				new_ext->next->next->prev = new_ext->next;
-			if (disc->tail == start_ext)
-				disc->tail = new_ext->next;
+			new_ext->pNext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
+			memset(new_ext->pNext, 0, sizeof(struct udf_extent));
+			new_ext->pNext->pPrev = new_ext;
+			new_ext->pNext->euSpaceType = start_ext->euSpaceType;
+			new_ext->pNext->nStart = start + blocks;
+			new_ext->pNext->nBlocks = start_ext->nBlocks - blocks - start + start_ext->nStart;
+			new_ext->pNext->pHead = new_ext->pNext->pTail = NULL;
+			new_ext->pNext->pNext = start_ext->pNext;
+			if (new_ext->pNext->pNext)
+				new_ext->pNext->pNext->pPrev = new_ext->pNext;
+			if (disc->pTail == start_ext)
+				disc->pTail = new_ext->pNext;
 
-			start_ext->blocks = start - start_ext->start;
-			start_ext->next = new_ext;
+			start_ext->nBlocks = start - start_ext->nStart;
+			start_ext->pNext = new_ext;
 
 			return new_ext;
 		}
@@ -208,19 +208,19 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 			MEMMOCLINE;
 			new_ext = (udf_extent*)MEMMALLOC(hMem, sizeof(struct udf_extent));
 			memset(new_ext, 0, sizeof(struct udf_extent));
-			new_ext->space_type = type;
-			new_ext->start = start;
-			new_ext->blocks = blocks;
-			new_ext->head = new_ext->tail = NULL;
-			new_ext->prev = start_ext;
-			new_ext->next = start_ext->next;
-			if (new_ext->next)
-				new_ext->next->prev = new_ext;
-			if (disc->tail == start_ext)
-				disc->tail = new_ext;
+			new_ext->euSpaceType = type;
+			new_ext->nStart = start;
+			new_ext->nBlocks = blocks;
+			new_ext->pHead = new_ext->pTail = NULL;
+			new_ext->pPrev = start_ext;
+			new_ext->pNext = start_ext->pNext;
+			if (new_ext->pNext)
+				new_ext->pNext->pPrev = new_ext;
+			if (disc->pTail == start_ext)
+				disc->pTail = new_ext;
 
-			start_ext->blocks -= blocks;
-			start_ext->next = new_ext;
+			start_ext->nBlocks -= blocks;
+			start_ext->pNext = new_ext;
 
 			return new_ext;
 		}
@@ -231,7 +231,7 @@ struct udf_extent *DVDRecUdf_set_extent(void *hMem, struct udf_disc *disc, enum 
 struct udf_desc *DVDRecUdf_next_desc(struct udf_desc *start_desc, uint16_t ident)
 {
 	while (start_desc != NULL && start_desc->ident != ident)
-		start_desc = start_desc->next;
+		start_desc = start_desc->pNext;
 
 	return start_desc;
 }
@@ -241,18 +241,18 @@ struct udf_desc *DVDRecUdf_find_desc(struct udf_extent *ext, uint32_t offset)
 {
 	struct udf_desc *start_desc;
 
-	start_desc = ext->head;
+	start_desc = ext->pHead;
 
-	while (start_desc->next != NULL)
+	while (start_desc->pNext != NULL)
 	{
 		if (start_desc->offset == offset)
 			return start_desc;
 		else if ((start_desc->offset) > offset)
 		{	
-			return start_desc->prev;
+			return start_desc->pPrev;
 		}
 		else
-			start_desc = start_desc->next;
+			start_desc = start_desc->pNext;
 	}
 	return start_desc;
 }
@@ -272,40 +272,40 @@ struct udf_desc *DVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct ud
 	new_desc->length = length;
 	if (data == NULL)
 	{
-		new_desc->data = DVDRecUdf_alloc_data(hMem, length);
+		new_desc->pData = DVDRecUdf_alloc_data(hMem, length);
 	}
 	else
 	{
-		new_desc->data = data;
+		new_desc->pData = data;
 	}
-	if (ext->head == NULL)
+	if (ext->pHead == NULL)
 	{
-		ext->head = ext->tail = new_desc;
-		new_desc->next = new_desc->prev = NULL;
+		ext->pHead = ext->pTail = new_desc;
+		new_desc->pNext = new_desc->pPrev = NULL;
 	}
 	else
 	{
 		start_desc = DVDRecUdf_find_desc(ext, offset);
 		if (start_desc == NULL)
 		{
-			new_desc->next = ext->head;
-			new_desc->prev = NULL;
-			new_desc->next->prev = new_desc;
-			ext->head = new_desc;
+			new_desc->pNext = ext->pHead;
+			new_desc->pPrev = NULL;
+			new_desc->pNext->pPrev = new_desc;
+			ext->pHead = new_desc;
 		}
 		else
 		{
-			new_desc->next = start_desc->next;
-			new_desc->prev = start_desc;
-			if (start_desc->next)
-				start_desc->next->prev = new_desc;
+			new_desc->pNext = start_desc->pNext;
+			new_desc->pPrev = start_desc;
+			if (start_desc->pNext)
+				start_desc->pNext->pPrev = new_desc;
 			else
 			{
-				ext->tail = new_desc;
+				ext->pTail = new_desc;
 				//new_desc->prev = start_desc;
 				//new_desc->next = NULL;
 			}
-			start_desc->next = new_desc;
+			start_desc->pNext = new_desc;
 			
 		}
 	}
@@ -316,21 +316,21 @@ struct udf_desc *DVDRecUdf_set_desc(void *hMem, struct udf_disc *disc, struct ud
 //为描述符追加数据
 void DVDRecUdf_append_data(struct udf_desc *desc, struct udf_data *data)
 {
-	struct udf_data *ndata = desc->data;
+	struct udf_data *ndata = desc->pData;
 
 	desc->length += data->length;
 
-	while (ndata->next != NULL)
-		ndata = ndata->next;
+	while (ndata->pNext != NULL)
+		ndata = ndata->pNext;
 
-	ndata->next = data;
-	data->prev = ndata;
+	ndata->pNext = data;
+	data->pPrev = ndata;
 }
 
 void* DVDRecUdf_realloc(void *hMem,struct udf_desc *desc,unsigned long long size)
 {
-	desc->data->buffer = MEMREALLOC(hMem,desc->data->buffer,size);
-	return desc->data->buffer;
+	desc->pData->pBuffer = MEMREALLOC(hMem,desc->pData->pBuffer,size);
+	return desc->pData->pBuffer;
 }
 
 //分配数据
@@ -345,13 +345,13 @@ struct udf_data *DVDRecUdf_alloc_data(void *hMem, int length)
 	if (length)
 	{
 		MEMMOCLINE;
-		data->buffer  = MEMMALLOC(hMem, length);
-		memset(data->buffer, 0, length);
+		data->pBuffer  = MEMMALLOC(hMem, length);
+		memset(data->pBuffer, 0, length);
 		data->bMalloc = 1;
 	}
 	else
 	{
-		data->buffer = NULL;
+		data->pBuffer = NULL;
 	}
 	data->length = length;
 	data->ilength = 0;

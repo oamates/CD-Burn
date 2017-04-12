@@ -87,15 +87,15 @@ static void setup_pvd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 	int length = sizeof(struct primaryVolDesc);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, pvds, TAG_IDENT_PVD, offset, 0, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_pvd[0];
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_pvd[0];
 	if(DataMode == UDFDATAMODE_DATA)
 		disc->udf_pvd[0]->impIdent.identSuffix[0]= 5;
 	disc->udf_pvd[0]->descTag = DVDRecUdf_query_tag(disc, pvds, desc, DataMode);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, rvds, TAG_IDENT_PVD, offset, length, NULL);
-	memcpy(disc->udf_pvd[1] = (struct primaryVolDesc*)desc->data->buffer, disc->udf_pvd[0], length);
-	disc->udf_pvd[1] = (struct primaryVolDesc *)desc->data->buffer;
+	memcpy(disc->udf_pvd[1] = (struct primaryVolDesc*)desc->pData->pBuffer, disc->udf_pvd[0], length);
+	disc->udf_pvd[1] = (struct primaryVolDesc *)desc->pData->pBuffer;
 	if(DataMode == UDFDATAMODE_DATA)
 		disc->udf_pvd[1]->impIdent.identSuffix[0]= 5;
 	disc->udf_pvd[1]->descTag = DVDRecUdf_query_tag(disc, rvds, desc, DataMode);
@@ -112,15 +112,15 @@ static void setup_iuvd(void *hMem, struct udf_disc *disc, struct udf_extent *pvd
 	((uint16_t *)disc->udf_iuvd[0]->impIdent.identSuffix)[0] = cpu_to_le16(disc->udf_rev);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, pvds, TAG_IDENT_IUVD, offset, 0, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_iuvd[0];
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_iuvd[0];
 	if(DataMode == UDFDATAMODE_DATA)
 		disc->udf_iuvd[0]->impIdent.identSuffix[2] = 5;
 	disc->udf_iuvd[0]->descTag = DVDRecUdf_query_tag(disc, pvds, desc, DataMode);
 	
 	desc = DVDRecUdf_set_desc(hMem, disc, rvds, TAG_IDENT_IUVD, offset, length, NULL);
-	memcpy(disc->udf_iuvd[1] = (impUseVolDesc*)desc->data->buffer, disc->udf_iuvd[0], length);
-	disc->udf_iuvd[1] = (struct impUseVolDesc *)desc->data->buffer;
+	memcpy(disc->udf_iuvd[1] = (impUseVolDesc*)desc->pData->pBuffer, disc->udf_iuvd[0], length);
+	disc->udf_iuvd[1] = (struct impUseVolDesc *)desc->pData->pBuffer;
 	if(DataMode == UDFDATAMODE_DATA)
 		disc->udf_iuvd[1]->impIdent.identSuffix[2] = 5;
 	disc->udf_iuvd[1]->descTag = DVDRecUdf_query_tag(disc, rvds, desc, DataMode);
@@ -137,8 +137,8 @@ static void setup_pd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 	int PDStart,PDBlocks;
 	int length = sizeof(struct partitionDesc);
 
-	ext = DVDRecUdf_next_extent(disc->head, FSD);
-	PDStart = ext->start;
+	ext = DVDRecUdf_next_extent(disc->pHead, FSD);
+	PDStart = ext->nStart;
 	PDBlocks = pUdfInfo->m_CdRwDiskinfo->udffile.writenext - pUdfInfo->m_CdRwDiskinfo->udffile.writestart;//disc->blocks - UDF_SYS_LEN - UDF_FSD_LEN - 512;
 	PDBlocks += UDF_FS_LENGTH + PACKET_BLOCK_16 - UDF_SYS_LEN;
 
@@ -146,8 +146,8 @@ static void setup_pd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 	disc->udf_pd[0]->partitionLength = cpu_to_le32(PDBlocks);
 	
 	desc = DVDRecUdf_set_desc(hMem, disc, pvds, TAG_IDENT_PD, offset, 0, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_pd[0];
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_pd[0];
 	if(DataMode == UDFDATAMODE_DATA)
 	{
 		disc->udf_pd[0]->impIdent.identSuffix[0] = 5;
@@ -158,8 +158,8 @@ static void setup_pd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 
 
 	desc = DVDRecUdf_set_desc(hMem, disc, rvds, TAG_IDENT_PD, offset, length, NULL);
-	memcpy(disc->udf_pd[1] = (struct partitionDesc*)desc->data->buffer, disc->udf_pd[0], length);
-	disc->udf_pd[1] = (struct partitionDesc *)desc->data->buffer;
+	memcpy(disc->udf_pd[1] = (struct partitionDesc*)desc->pData->pBuffer, disc->udf_pd[0], length);
+	disc->udf_pd[1] = (struct partitionDesc *)desc->pData->pBuffer;
 	if(DataMode == UDFDATAMODE_DATA)
 	{
 		disc->udf_pd[1]->impIdent.identSuffix[0] = 5;
@@ -179,7 +179,7 @@ static void setup_lvd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 
 	//disc->udf_lvd[0]->integritySeqExt.extLength = cpu_to_le32(lvid->blocks * disc->blocksize);
 	disc->udf_lvd[0]->integritySeqExt.extLength = cpu_to_le32(2 * disc->blocksize);
-	disc->udf_lvd[0]->integritySeqExt.extLocation = cpu_to_le32(lvid->start);
+	disc->udf_lvd[0]->integritySeqExt.extLocation = cpu_to_le32(lvid->nStart);
 
 	if(DataMode == UDFDATAMODE_DATA)
         ((long_ad *)disc->udf_lvd[0]->logicalVolContentsUse)->extLength = cpu_to_le32(CDROM_BLOCK);
@@ -189,8 +189,8 @@ static void setup_lvd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 	((long_ad *)disc->udf_lvd[0]->logicalVolContentsUse)->extLocation.partitionReferenceNum = cpu_to_le16(0);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, pvds, TAG_IDENT_LVD, offset, 0, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_lvd[0];
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_lvd[0];
 	if(DataMode == UDFDATAMODE_DATA)
 		disc->udf_lvd[0]->impIdent.identSuffix[0] = 5;
 	
@@ -198,7 +198,7 @@ static void setup_lvd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 
 
 	desc = DVDRecUdf_set_desc(hMem, disc, rvds, TAG_IDENT_LVD, offset, length, NULL);
-	memcpy(disc->udf_lvd[1] = (struct logicalVolDesc*)desc->data->buffer, disc->udf_lvd[0], length);
+	memcpy(disc->udf_lvd[1] = (struct logicalVolDesc*)desc->pData->pBuffer, disc->udf_lvd[0], length);
 	
 	if(DataMode == UDFDATAMODE_DATA)
 		((long_ad *)disc->udf_lvd[1]->logicalVolContentsUse)->extLength = cpu_to_le32(CDROM_BLOCK);
@@ -207,7 +207,7 @@ static void setup_lvd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 	((long_ad *)disc->udf_lvd[1]->logicalVolContentsUse)->extLocation.logicalBlockNum = cpu_to_le32(0);
 	((long_ad *)disc->udf_lvd[1]->logicalVolContentsUse)->extLocation.partitionReferenceNum = cpu_to_le16(0);
 
-	disc->udf_lvd[1] = (struct logicalVolDesc *)desc->data->buffer;
+	disc->udf_lvd[1] = (struct logicalVolDesc *)desc->pData->pBuffer;
 	if(DataMode == UDFDATAMODE_DATA)
 		disc->udf_lvd[1]->impIdent.identSuffix[0] = 5;	
 	disc->udf_lvd[1]->descTag = DVDRecUdf_query_tag(disc, rvds, desc, DataMode);
@@ -241,13 +241,13 @@ static void setup_usd(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 
 
 	desc = DVDRecUdf_set_desc(hMem, disc, pvds, TAG_IDENT_USD, offset, 0/*length*/, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_usd[0];
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_usd[0];
 	disc->udf_usd[0]->descTag = DVDRecUdf_query_tag(disc, pvds, desc, DataMode);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, rvds, TAG_IDENT_USD, offset, length, NULL);
-	memcpy(disc->udf_usd[1] = (struct unallocSpaceDesc *)desc->data->buffer, disc->udf_usd[0], length);
-	disc->udf_usd[1] = (struct unallocSpaceDesc *)desc->data->buffer;
+	memcpy(disc->udf_usd[1] = (struct unallocSpaceDesc *)desc->pData->pBuffer, disc->udf_usd[0], length);
+	disc->udf_usd[1] = (struct unallocSpaceDesc *)desc->pData->pBuffer;
 	//memcpy(disc->udf_usd[1] = desc->data->buffer, disc->udf_usd[0], length);
 	disc->udf_usd[1]->descTag = DVDRecUdf_query_tag(disc, rvds, desc, DataMode);
 
@@ -261,13 +261,13 @@ static void setup_td(void *hMem, struct udf_disc *disc, struct udf_extent *pvds
 	int length = sizeof(struct terminatingDesc);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, pvds, TAG_IDENT_TD, offset, 0, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_td[0];
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_td[0];
 	disc->udf_td[0]->descTag = DVDRecUdf_query_tag(disc, pvds, desc, DataMode);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, rvds, TAG_IDENT_TD, offset, length, NULL);
-	memcpy(disc->udf_td[1] = (struct terminatingDesc *)desc->data->buffer, disc->udf_td[0], length);
-	disc->udf_td[1] = (struct terminatingDesc *)desc->data->buffer;
+	memcpy(disc->udf_td[1] = (struct terminatingDesc *)desc->pData->pBuffer, disc->udf_td[0], length);
+	disc->udf_td[1] = (struct terminatingDesc *)desc->pData->pBuffer;
 	disc->udf_td[1]->descTag = DVDRecUdf_query_tag(disc, rvds, desc, DataMode);
 }
 
@@ -279,7 +279,7 @@ static void setup_lvid(void *hMem, struct udf_disc *disc, struct udf_extent *lvi
 	struct udf_extent *ext;
 	int length = sizeof(struct logicalVolIntegrityDesc) + le32_to_cpu(disc->udf_lvid->numOfPartitions) * sizeof(uint32_t) * 2 + le32_to_cpu(disc->udf_lvid->lengthOfImpUse);
 
-	ext = DVDRecUdf_next_extent(disc->head, LVID);
+	ext = DVDRecUdf_next_extent(disc->pHead, LVID);
 	disc->udf_lvid->freeSpaceTable[0] = 0;//cpu_to_le32(ext->blocks); //统计物理分区空间的大小
 	disc->udf_lvid->sizeTable[1] = 0;//cpu_to_le32(ext->blocks);  //统计可用空间大小
 	((struct logicalVolHeaderDesc *)disc->udf_lvid->logicalVolContentsUse)->uniqueID = 32;
@@ -293,12 +293,12 @@ static void setup_lvid(void *hMem, struct udf_disc *disc, struct udf_extent *lvi
 		disc->udf_lvid->integrityType = LVID_INTEGRITY_TYPE_CLOSE;
 	}
 	desc = DVDRecUdf_set_desc(hMem, disc, lvid, TAG_IDENT_LVID, 0, 0, NULL);
-	desc->length = desc->data->length = length;
-	desc->data->buffer = disc->udf_lvid;
+	desc->length = desc->pData->length = length;
+	desc->pData->pBuffer = disc->udf_lvid;
 	disc->udf_lvid->descTag = DVDRecUdf_query_tag(disc, lvid, desc, DataMode);
 
 	desc = DVDRecUdf_set_desc(hMem, disc, lvid, TAG_IDENT_TD, 1, sizeof(struct terminatingDesc), NULL);
-	disc->udf_td[2] = (struct terminatingDesc *)desc->data->buffer;
+	disc->udf_td[2] = (struct terminatingDesc *)desc->pData->pBuffer;
 	disc->udf_td[2]->descTag = DVDRecUdf_query_tag(disc, lvid, desc, DataMode);
 
 }
@@ -598,13 +598,13 @@ static int change_data(struct udf_desc *desc,int pos,int len)
 {
 	struct fileEntry *fe;
 	unsigned int fidlen = 0;
-	fe = (struct fileEntry *)desc->data->buffer;
+	fe = (struct fileEntry *)desc->pData->pBuffer;
 
 	if ((le16_to_cpu(fe->icbTag.flags) & ICBTAG_FLAG_AD_MASK) == ICBTAG_FLAG_AD_SHORT)
 	{
 		short_ad *sad;
 
-		fe = (struct fileEntry *)desc->data->buffer;
+		fe = (struct fileEntry *)desc->pData->pBuffer;
 		fe->lengthAllocDescs = cpu_to_le32(sizeof(short_ad));
 
 		sad = (short_ad *)(&fe->extendedAttr[0]);
@@ -616,7 +616,7 @@ static int change_data(struct udf_desc *desc,int pos,int len)
 
 		long_ad *lad;
 
-		fe = (struct fileEntry *)desc->data->buffer;
+		fe = (struct fileEntry *)desc->pData->pBuffer;
 		fe->lengthAllocDescs = cpu_to_le32(sizeof(long_ad));
 		
 		lad = (long_ad *)&fe->allocDescs[le32_to_cpu(fe->lengthExtendedAttr)];
@@ -635,9 +635,9 @@ static int change_data(struct udf_desc *desc,int pos,int len)
 
 }
 //计算fid需要的大小
-static int CalcNeedFidSize(FILDIRNODE * Dir,int DataMode)
+static int CalcNeedFidSize(FILEDIRNODE * Dir,int DataMode)
 {
-	FILDIRNODE * tmpDir;
+	FILEDIRNODE * tmpDir;
 	int namelen = 0;
 	int tmplen = 0;
 
@@ -651,61 +651,61 @@ static int CalcNeedFidSize(FILDIRNODE * Dir,int DataMode)
 	while(tmpDir)
 	{
 		//get unicode
-		DVDRec_Utf8ToUnicode((unsigned char *)tmpDir->Name, UnicodeName, buflen, &slen);
+		DVDRec_Utf8ToUnicode((unsigned char *)tmpDir->cName, UnicodeName, buflen, &slen);
 		if(DataMode == UDFDATAMODE_DATA)
 		{
 			tmplen = slen;//strlen(tmpDir->Name); modify by yanming for utf
 			//tmplen = LvDVDRecUdf_EncUnicodeStr(tmpDir->Name,(uint8_t *)tmpname,strlen(tmpDir->Name),strlen(tmpDir->Name)+2);
 		}
 		else
-			tmplen = strlen(tmpDir->Name);	
+			tmplen = strlen(tmpDir->cName);	
 		//tmplen = (2*count);
 		//tmplen = 2*strlen(tmpname);
 		//namelen += PAD((40+(2*strlen(tmpDir->Name))),4);
 		namelen += PAD((40+tmplen),4);
-		DP(("tmpDir->Name=%s\n",tmpDir->Name));
+		DP(("tmpDir->Name=%s\n",tmpDir->cName));
 		//printf("namelen=%d,tmplen=%d\n",namelen,tmplen);
-		tmpDir = tmpDir->Next;
+		tmpDir = tmpDir->pNext;
 	}
 	namelen += 40; //第一个fid的长度为40
 	//printf("1namelen=%d\n",namelen);
 	return namelen;
 }
 //计算路径深度
-static int DirDepth(FILDIRNODE * Directory,int DataMode)
+static int DirDepth(FILEDIRNODE * Directory,int DataMode)
 {
 	int num = 0;
 	int fidlen = 0;
-	FILDIRNODE * Dir = NULL;
+	FILEDIRNODE * Dir = NULL;
 
 	Dir = Directory;//->Child;
 	if(Dir)
 	{
-		if(Dir->NodeType == NODETYPE_DIR)
+		if(Dir->nNodeType == NODETYPE_DIR)
 		{
 			num += 2;   //目录占用2个数据区
-			fidlen = CalcNeedFidSize(Dir->Child,DataMode); //计算fid占的空间
+			fidlen = CalcNeedFidSize(Dir->pChild,DataMode); //计算fid占的空间
 			if(fidlen > 2048)
 			{
 				num += ((fidlen/2048)+(((fidlen%2048) > 0) ? 1:0));
 				num--;		//多加一个
 			}			
 		}
-		else if(Dir->NodeType == NODETYPE_FILE)
+		else if(Dir->nNodeType == NODETYPE_FILE)
 		{
 			num += 1;
 		}
 		
-		if(Dir->Next)
-			num += DirDepth(Dir->Next,DataMode);
-		if(Dir->Child)
-			num += DirDepth(Dir->Child,DataMode);
+		if(Dir->pNext)
+			num += DirDepth(Dir->pNext,DataMode);
+		if(Dir->pChild)
+			num += DirDepth(Dir->pChild,DataMode);
 	}
 	return num;
 }
 
 static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *pspace,
-	            FILDIRNODE * Directory,uint32_t offset,
+	            FILEDIRNODE * Directory,uint32_t offset,
 	            udfinfo_t *pUdfInfo, struct udf_desc *desc)
 {
 	uint32_t FileType,FileChar,suboffset,ChildNum,ChildFid,i,j,num,Num_Fid,Cumulative;
@@ -714,8 +714,8 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 	struct udf_desc *fe_desc;
 	struct fileEntry *fentry[MAX_FILE_OR_DIR];
 	struct udf_desc *fe[MAX_FILE_OR_DIR];//目录文件数不大于256
-	FILDIRNODE *SubDir[MAX_FILE_OR_DIR];
-	FILDIRNODE * Dir;
+	FILEDIRNODE *SubDir[MAX_FILE_OR_DIR];
+	FILEDIRNODE * Dir;
 	//int flag = 1;
 	int Depth = 0;
 	int SecNum = 0;
@@ -740,7 +740,7 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 	DirCount = pUdfInfo->udfCmd.GetDirCount(pUdfInfo->m_FileDirTree);
 	//查找目录或文件并创建FE
 	do{
-		if(Dir->NodeType == NODETYPE_DIR)
+		if(Dir->nNodeType == NODETYPE_DIR)
 		{
 			FileType = ICBTAG_FILE_TYPE_DIRECTORY;  //目录
 			FileChar = FID_FILE_CHAR_DIRECTORY;
@@ -750,7 +750,7 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 			FileType = ICBTAG_FILE_TYPE_REGULAR;  //文件
 			FileChar = FID_FILE_CHAR_METADATA;
 		}
-		if(Dir->FileSize < FILE1G)
+		if(Dir->nFileSize < FILE1G)
 		{
 			fe_desc = DVDRecUdf_udf_create(hMem, disc, pspace,suboffset, desc,DirCount, //Directory->Name,suboffset, desc,DirCount, 
 			       		&Dir->ts,FileType, 0, pUdfInfo->m_DataMode, 0);				
@@ -758,49 +758,49 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 		else
 		{
 			fe_desc = DVDRecUdf_udf_create(hMem, disc, pspace,suboffset, desc,DirCount, //Directory->Name,suboffset, desc,DirCount, 
-			       		&Dir->ts,FileType, 0, pUdfInfo->m_DataMode,((Dir->FileSize/BIGFILERECORD)+(Dir->FileSize%BIGFILERECORD == 0?0:1))*16);	
+			       		&Dir->ts,FileType, 0, pUdfInfo->m_DataMode,((Dir->nFileSize/BIGFILERECORD)+(Dir->nFileSize%BIGFILERECORD == 0?0:1))*16);	
 		}
 		
-		fentry[i] = (struct fileEntry *)fe_desc->data->buffer;
+		fentry[i] = (struct fileEntry *)fe_desc->pData->pBuffer;
 		fe[i] = fe_desc;		
 		//如果是文件则设定文件的位置及大小
 		if(FileType == ICBTAG_FILE_TYPE_REGULAR)		 //如果是文件计算文件位置及tag crc
 		{
-			fentry[i]->informationLength = cpu_to_le64(Dir->FileSize);
-			fentry[i]->logicalBlocksRecorded = Dir->FileSize / CDROM_BLOCK + ( Dir->FileSize % CDROM_BLOCK == 0 ? 0 : 1);
+			fentry[i]->informationLength = cpu_to_le64(Dir->nFileSize);
+			fentry[i]->logicalBlocksRecorded = Dir->nFileSize / CDROM_BLOCK + ( Dir->nFileSize % CDROM_BLOCK == 0 ? 0 : 1);
 			fentry[i]->logicalBlocksRecorded = cpu_to_le64(fentry[i]->logicalBlocksRecorded);
 
-            DP(("+++++++++[RecursiveTree] File name = %s,File  location = %ld,File size =%ld++++++++++\n",Dir->Name,Dir->FileLoca,Dir->FileSize));
-			if(Dir->FileSize < FILE1G)
+            DP(("+++++++++[RecursiveTree] File name = %s,File  location = %ld,File size =%ld++++++++++\n",Dir->cName,Dir->nFileLoca,Dir->nFileSize));
+			if(Dir->nFileSize < FILE1G)
 			{
 				if( (le16_to_cpu(fentry[i]->icbTag.flags) & ICBTAG_FLAG_AD_MASK) == ICBTAG_FLAG_AD_SHORT )
 				{	
 					fentry[i]->lengthAllocDescs = cpu_to_le32(sizeof(short_ad));
-					((short_ad *)&fentry[i]->allocDescs[0])->extLength = cpu_to_le32((unsigned int)Dir->FileSize);
-					((short_ad *)&fentry[i]->allocDescs[0])->extPosition = cpu_to_le32((unsigned int)Dir->FileLoca);//cpu_to_le32(pUdfInfo->m_CurrentFileLocation);	
+					((short_ad *)&fentry[i]->allocDescs[0])->extLength = cpu_to_le32((unsigned int)Dir->nFileSize);
+					((short_ad *)&fentry[i]->allocDescs[0])->extPosition = cpu_to_le32((unsigned int)Dir->nFileLoca);//cpu_to_le32(pUdfInfo->m_CurrentFileLocation);	
 				}
 				else if( (le16_to_cpu(fentry[i]->icbTag.flags) & ICBTAG_FLAG_AD_MASK) == ICBTAG_FLAG_AD_LONG )
 				{
 					fentry[i]->lengthAllocDescs = cpu_to_le32(sizeof(long_ad));
-					((long_ad *)&fentry[i]->allocDescs[0])->extLocation.logicalBlockNum = cpu_to_le32((unsigned int)Dir->FileLoca);//cpu_to_le32(pUdfInfo->m_CurrentFileLocation);
+					((long_ad *)&fentry[i]->allocDescs[0])->extLocation.logicalBlockNum = cpu_to_le32((unsigned int)Dir->nFileLoca);//cpu_to_le32(pUdfInfo->m_CurrentFileLocation);
 					((long_ad *)&fentry[i]->allocDescs[0])->extLocation.partitionReferenceNum = cpu_to_le16(0);
-					((long_ad *)&fentry[i]->allocDescs[0])->extLength = cpu_to_le32((unsigned int)Dir->FileSize);
+					((long_ad *)&fentry[i]->allocDescs[0])->extLength = cpu_to_le32((unsigned int)Dir->nFileSize);
 				}
 			}
 			else
 			{
 				fentry[i]->lengthAllocDescs = cpu_to_le32(0x50);
-				for(j = 0;j < (Dir->FileSize/BIGFILERECORD);j++)
+				for(j = 0;j < (Dir->nFileSize/BIGFILERECORD);j++)
 				{
-					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLocation.logicalBlockNum = cpu_to_le32(Dir->FileLoca+(j*BIGFILENUM));//cpu_to_le32(pUdfInfo->m_CurrentFileLocation+(j*BIGFILENUM));
+					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLocation.logicalBlockNum = cpu_to_le32(Dir->nFileLoca+(j*BIGFILENUM));//cpu_to_le32(pUdfInfo->m_CurrentFileLocation+(j*BIGFILENUM));
 					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLocation.partitionReferenceNum = cpu_to_le16(0);
 					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLength = cpu_to_le32((unsigned int)BIGFILERECORD);
 				}
-				if((Dir->FileSize%BIGFILERECORD) == 0?0:1)
+				if((Dir->nFileSize%BIGFILERECORD) == 0?0:1)
 				{
-					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLocation.logicalBlockNum = cpu_to_le32(Dir->FileLoca+(j*BIGFILENUM));//cpu_to_le32(pUdfInfo->m_CurrentFileLocation+(j*BIGFILENUM));
+					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLocation.logicalBlockNum = cpu_to_le32(Dir->nFileLoca+(j*BIGFILENUM));//cpu_to_le32(pUdfInfo->m_CurrentFileLocation+(j*BIGFILENUM));
 					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLocation.partitionReferenceNum = cpu_to_le16(0);
-					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLength = cpu_to_le32((unsigned int)(Dir->FileSize%BIGFILERECORD));
+					(((long_ad *)&fentry[i]->extendedAttr[0])+j)->extLength = cpu_to_le32((unsigned int)(Dir->nFileSize%BIGFILERECORD));
 				}
 			}
 			
@@ -814,7 +814,7 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 		SubDir[i] = Dir;
 		i++;
 		suboffset++;
-	}while((Dir = Dir->Next));
+	}while((Dir = Dir->pNext));
 	
 	//查找当前目录下子目录或文件个数
 	for(i = 0;i < MAX_FILE_OR_DIR;i++)
@@ -824,7 +824,7 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 		
 		if(SubDir[i] != NULL)
 		{
-			if(SubDir[i]->NodeType == NODETYPE_FILE)
+			if(SubDir[i]->nNodeType == NODETYPE_FILE)
 				continue;                           //文件不需要FID
 		}
 		Num_Fid++;
@@ -840,7 +840,7 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 		
 		if(SubDir[i] != NULL)
 		{
-			if(SubDir[i]->NodeType == NODETYPE_FILE)
+			if(SubDir[i]->nNodeType == NODETYPE_FILE)
 				continue;                           //文件不需要FID
 		}
 			
@@ -851,9 +851,9 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 		if(SecNum == -1)
 			return suboffset;
 
-		if(SubDir[i]->Prior)					//modify by yanming 10.12.27
+		if(SubDir[i]->pPrior)					//modify by yanming 10.12.27
 		{
-			Depth += DirDepth(SubDir[i]->Prior->Child,pUdfInfo->m_DataMode);
+			Depth += DirDepth(SubDir[i]->pPrior->pChild,pUdfInfo->m_DataMode);
 			ChildNum = Num_Fid + Depth;// 多文件时fid占用的空间会大于1个2048
 		}		
 		else
@@ -863,9 +863,9 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 			{
 				if(SubDir[j] == NULL)
 					break;				
-				if(SubDir[j]->NodeType == NODETYPE_FILE)
+				if(SubDir[j]->nNodeType == NODETYPE_FILE)
 					continue;       				
-				NeedFidLen = CalcNeedFidSize(SubDir[j]->Child,pUdfInfo->m_DataMode);
+				NeedFidLen = CalcNeedFidSize(SubDir[j]->pChild,pUdfInfo->m_DataMode);
 				if(NeedFidLen > 2048)
 				{
 					ChildFid += ((NeedFidLen/2048)+(((NeedFidLen%2048) > 0) ? 1:0));
@@ -873,9 +873,9 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 				}				
 			}			
 		}
-		if(SubDir[i]->Child != NULL)
+		if(SubDir[i]->pChild != NULL)
 		{
-			Dir = SubDir[i]->Child;
+			Dir = SubDir[i]->pChild;
 #if 0			
 			ChildFid = tmpChild;
 			if(flag)
@@ -907,16 +907,16 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 			}
 #endif			
 			do{
-				if(Dir->NodeType == NODETYPE_DIR)
+				if(Dir->nNodeType == NODETYPE_DIR)
 					FileType = FID_FILE_CHAR_DIRECTORY;  //目录
 				else
 					FileType = 0;//文件
 
 				//get unicode
-				DVDRec_Utf8ToUnicode((unsigned char *)Dir->Name, UnicodeName, buflen, &slen);
+				DVDRec_Utf8ToUnicode((unsigned char *)Dir->cName, UnicodeName, buflen, &slen);
 
 				if(UDFDATAMODE_VIDEO == pUdfInfo->m_DataMode)
-					Cumulative = PAD(sizeof(struct fileIdentDesc) + strlen((char *)Dir->Name), 4);  //根据目录的unicode的数据长度获得一个文件数据块的长度(例如:VIDEO_TS.VOB)
+					Cumulative = PAD(sizeof(struct fileIdentDesc) + strlen((char *)Dir->cName), 4);  //根据目录的unicode的数据长度获得一个文件数据块的长度(例如:VIDEO_TS.VOB)
 				else
 				{
 					Cumulative = PAD(sizeof(struct fileIdentDesc) + slen, 4);  //modify by yanming for utf-8			
@@ -925,14 +925,14 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 				}
 
 				SecNum = DVDRecUdf_insert_fid(hMem, disc,pspace,fe[i],
-							(uint8_t *)Dir->Name,suboffset,ChildFid+(ChildNum++),FileType,pUdfInfo->m_DataMode,Cumulative);//目录为2
+							(uint8_t *)Dir->cName,suboffset,ChildFid+(ChildNum++),FileType,pUdfInfo->m_DataMode,Cumulative);//目录为2
 				if(SecNum == -1)
 					return -1;
 
 				//if(Directory->Next)											//modify by yanming 10.12.21					
 				//	ChildNum++;							
 			}
-			while((Dir = Dir->Next));
+			while((Dir = Dir->pNext));
 		}
 
 		change_data(fe[i],suboffset,(unsigned int)fentry[i]->informationLength); 
@@ -973,8 +973,8 @@ static int RecursiveTree(void *hMem, struct udf_disc *disc,struct udf_extent *ps
 		//查找是否还有子目录
 		if(SubDir[i] != NULL)
 		{
-			if(SubDir[i]->Child != NULL)
-				Dir = SubDir[i]->Child;
+			if(SubDir[i]->pChild != NULL)
+				Dir = SubDir[i]->pChild;
 			else
 				continue;
 		}
@@ -1011,7 +1011,7 @@ static void setup_partition(struct udf_disc *disc,uint16_t DataMode)
 #endif
 
 // 初始化光盘数据结构
-void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlocks, DISC_VOLID_T *pDiscVol)
+void DVDUdf_UDF_Init_Disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlocks, DISC_VOLID_T *pDiscVol)
 {
 	timestamp	ts;
 	struct timeval	tv;
@@ -1026,7 +1026,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
 	disc->blocksize = 2048;
 	disc->packetSize = PACKET_BLOCK_16;
 	disc->blocksize_bits = 11;
-	disc->udf_rev = le16_to_cpu(UDF_Defaults.default_lvidiu->default_lvidiu.minUDFReadRev);  //确定udf版本，默认1.02
+	disc->udf_rev = le16_to_cpu(UDF_Defaults.pDefault_lvidiu->default_lvidiu.minUDFReadRev);  //确定udf版本，默认1.02
 	disc->flags = FLAG_UTF8 | FLAG_CLOSED;
 	
 	//if (disc->udf_rev >= 0x0200)
@@ -1053,7 +1053,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
 	//分配,初始化主卷标描述符PVD---0
 	MEMMOCLINE;
 	disc->udf_pvd[0] = (primaryVolDesc*)MEMMALLOC(hMem, sizeof(struct primaryVolDesc));
-	memcpy((void *)disc->udf_pvd[0], UDF_Defaults.default_pvd, sizeof(struct primaryVolDesc));
+	memcpy((void *)disc->udf_pvd[0], UDF_Defaults.pDefault_pvd, sizeof(struct primaryVolDesc));
 	memcpy((void *)&disc->udf_pvd[0]->recordingDateAndTime, &ts, sizeof(timestamp));
 	sprintf((char *)&disc->udf_pvd[0]->volSetIdent[1], "%08lx%s",
 	        mktime(tm), &disc->udf_pvd[0]->volSetIdent[9]);
@@ -1066,19 +1066,19 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配初始化实施使用描述符LUVD---1
 	MEMMOCLINE;
 	disc->udf_iuvd[0] = (impUseVolDesc *)MEMMALLOC(hMem, sizeof(struct impUseVolDesc) + sizeof(struct impUseVolDescImpUse));
-	memcpy(disc->udf_iuvd[0], UDF_Defaults.default_iuvd, sizeof(struct impUseVolDesc));
-	memcpy(query_iuvdiu(disc), UDF_Defaults.default_iuvdiu, sizeof(struct impUseVolDescImpUse));
+	memcpy(disc->udf_iuvd[0], UDF_Defaults.pDefault_iuvd, sizeof(struct impUseVolDesc));
+	memcpy(query_iuvdiu(disc), UDF_Defaults.pDefault_iuvdiu, sizeof(struct impUseVolDescImpUse));
 	//modify by yanming for utf-8
 	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->logicalVolIdent, unicodename, buflen, &slen);
 	memcpy(query_iuvdiu(disc)->logicalVolIdent,unicodename,128);
 	//LvDVDRecUdf_EncUnicodeStr(pDiscVol->logicalVolIdent, query_iuvdiu(disc)->logicalVolIdent, strlen(pDiscVol->logicalVolIdent),128);
-	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->LVInfoTitle, unicodename, buflen, &slen);
+	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->infoTitle, unicodename, buflen, &slen);
 	memcpy(query_iuvdiu(disc)->LVInfo1,unicodename,36);	
 	//LvDVDRecUdf_EncUnicodeStr(pDiscVol->LVInfoTitle,query_iuvdiu(disc)->LVInfo1,strlen(pDiscVol->LVInfoTitle),36);
-	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->LVInfoDataTime, unicodename, buflen, &slen);
+	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->infoDataTime, unicodename, buflen, &slen);
 	memcpy(query_iuvdiu(disc)->LVInfo2,unicodename,36);		
 	//LvDVDRecUdf_EncUnicodeStr(pDiscVol->LVInfoDataTime,query_iuvdiu(disc)->LVInfo2,strlen(pDiscVol->LVInfoDataTime),36);
-	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->LVInfoEmail, unicodename, buflen, &slen);
+	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->infoEmail, unicodename, buflen, &slen);
 	memcpy(query_iuvdiu(disc)->LVInfo3,unicodename,36);		
 	//LvDVDRecUdf_EncUnicodeStr(pDiscVol->LVInfoEmail,query_iuvdiu(disc)->LVInfo3,strlen(pDiscVol->LVInfoEmail),36);
 	//query_iuvdiu(disc)->logicalVolIdent[127] = strlen(query_iuvdiu(disc)->logicalVolIdent);
@@ -1089,7 +1089,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配，初始化逻辑卷标描述LVD---2
 	MEMMOCLINE;
 	disc->udf_lvd[0] = (logicalVolDesc *)MEMMALLOC(hMem, sizeof(struct logicalVolDesc));
-	memcpy(disc->udf_lvd[0], UDF_Defaults.default_lvd, sizeof(struct logicalVolDesc));
+	memcpy(disc->udf_lvd[0], UDF_Defaults.pDefault_lvd, sizeof(struct logicalVolDesc));
 	//disc->udf_lvd[0]->logicalVolIdent[127] = strlen(disc->udf_lvd[0]->logicalVolIdent);
 	//modify by yanming for utf-8
 	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->logicalVolIdent, unicodename, buflen, &slen);
@@ -1101,24 +1101,24 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配初始化分区描述PD---3
 	MEMMOCLINE;
 	disc->udf_pd[0] = (struct partitionDesc *)MEMMALLOC(hMem, sizeof(struct partitionDesc));
-	memcpy(disc->udf_pd[0], UDF_Defaults.default_pd, sizeof(struct partitionDesc));
+	memcpy(disc->udf_pd[0], UDF_Defaults.pDefault_pd, sizeof(struct partitionDesc));
 
     //分配初始化空白空间描述USD---4
 	MEMMOCLINE;
 	disc->udf_usd[0] = (struct unallocSpaceDesc *)MEMMALLOC(hMem, sizeof(struct unallocSpaceDesc));
-	memcpy(disc->udf_usd[0], UDF_Defaults.default_usd, sizeof(struct unallocSpaceDesc));
+	memcpy(disc->udf_usd[0], UDF_Defaults.pDefault_usd, sizeof(struct unallocSpaceDesc));
 
     //分配初始化结束描述符TD
 	MEMMOCLINE;
 	disc->udf_td[0] = (struct terminatingDesc *)MEMMALLOC(hMem, sizeof(struct terminatingDesc));
-	memcpy(disc->udf_td[0], UDF_Defaults.default_td, sizeof(struct terminatingDesc));
+	memcpy(disc->udf_td[0], UDF_Defaults.pDefault_td, sizeof(struct terminatingDesc));
 
     //分配初始化逻辑卷标完整性描述LVID
 	MEMMOCLINE;
 	disc->udf_lvid = (struct logicalVolIntegrityDesc *)MEMMALLOC(hMem, sizeof(struct logicalVolIntegrityDesc) + sizeof(struct logicalVolIntegrityDescImpUse));
-	memcpy(disc->udf_lvid, UDF_Defaults.default_lvid, sizeof(struct logicalVolIntegrityDesc));
+	memcpy(disc->udf_lvid, UDF_Defaults.pDefault_lvid, sizeof(struct logicalVolIntegrityDesc));
 	memcpy(&disc->udf_lvid->recordingDateAndTime, &ts, sizeof(timestamp));
-	memcpy(query_lvidiu(disc), UDF_Defaults.default_lvidiu, sizeof(struct logicalVolIntegrityDescImpUse));
+	memcpy(query_lvidiu(disc), UDF_Defaults.pDefault_lvidiu, sizeof(struct logicalVolIntegrityDescImpUse));
 
 	//disc->udf_stable[0] = MEMMALLOC(hMem, sizeof(struct sparingTable));
 	//memcpy(disc->udf_stable[0], &default_stable, sizeof(struct sparingTable));
@@ -1129,7 +1129,7 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
     //分配初始化文件集描述符FSD
 	MEMMOCLINE;
 	disc->udf_fsd = (struct fileSetDesc *)MEMMALLOC(hMem, sizeof(struct fileSetDesc));
-	memcpy(disc->udf_fsd, UDF_Defaults.default_fsd, sizeof(struct fileSetDesc));
+	memcpy(disc->udf_fsd, UDF_Defaults.pDefault_fsd, sizeof(struct fileSetDesc));
 	memcpy(&disc->udf_fsd->recordingDateAndTime, &ts, sizeof(timestamp));
 	//modify by yanming for utf-8
 	DVDRec_Utf8ToUnicode((unsigned char * )pDiscVol->logicalVolIdent, unicodename, buflen, &slen);
@@ -1154,23 +1154,23 @@ void LvDVDUdf_udf_init_disc(void *hMem, struct udf_disc *disc, uint64_t DisckBlo
 
     //分配初始化扩展盘区，环形结构
 	MEMMOCLINE;
-	disc->head = (struct udf_extent *)MEMMALLOC(hMem, sizeof(struct udf_extent));
-	memset(disc->head, 0, sizeof(struct udf_extent));
-	disc->tail = disc->head;
+	disc->pHead = (struct udf_extent *)MEMMALLOC(hMem, sizeof(struct udf_extent));
+	memset(disc->pHead, 0, sizeof(struct udf_extent));
+	disc->pTail = disc->pHead;
 
     //初始化盘区
-	disc->head->space_type = USPACE;
-	disc->head->start  = 0;	
+	disc->pHead->euSpaceType = USPACE;
+	disc->pHead->nStart  = 0;	
 	DP(("udf_init_disc DisckBlocks=%lld\n",DisckBlocks));
 	disc->blocks = DisckBlocks;	 //默认光驱扇区块数量，可以通过光盘信息获取
-	disc->head->blocks = disc->blocks; 
-	disc->head->next = NULL;
-	disc->head->prev = NULL;
+	disc->pHead->nBlocks = disc->blocks; 
+	disc->pHead->pNext = NULL;
+	disc->pHead->pPrev = NULL;
 }
 
-void LvDVDUdf_split_space(void *hMem, struct udf_disc *disc)
+void DVDUdf_Split_Space(void *hMem, struct udf_disc *disc)
 {
-	uint32_t blocks = disc->head->blocks;
+	uint32_t blocks = disc->pHead->nBlocks;
 	uint32_t start, size;
 	int i, j;
 
@@ -1228,7 +1228,7 @@ void LvDVDUdf_split_space(void *hMem, struct udf_disc *disc)
 }
 
 //设定文件描述集,在分区盘区
-int LvDVDUdf_setup_fileset(void *hMem, struct udf_disc *disc, struct udf_extent *pspace, uint16_t DataMode)
+int DVDUdf_Setup_Fileset(void *hMem, struct udf_disc *disc, struct udf_extent *pspace, uint16_t DataMode)
 {
 	uint32_t offset = 0;
 	struct udf_desc *desc;
@@ -1240,9 +1240,9 @@ int LvDVDUdf_setup_fileset(void *hMem, struct udf_disc *disc, struct udf_extent 
 	
 	desc = DVDRecUdf_set_desc(hMem, disc, pspace, TAG_IDENT_FSD, offset, 0, NULL);
 	
-	desc->length = desc->data->length = length;
+	desc->length = desc->pData->length = length;
 	
-	desc->data->buffer = disc->udf_fsd;
+	desc->pData->pBuffer = disc->udf_fsd;
 	
 	disc->udf_fsd->descTag = DVDRecUdf_query_tag(disc, pspace, desc, DataMode);
 
@@ -1250,7 +1250,7 @@ int LvDVDUdf_setup_fileset(void *hMem, struct udf_disc *disc, struct udf_extent 
 }
 
 //设定根文件系统
-int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *pspace, udfinfo_t *pUdfInfo)
+int DVDUdf_Setup_Root(void *hMem, struct udf_disc *disc, struct udf_extent *pspace, udfinfo_t *pUdfInfo)
 {
 	uint32_t offset,FileType,ChildNum,FidLen;
 	uint32_t SecNum = 0;
@@ -1262,7 +1262,7 @@ int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *ps
 	struct udf_desc *desc, *fsd_desc;
 	struct fileEntry *fentry;
 	FILEDIRTREE * FileDirTree;
-	FILDIRNODE *Directory;
+	FILEDIRNODE *Directory;
 	unsigned char UnicodeName[256];
 	int buflen = 256;
 	int slen = 0;
@@ -1293,17 +1293,17 @@ int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *ps
 	
 	DP(("setup_root 4\n"));
 	disc->udf_fsd->rootDirectoryICB.extLocation.partitionReferenceNum = cpu_to_le16(0);
-	fsd_desc = DVDRecUdf_next_desc(pspace->head, TAG_IDENT_FSD);
+	fsd_desc = DVDRecUdf_next_desc(pspace->pHead, TAG_IDENT_FSD);
 	disc->udf_fsd->descTag = DVDRecUdf_query_tag(disc, pspace, fsd_desc, pUdfInfo->m_DataMode);
 	
 	DP(("setup_root 5\n"));
-	Directory = FileDirTree->FirstNode->Child; //modify by yanming for get file time
+	Directory = FileDirTree->pFirstNode->pChild; //modify by yanming for get file time
 
 	//首先建立根目录
 	desc = DVDRecUdf_udf_create(hMem, disc, pspace, offset, NULL,//"",offset,NULL,
 		               DirCount, &Directory->ts, ICBTAG_FILE_TYPE_DIRECTORY, 0, pUdfInfo->m_DataMode, 0);
 	
-	fentry = (struct fileEntry *)desc->data->buffer;
+	fentry = (struct fileEntry *)desc->pData->pBuffer;
 	
 	Cumulative = PAD(sizeof(struct fileIdentDesc), 4);	//数据和视频的长度不同		
 	
@@ -1324,17 +1324,17 @@ int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *ps
 
 	while(Directory)
 	{
-		if(Directory->NodeType == NODETYPE_DIR)
+		if(Directory->nNodeType == NODETYPE_DIR)
 			FileType = FID_FILE_CHAR_DIRECTORY;  //目录
 		else
 			FileType = 0;//文件
 		ChildNum++;
 
 		//get unicode
-		DVDRec_Utf8ToUnicode((unsigned char *)Directory->Name, UnicodeName, buflen, &slen);
+		DVDRec_Utf8ToUnicode((unsigned char *)Directory->cName, UnicodeName, buflen, &slen);
 		DP(("setup_root 7\n"));
 		if(UDFDATAMODE_VIDEO == pUdfInfo->m_DataMode)
-			Cumulative = PAD(sizeof(struct fileIdentDesc) + strlen((char *)Directory->Name), 4);  //根据目录的unicode的数据长度获得一个文件数据块的长度(例如:VIDEO_TS.VOB)
+			Cumulative = PAD(sizeof(struct fileIdentDesc) + strlen((char *)Directory->cName), 4);  //根据目录的unicode的数据长度获得一个文件数据块的长度(例如:VIDEO_TS.VOB)
 		else
 		{
 			DP(("setup_root 8\n"));
@@ -1346,11 +1346,11 @@ int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *ps
 
 		DP(("setup_root 9\n"));
 		SecNum = DVDRecUdf_insert_fid(hMem, disc, pspace, desc, 
-					(uint8_t *)Directory->Name, offset, (offset + ChildNum + ChildFid), 
+					(uint8_t *)Directory->cName, offset, (offset + ChildNum + ChildFid), 
 					FileType, pUdfInfo->m_DataMode, Cumulative);//目录为2
 		if(SecNum == -1)
 			return 0;			
-		Directory = Directory->Next;
+		Directory = Directory->pNext;
 	};
 	
 	DP(("setup_root 10\n"));
@@ -1365,23 +1365,23 @@ int LvDVDUdf_setup_root(void *hMem, struct udf_disc *disc, struct udf_extent *ps
 	else
 		offset++;	
 	//目录递归调用处理子目录文件
-	ret = RecursiveTree(hMem, disc, pspace, FileDirTree->FirstNode->Child, offset, pUdfInfo, desc);
+	ret = RecursiveTree(hMem, disc, pspace, FileDirTree->pFirstNode->pChild, offset, pUdfInfo, desc);
 	if(ret == -1)
 		return -1;
 	return 0;
 }
 
 //设定VRS盘区，其第一个扇区要在16位置后即，17个扇区位置,可确定该光盘是否UDF和其版本号
-void LvDVDUdf_setup_vrs(void *hMem, struct udf_disc *disc)
+void DVDUdf_Setup_VRS(void *hMem, struct udf_disc *disc)
 {
 	struct udf_extent *ext;
 	struct udf_desc *desc;
 
-	if (!(ext = DVDRecUdf_next_extent(disc->head, VRS))) return;
+	if (!(ext = DVDRecUdf_next_extent(disc->pHead, VRS))) return;
 	
 	//设定第一个VRS结构描述，在16+1 位置
 	desc = DVDRecUdf_set_desc(hMem, disc, ext, 0x00, 0, sizeof(struct volStructDesc), NULL);//申请空间并加入到链表中
-	disc->udf_vrs[0] = (struct volStructDesc *)desc->data->buffer;
+	disc->udf_vrs[0] = (struct volStructDesc *)desc->pData->pBuffer;
 	disc->udf_vrs[0]->structType    = 0x00;
 	disc->udf_vrs[0]->structVersion = 0x01;
 	memcpy(disc->udf_vrs[0]->stdIdent, VSD_STD_ID_BEA01, VSD_STD_ID_LEN);
@@ -1391,7 +1391,7 @@ void LvDVDUdf_setup_vrs(void *hMem, struct udf_disc *disc)
 		desc = DVDRecUdf_set_desc(hMem, disc, ext, 0x00, 1, sizeof(struct volStructDesc), NULL);
 	else
 		desc = DVDRecUdf_set_desc(hMem, disc, ext, 0x00, 2048 / disc->blocksize, sizeof(struct volStructDesc), NULL);
-	disc->udf_vrs[1] = (struct volStructDesc *)desc->data->buffer;
+	disc->udf_vrs[1] = (struct volStructDesc *)desc->pData->pBuffer;
 	disc->udf_vrs[1]->structType    = 0x00;
 	disc->udf_vrs[1]->structVersion = 0x01;
 	memcpy(disc->udf_vrs[1]->stdIdent, disc->udf_rev >= 0x0200 ? VSD_STD_ID_NSR03 : VSD_STD_ID_NSR02, VSD_STD_ID_LEN);
@@ -1405,65 +1405,65 @@ void LvDVDUdf_setup_vrs(void *hMem, struct udf_disc *disc)
 	{
 		desc = DVDRecUdf_set_desc(hMem, disc, ext, 0x00, 4096 / disc->blocksize, sizeof(struct volStructDesc), NULL);
 	}
-	disc->udf_vrs[2] = (struct volStructDesc *)desc->data->buffer;
+	disc->udf_vrs[2] = (struct volStructDesc *)desc->pData->pBuffer;
 	disc->udf_vrs[2]->structType    = 0x00;
 	disc->udf_vrs[2]->structVersion = 0x01;
 	memcpy(disc->udf_vrs[2]->stdIdent, VSD_STD_ID_TEA01, VSD_STD_ID_LEN);
 }
 
 //设定AVDP盘区，在256，N-256 或N -1 位置
-void LvDVDUdf_setup_anchor(void *hMem, struct udf_disc *disc,int DataMode)
+void DVDUdf_Setup_Anchor(void *hMem, struct udf_disc *disc,int DataMode)
 {
 	struct udf_extent *ext;
 	uint32_t mloc, rloc, mlen, rlen;
 	int i = 0;
 
-	ext = DVDRecUdf_next_extent(disc->head, PVDS);
-	mloc = ext->start;
-	mlen = ext->blocks << disc->blocksize_bits;
+	ext = DVDRecUdf_next_extent(disc->pHead, PVDS);
+	mloc = ext->nStart;
+	mlen = ext->nBlocks << disc->blocksize_bits;
 
-	ext = DVDRecUdf_next_extent(disc->head, RVDS);
-	rloc = ext->start;
-	rlen = ext->blocks << disc->blocksize_bits;
+	ext = DVDRecUdf_next_extent(disc->pHead, RVDS);
+	rloc = ext->nStart;
+	rlen = ext->nBlocks << disc->blocksize_bits;
 
-	ext = DVDRecUdf_next_extent(disc->head, ANCHOR);
+	ext = DVDRecUdf_next_extent(disc->pHead, ANCHOR);
 	do
 	{
 		MEMMOCLINE;
-		ext->head = ext->tail = (struct udf_desc*)MEMMALLOC(hMem, sizeof(struct udf_desc));
-		memset(ext->tail, 0, sizeof(struct udf_desc));
+		ext->pHead = ext->pTail = (struct udf_desc*)MEMMALLOC(hMem, sizeof(struct udf_desc));
+		memset(ext->pTail, 0, sizeof(struct udf_desc));
 
 		MEMMOCLINE;
-		ext->head->data = (struct udf_data*)MEMMALLOC(hMem, sizeof(struct udf_data));
-		memset(ext->head->data, 0, sizeof(struct udf_data));
-		ext->head->data->next = ext->head->data->prev = NULL;
-		ext->head->ident = TAG_IDENT_AVDP;
-		ext->head->offset = 0;
-		ext->head->length = ext->head->data->length = sizeof(struct anchorVolDescPtr);
+		ext->pHead->pData = (struct udf_data*)MEMMALLOC(hMem, sizeof(struct udf_data));
+		memset(ext->pHead->pData, 0, sizeof(struct udf_data));
+		ext->pHead->pData->pNext = ext->pHead->pData->pPrev = NULL;
+		ext->pHead->ident = TAG_IDENT_AVDP;
+		ext->pHead->offset = 0;
+		ext->pHead->length = ext->pHead->pData->length = sizeof(struct anchorVolDescPtr);
 
 		MEMMOCLINE;
-		ext->head->data->buffer = MEMMALLOC(hMem, sizeof(struct anchorVolDescPtr));
-		disc->udf_anchor[i] = (struct anchorVolDescPtr*)ext->head->data->buffer;
+		ext->pHead->pData->pBuffer = MEMMALLOC(hMem, sizeof(struct anchorVolDescPtr));
+		disc->udf_anchor[i] = (struct anchorVolDescPtr*)ext->pHead->pData->pBuffer;
 		memset(disc->udf_anchor[i], 0, sizeof(struct anchorVolDescPtr));
-		ext->head->next = ext->head->prev = NULL;
+		ext->pHead->pNext = ext->pHead->pPrev = NULL;
 		disc->udf_anchor[i]->mainVolDescSeqExt.extLocation = cpu_to_le32(mloc);
 		disc->udf_anchor[i]->mainVolDescSeqExt.extLength = cpu_to_le32(mlen);
 		disc->udf_anchor[i]->reserveVolDescSeqExt.extLocation = cpu_to_le32(rloc);
 		disc->udf_anchor[i]->reserveVolDescSeqExt.extLength = cpu_to_le32(rlen);
-		disc->udf_anchor[i]->descTag = DVDRecUdf_query_tag(disc, ext, ext->head, DataMode);
-		ext = DVDRecUdf_next_extent(ext->next, ANCHOR);
+		disc->udf_anchor[i]->descTag = DVDRecUdf_query_tag(disc, ext, ext->pHead, DataMode);
+		ext = DVDRecUdf_next_extent(ext->pNext, ANCHOR);
 	} while (i++, ext != NULL);
 }
 
 //设定VDS,主卷描述序列包括PVD,IUVD,LVD,PD,USD,TD
-void LvDVDUdf_setup_vds(void *hMem, struct udf_disc *disc,uint16_t DataMode, udfinfo_t *pUdfInfo)
+void DVDUdf_Setup_VDS(void *hMem, struct udf_disc *disc,uint16_t DataMode, udfinfo_t *pUdfInfo)
 {
 	struct udf_extent *pvds, *rvds, *lvid;
 
-	pvds = DVDRecUdf_next_extent(disc->head, PVDS); //主卷描述序列，包括PVD,IUVD,LVD,PD,USD,TD
+	pvds = DVDRecUdf_next_extent(disc->pHead, PVDS); //主卷描述序列，包括PVD,IUVD,LVD,PD,USD,TD
 
-	rvds = DVDRecUdf_next_extent(disc->head, RVDS);
-	lvid = DVDRecUdf_next_extent(disc->head, LVID);
+	rvds = DVDRecUdf_next_extent(disc->pHead, RVDS);
+	lvid = DVDRecUdf_next_extent(disc->pHead, LVID);
 	setup_pvd(hMem, disc, pvds, rvds, 0,DataMode);
 	setup_iuvd(hMem, disc, pvds, rvds, 1,DataMode);
 	setup_pd(hMem, disc, pvds, rvds, 2,DataMode, pUdfInfo);
@@ -1478,14 +1478,14 @@ static void Freeudf_data(void *hMem, struct udf_data *pData)
 	struct udf_data *pTmp;
 	while(pData)
 	{
-		if(pData->buffer)
+		if(pData->pBuffer)
 		{
 			if(pData->bMalloc)
 			{
-				MEMFREE(hMem, pData->buffer);
+				MEMFREE(hMem, pData->pBuffer);
 			}
 		}
-		pTmp = pData->next;
+		pTmp = pData->pNext;
 		MEMFREE(hMem, pData);
 		pData = pTmp;
 	}
@@ -1496,8 +1496,8 @@ static void Freeudf_desc(void *hMem, struct udf_desc *pdesc)
 	struct udf_desc *pTmp;
 	while(pdesc)
 	{
-		Freeudf_data(hMem, pdesc->data);
-		pTmp = pdesc->next;
+		Freeudf_data(hMem, pdesc->pData);
+		pTmp = pdesc->pNext;
 		MEMFREE(hMem, pdesc);
 		pdesc = pTmp;
 	}
@@ -1509,15 +1509,15 @@ static void FreeUdf_extent(void *hMem, struct udf_extent *pExt)
 	while(pExt)
 	{
 		//printf("FreeUdf_extent 1\n");
-		Freeudf_desc(hMem, pExt->head);
-		pTmp = pExt->next;
+		Freeudf_desc(hMem, pExt->pHead);
+		pTmp = pExt->pNext;
 		MEMFREE(hMem, pExt);
 		pExt = pTmp;
 	}
 	//printf("FreeUdf_extent OK\n");
 }
 
-void LvDVDUdf_freeUdfdisc(void *hMem, struct udf_disc * disc)
+void DVDUdf_FreeUDF_Disc(void *hMem, struct udf_disc * disc)
 {
 	int i;
 	struct udf_extent *ext;
@@ -1525,7 +1525,7 @@ void LvDVDUdf_freeUdfdisc(void *hMem, struct udf_disc * disc)
 		return;
 	
 	//printf("LvDVDUdf_freeUdfdisc 0\n");
-	ext = disc->head;
+	ext = disc->pHead;
 	
 	//printf("LvDVDUdf_freeUdfdisc 1\n");
 	FreeUdf_extent(hMem, ext);
@@ -1557,24 +1557,24 @@ void LvDVDUdf_freeUdfdisc(void *hMem, struct udf_disc * disc)
 }
 
 //为FE插入描述符，指定FE分配描述的字段
-int LvDVDUdf_insert_desc(void *hMem, struct udf_desc *desc)
+int DVDUdf_Insert_Desc(void *hMem, struct udf_desc *desc)
 {
 	struct fileEntry *fe;
-	fe = (struct fileEntry *)desc->data->buffer;
+	fe = (struct fileEntry *)desc->pData->pBuffer;
 
 	if (le32_to_cpu(fe->lengthAllocDescs) == 0)
 	{
 		if ((le16_to_cpu(fe->icbTag.flags) & ICBTAG_FLAG_AD_MASK) == ICBTAG_FLAG_AD_SHORT)
 		{
 			desc->length += sizeof(short_ad);
-			desc->data->length += sizeof(short_ad);
-			desc->data->buffer = MEMREALLOC(hMem, desc->data->buffer, desc->length);
+			desc->pData->length += sizeof(short_ad);
+			desc->pData->pBuffer = MEMREALLOC(hMem, desc->pData->pBuffer, desc->length);
 		}
 		else if ((le16_to_cpu(fe->icbTag.flags) & ICBTAG_FLAG_AD_MASK) == ICBTAG_FLAG_AD_LONG)
 		{
 			desc->length += sizeof(long_ad);
-			desc->data->length += sizeof(long_ad);		
-			desc->data->buffer = MEMREALLOC(hMem, desc->data->buffer, desc->length);
+			desc->pData->length += sizeof(long_ad);		
+			desc->pData->pBuffer = MEMREALLOC(hMem, desc->pData->pBuffer, desc->length);
 		}
 	}
 

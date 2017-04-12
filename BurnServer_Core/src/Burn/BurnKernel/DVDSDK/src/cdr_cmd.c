@@ -695,33 +695,33 @@ BOOL CCDRCmd::CDR_HaveDisc(int fd)
 }
 
 // 获得轨道信息
-int CCDRCmd::CDR_GetTrackinfo(int fd, int trackid, stCDRTrack *ptrack)
+int CCDRCmd::CDR_GetTrackinfo(int fd, int nTrackID , stCDRTrack *pTrack)
 {
 	track_info_t trick;
 
-	if (!read_track_info(fd, trackid, &trick))
+	if (!read_track_info(fd, nTrackID , &trick))
 	{
 		DPERROR(("read_track_info error\n"));
 		return ERROR_DVD_OPTERFAILED;
 	}
-	ptrack->sessionid = (trick.session_number_m << 8) | trick.session_number_l;
-	ptrack->trackmode = trick.track_mode;  //轨道模式
-	ptrack->datamode = trick.data_mode;   //数据模式		
-	ptrack->trackid = trackid;
+	pTrack->sessionid = (trick.session_number_m << 8) | trick.session_number_l;
+	pTrack->trackmode = trick.track_mode;  //轨道模式
+	pTrack->datamode = trick.data_mode;   //数据模式		
+	pTrack->trackid = nTrackID ;
 
-	ptrack->tracksize = be32_to_cpu(trick.track_size);
-	ptrack->freeblocks = be32_to_cpu(trick.free_blocks);
-	ptrack->writestart = be32_to_cpu(trick.track_start);
-	ptrack->writenext = be32_to_cpu(trick.next_writable);
-	ptrack->writedsize = ptrack->writenext - ptrack->writestart;
+	pTrack->tracksize = be32_to_cpu(trick.track_size);
+	pTrack->freeblocks = be32_to_cpu(trick.free_blocks);
+	pTrack->writestart = be32_to_cpu(trick.track_start);
+	pTrack->writenext = be32_to_cpu(trick.next_writable);
+	pTrack->writedsize = pTrack->writenext - pTrack->writestart;
 
-	ptrack->bclosed = (ptrack->freeblocks == 0 && ptrack->writenext == 0) ? TRUE : FALSE;
+	pTrack->bclosed = (pTrack->freeblocks == 0 && pTrack->writenext == 0) ? TRUE : FALSE;
 
 	return 0;
 }
 
 // 格式化光盘
-int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
+int CCDRCmd::CDR_FormatDisc(int fd, int nReserveBlocks)
 {
 	disc_info_t stdisc_info;
 	stCDRTrack stTrack;
@@ -758,7 +758,7 @@ int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
 
 	wait_unit_ready(fd, 120);
 
-	if (!reserve_track(fd, ReserveBlocks))
+	if (!reserve_track(fd, nReserveBlocks))
 	{
 		DPERROR(("reserve_track failed!\n"));
 		return ERROR_DVD_RESERVETRACKERR;
@@ -791,7 +791,7 @@ int CCDRCmd::CDR_FormatDisc(int fd, int ReserveBlocks)
 }
 
 // 获得光驱Buffer能力
-int CCDRCmd::CDR_Buffcap(int fd, uint32_t *buffsize, uint32_t *bufffree)
+int CCDRCmd::CDR_Buffcap(int fd, uint32_t *pBuffsize, uint32_t *pBufferFree)
 {
 	struct{
 		unsigned int pad;
@@ -815,12 +815,12 @@ int CCDRCmd::CDR_Buffcap(int fd, uint32_t *buffsize, uint32_t *bufffree)
 		DP_MMCCMD("get bufcap", &cgc, __LINE__);
 		return ERROR_DVD_OPTERFAILED;
 	}
-	*buffsize = be32_to_cpu(bufcap.buffer_size);
-	*bufffree = be32_to_cpu(bufcap.buffer_free);
+	*pBuffsize = be32_to_cpu(bufcap.buffer_size);
+	*pBufferFree = be32_to_cpu(bufcap.buffer_free);
 	return 0;
 }
 
-int CCDRCmd::CDR_DiscExactType(int fd, int *type)
+int CCDRCmd::CDR_DiscExactType(int fd, int *pType)
 {
 	unsigned char Profile[512];
 	unsigned char disclist;
@@ -841,12 +841,12 @@ int CCDRCmd::CDR_DiscExactType(int fd, int *type)
 		return ERROR_DVD_OPTERFAILED;
 	}
 	//tmp = from2Byte( &Profile[6] );
-	*type = FindDiscType((char*)(&Profile[7]), (unsigned char*)&disclist, &j);
-	return *type;
+	*pType = FindDiscType((char*)(&Profile[7]), (unsigned char*)&disclist, &j);
+	return *pType;
 }
 
 // 获得光盘基本类型
-int CCDRCmd::CDR_DiscBasicType(int fd, int *type)
+int CCDRCmd::CDR_DiscBasicType(int fd, int *pType)
 {
 	unsigned char Profile[512];
 	int tmp;
@@ -869,22 +869,22 @@ int CCDRCmd::CDR_DiscBasicType(int fd, int *type)
 
 	if ((tmp >= 0x08) && (tmp <= 0x0a))
 	{
-		*type = CD_DISC;
+		*pType = CD_DISC;
 		return CD_DISC;
 	}
 	else if (((tmp >= 0x10) && (tmp <= 0x14)) || (0x1A == tmp) || (0x1B == tmp))
 	{
-		*type = DVD_DISC;
+		*pType = DVD_DISC;
 		return DVD_DISC;
 	}
 	else if (((tmp >= 0x15) && (tmp <= 0x16)) || (0x2B == tmp))
 	{
-		*type = DVD_DL_DISC;
+		*pType = DVD_DL_DISC;
 		return DVD_DL_DISC;
 	}
 	else if ((tmp >= 0x40) && (tmp <= 0x42))
 	{
-		*type = B_DVD_DISC;
+		*pType = B_DVD_DISC;
 		return B_DVD_DISC;
 	}
 	DP(("Profile is %04x!\n", tmp));

@@ -1017,49 +1017,26 @@ ExtendedFileEntry::ExtendedFileEntry()
 
 static ExtendedFileEntry default_efe;
 
-#if 0
-LVUDF_DEFAULTSINFO_T LvUDF_Defaults = {
-	.default_pvd     = &default_pvd,
-	.default_lvd     = &default_lvd,
-	.default_vdp     = &default_vdp,
-	.default_iuvdiu  = &default_iuvdiu,
-	.default_iuvd    = &default_iuvd,
-	.default_pd      = &default_pd,
-	.default_usd     = &default_usd,
-	.default_td      = &default_td,
-	.default_lvid    = &default_lvid,
-	.default_lvidiu  = &default_lvidiu,
-	.default_stable  = &default_stable,
-	.default_sparmap = &default_sparmap,
-	.default_vat15   = &default_vat15,
-	.default_vat20   = &default_vat20,
-	.default_virtmap = &default_virtmap,
-	.default_fsd     = &default_fsd,
-	.default_fe      = &default_fe,
-	.default_efe     = &default_efe,
-};
-#endif
-
 UDF_DefaultInfo::UDF_DefaultInfo()
 {
-	default_pvd = NULL;
-	default_lvd = NULL;
-	default_vdp = NULL;
-	default_iuvdiu = NULL;
-	default_iuvd = NULL;
-	default_pd = NULL;
-	default_usd = NULL;
-	default_td = NULL;
-	default_lvid = NULL;
-	default_lvidiu = NULL;
-	default_stable = NULL;
-	default_sparmap = NULL;
-	default_vat15 = NULL;
-	default_vat20 = NULL;
-	default_virtmap = NULL;
-	default_fsd = NULL;
-	default_fe = NULL;
-	default_efe = NULL;
+	pDefault_pvd = NULL;
+	pDefault_lvd = NULL;
+	pDefault_vdp = NULL;
+	pDefault_iuvdiu = NULL;
+	pDefault_iuvd = NULL;
+	pDefault_pd = NULL;
+	pDefault_usd = NULL;
+	pDefault_td = NULL;
+	pDefault_lvid = NULL;
+	pDefault_lvidiu = NULL;
+	pDefault_stable = NULL;
+	pDefault_sparmap = NULL;
+	pDefault_vat15 = NULL;
+	pDefault_vat20 = NULL;
+	pDefault_virtmap = NULL;
+	pDefault_fsd = NULL;
+	pDefault_fe = NULL;
+	pDefault_efe = NULL;
 }
 
 UDF_DefaultInfo::UDF_DefaultInfo(PrimaryVolDesc* pPVD,
@@ -1072,24 +1049,24 @@ UDF_DefaultInfo::UDF_DefaultInfo(PrimaryVolDesc* pPVD,
 	VirtualAllocationTable20* pVAT20, VirtualPartitionMap* pVPM,
 	FileSetDesc* pFSD, FileEntry* pFE, ExtendedFileEntry* pEFE)
 {
-	default_pvd = pPVD;
-	default_lvd = pLVD;
-	default_vdp = pVDP;
-	default_iuvdiu = pIUVDIU;
-	default_iuvd = pIUVD;
-	default_pd = pPD;
-	default_usd = pUSD;
-	default_td = pTD;
-	default_lvid = pLVID;
-	default_lvidiu = pLVIDIU;
-	default_stable = pST;
-	default_sparmap = pSPM;
-	default_vat15 = pVAT15;
-	default_vat20 = pVAT20;
-	default_virtmap = pVPM;
-	default_fsd = pFSD;
-	default_fe = pFE;
-	default_efe = pEFE;
+	pDefault_pvd = pPVD;
+	pDefault_lvd = pLVD;
+	pDefault_vdp = pVDP;
+	pDefault_iuvdiu = pIUVDIU;
+	pDefault_iuvd = pIUVD;
+	pDefault_pd = pPD;
+	pDefault_usd = pUSD;
+	pDefault_td = pTD;
+	pDefault_lvid = pLVID;
+	pDefault_lvidiu = pLVIDIU;
+	pDefault_stable = pST;
+	pDefault_sparmap = pSPM;
+	pDefault_vat15 = pVAT15;
+	pDefault_vat20 = pVAT20;
+	pDefault_virtmap = pVPM;
+	pDefault_fsd = pFSD;
+	pDefault_fe = pFE;
+	pDefault_efe = pEFE;
 }
 
 UDF_DefaultInfo UDF_Defaults(&default_pvd, &default_lvd, &default_vdp,

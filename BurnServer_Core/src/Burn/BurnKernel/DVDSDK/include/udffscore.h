@@ -49,50 +49,50 @@ typedef struct UDF_CMD_T udfcmd_t;
 typedef struct tagFileDirNode
 {	
     //节点类型
-	int NodeType;
+	int nNodeType;
 
 	//节点ID
-	int NodeID;
+	int nNodeID;
 	
 	//节点名称
-	char Name[256];
+	char cName[256];
 
 	//长度,文件长度或目录名长度
-	uint64_t FileSize;
+	uint64_t nFileSize;
 
 	//文件位置
-	uint64_t FileLoca;
+	uint64_t nFileLoca;
 
 	//创建时间
 	timestamp ts;
 
 	//父节点
-	struct tagFileDirNode * Parent;
+	struct tagFileDirNode * pParent;
 
 	//兄弟节点
-	struct tagFileDirNode * Next;
-	struct tagFileDirNode * Prior;
+	struct tagFileDirNode * pNext;
+	struct tagFileDirNode * pPrior;
 
 	//子节点
-	struct tagFileDirNode * Child;
+	struct tagFileDirNode * pChild;
 	
-}FILDIRNODE;
+}FILEDIRNODE;
 
 
 //文件目录树
 typedef struct tagFileDirTree
 {
 	//节点总数
-	int NodeCount;
+	int nNodeCount;
 
 	//总文件大小
-	uint64_t TotalFileSize;
+	uint64_t nTotalFileSize;
 
 	//首节点
-	FILDIRNODE * FirstNode;
+	FILEDIRNODE * pFirstNode;
 
 	//尾部节点
-	FILDIRNODE * LastNode;	
+	FILEDIRNODE * pLastNode;	
 	
 }FILEDIRTREE;
 
@@ -153,9 +153,9 @@ typedef struct{
 	char logicalVolIdent[128];
 	char volIdent[32];
 	char volSetIdent[128];
-	char LVInfoTitle[36];
-	char LVInfoDataTime[36];
-	char LVInfoEmail[36];
+	char infoTitle[36];
+	char infoDataTime[36];
+	char infoEmail[36];
 	char fileSetIdent[32];
 	char copyrightFileIdent[32];
 	char abstractFileIdent[32];
@@ -169,16 +169,16 @@ public:
 
 public:
 	// 添加目录或文件
-	FILDIRNODE* AddNode(void *hMem, FILEDIRTREE *pFileDirTree, FILDIRNODE *pParent, char *szName, uint64_t filesize, int NodeType);
+	FILEDIRNODE* AddNode(void *hMem, FILEDIRTREE *pFileDirTree, FILEDIRNODE *pParent, char *szName, uint64_t filesize, int NodeType);
 
 	// 通过名称查找节点
-	FILDIRNODE* FindNodeByName(FILEDIRTREE *FileDirTree, char *szName);
+	FILEDIRNODE* FindNodeByName(FILEDIRTREE *FileDirTree, char *szName);
 
 	// 通过节点ID
-	FILDIRNODE* FindNodeByID(FILEDIRTREE *FileDirTree, int nodeid);
+	FILEDIRNODE* FindNodeByID(FILEDIRTREE *FileDirTree, int nodeid);
 
 	// 判断目录下名称是否重复
-	FILDIRNODE* GetNodeInDir(FILDIRNODE *pDirNode, char *szName);
+	FILEDIRNODE* GetNodeInDir(FILEDIRNODE *pDirNode, char *szName);
 
 	// 获取目录数量
 	int GetDirCount(FILEDIRTREE *FileDirTree);
@@ -190,7 +190,7 @@ public:
 	int InitUdfFs(udfinfo_t *pUdfInfo, DISC_VOLID_T *pDiscVol);
 
 	// 写流数据到光盘文件, length可以为任意大小
-	int WriteStream(udfinfo_t *pUdfInfo, FILDIRNODE *FileNode, uint8_t *Data, int length);
+	int WriteStream(udfinfo_t *pUdfInfo, FILEDIRNODE *FileNode, uint8_t *Data, int length);
 
 	// 填充空数据到光盘最后, length可以为任意大小
 	int WriteEmptyStream(udfinfo_t *pUdfInfo, uint8_t *Data, int length);
