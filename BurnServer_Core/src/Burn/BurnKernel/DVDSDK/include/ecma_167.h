@@ -1,9 +1,9 @@
 #include <inttypes.h>
 
 #ifndef _ECMA_167_H
-#define _ECMA_167_H 1
+#define _ECMA_167_H 1s
 
-/* Character set specification (ECMA 167r3 1/7.2.1) */
+/* Character set specification (ECMA 167r3 1/7.2.1 */
 typedef struct
 {
 	uint8_t		charSetType;   		//字符集类型，默认CS0
@@ -406,7 +406,7 @@ typedef struct
 #define TAG_IDENT_EFE			0x010A
 
 
-struct filetag 
+typedef struct filetag 
 { /* ISO 13346 4/7.2 */
 uint16_t TagIdentifier;
 uint16_t DescriptorVersion;

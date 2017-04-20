@@ -106,12 +106,13 @@ static BOOL testHaveDisc(int fd)
 {
 	int ret, attempts = 3;
 
+	CCDRCmd cdrCmd;
 	do{
 	    // 获取当前光驱状态
 		ret = ioctl(fd, CDROM_DRIVE_STATUS, CDSL_CURRENT);
 		if (ret == CDS_TRAY_OPEN)
 		{
-			cdr_closetray(fd);
+			cdrCmd.CDR_CloseTray(fd);//cdr_closetray(fd);
 			continue;
 		}
 		else if (ret == CDS_DISC_OK)
